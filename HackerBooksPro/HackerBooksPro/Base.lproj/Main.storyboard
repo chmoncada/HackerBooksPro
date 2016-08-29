@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="JVh-fV-9MJ">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <scenes>
+        <!--HackerBooks Pro-->
+        <scene sceneID="c2g-fa-YKC">
+            <objects>
+                <viewController id="COz-aj-HO5" customClass="LibraryViewController" customModule="HackerBooksPro" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LAY-SJ-Jjj"/>
+                        <viewControllerLayoutGuide type="bottom" id="TO7-1l-g1C"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="zZs-yO-yfm">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="J4O-aH-EwD">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BookCell" rowHeight="100" id="cBl-Hj-l4P" customClass="BookCell" customModule="HackerBooksPro" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="92" width="600" height="100"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cBl-Hj-l4P" id="xOP-eD-Ydb">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="99"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Book Title" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SuC-9y-JJS">
+                                                    <rect key="frame" x="86" y="8" width="506" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Authors" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2vn-2R-Quj">
+                                                    <rect key="frame" x="86" y="46" width="506" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="emptyBook.png" translatesAutoresizingMaskIntoConstraints="NO" id="IOw-MI-sV5">
+                                                    <rect key="frame" x="8" y="5" width="60" height="90"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="90" id="8LU-m7-plO"/>
+                                                        <constraint firstAttribute="width" constant="60" id="U5v-j0-hh1"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="IOw-MI-sV5" firstAttribute="centerY" secondItem="xOP-eD-Ydb" secondAttribute="centerY" id="29g-N2-VpB"/>
+                                                <constraint firstItem="IOw-MI-sV5" firstAttribute="leading" secondItem="xOP-eD-Ydb" secondAttribute="leading" constant="8" id="r7d-Cy-VfH"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="BookAuthors" destination="2vn-2R-Quj" id="JMt-lG-cvC"/>
+                                            <outlet property="BookCover" destination="IOw-MI-sV5" id="UmJ-XD-kgr"/>
+                                            <outlet property="BookTitle" destination="SuC-9y-JJS" id="ziU-0v-0Ml"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="COz-aj-HO5" id="wgT-8U-aIH"/>
+                                    <outlet property="delegate" destination="COz-aj-HO5" id="xgk-MG-8b1"/>
+                                </connections>
+                            </tableView>
+                            <searchBar contentMode="redraw" placeholder="Book title, tag, author" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oWO-Zx-Lp1">
+                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="5s1-ZG-36P"/>
+                                </constraints>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="COz-aj-HO5" id="tic-x5-owA"/>
+                                </connections>
+                            </searchBar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="oWO-Zx-Lp1" firstAttribute="leading" secondItem="zZs-yO-yfm" secondAttribute="leading" id="15T-dq-c4N"/>
+                            <constraint firstItem="J4O-aH-EwD" firstAttribute="top" secondItem="LAY-SJ-Jjj" secondAttribute="bottom" id="DoY-q8-5X3"/>
+                            <constraint firstItem="oWO-Zx-Lp1" firstAttribute="top" secondItem="LAY-SJ-Jjj" secondAttribute="bottom" id="Vjz-GN-tnH"/>
+                            <constraint firstAttribute="trailing" secondItem="oWO-Zx-Lp1" secondAttribute="trailing" id="g2O-iE-ibc"/>
+                            <constraint firstItem="TO7-1l-g1C" firstAttribute="top" secondItem="J4O-aH-EwD" secondAttribute="bottom" id="xkC-Mv-FCB"/>
+                            <constraint firstAttribute="trailing" secondItem="J4O-aH-EwD" secondAttribute="trailing" id="yDL-Iu-AhJ"/>
+                            <constraint firstItem="J4O-aH-EwD" firstAttribute="leading" secondItem="zZs-yO-yfm" secondAttribute="leading" id="zsz-cT-lke"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="HackerBooks Pro" id="M5S-x0-fBq">
+                        <barButtonItem key="leftBarButtonItem" id="LhC-Pc-GvU">
+                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="bf9-m3-sQZ">
+                                <rect key="frame" x="20" y="7" width="100" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Title"/>
+                                    <segment title="Tag"/>
+                                </segments>
+                            </segmentedControl>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="searchBar" destination="oWO-Zx-Lp1" id="x0d-xE-q4u"/>
+                        <outlet property="tableView" destination="J4O-aH-EwD" id="vRd-6N-OZ7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bmh-rR-x00" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="851" y="470"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="gGv-xA-GjO">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JVh-fV-9MJ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="vp8-PU-p3D">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="COz-aj-HO5" kind="relationship" relationship="rootViewController" id="uT7-75-ev9"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LZA-ar-Ypk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="103" y="470"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="emptyBook.png" width="512" height="512"/>
+    </resources>
+</document>

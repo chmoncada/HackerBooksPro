@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15G31" minimumToolsVersion="Automatic">
+    <entity name="Author" representedClassName="Author" syncable="YES">
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <relationship name="books" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Book" inverseName="authors" inverseEntity="Book" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="name"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Book" representedClassName="Book" syncable="YES">
+        <attribute name="isFavorite" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="title" attributeType="String" syncable="YES"/>
+        <relationship name="authors" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Author" inverseName="books" inverseEntity="Author" syncable="YES"/>
+        <relationship name="image" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="BookImage" inverseName="book" inverseEntity="BookImage" syncable="YES"/>
+        <relationship name="pdf" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="BookPDF" inverseName="book" inverseEntity="BookPDF" syncable="YES"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Tag" inverseName="book" inverseEntity="Tag" syncable="YES"/>
+    </entity>
+    <entity name="BookImage" representedClassName="BookImage" syncable="YES">
+        <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="imageURL" attributeType="String" syncable="YES"/>
+        <relationship name="book" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="image" inverseEntity="Book" syncable="YES"/>
+    </entity>
+    <entity name="BookPDF" representedClassName="BookPDF" syncable="YES">
+        <attribute name="pdfData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="pdfURL" attributeType="String" syncable="YES"/>
+        <relationship name="book" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="pdf" inverseEntity="Book" syncable="YES"/>
+    </entity>
+    <entity name="Tag" representedClassName="Tag" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="book" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Book" inverseName="tags" inverseEntity="Book" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="name"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <elements>
+        <element name="Author" positionX="-126" positionY="-192" width="128" height="75"/>
+        <element name="Book" positionX="162" positionY="-108" width="128" height="135"/>
+        <element name="BookImage" positionX="-101" positionY="-90" width="128" height="88"/>
+        <element name="BookPDF" positionX="-99" positionY="27" width="128" height="88"/>
+        <element name="Tag" positionX="-83" positionY="144" width="128" height="75"/>
+    </elements>
+</model>
