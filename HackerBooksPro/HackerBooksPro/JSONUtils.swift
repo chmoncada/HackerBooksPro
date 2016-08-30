@@ -15,6 +15,15 @@ typealias JSONObject        = AnyObject
 typealias JSONDictionary    = [String : JSONObject]
 typealias JSONArray         = [JSONDictionary]
 
+//MARK: - JSON Keys
+
+enum JSONKeys: String {
+    case title = "title"
+    case authors = "authors"
+    case tags = "tags"
+    case imageURL = "image_url"
+    case pdfURL = "pdf_url"
+}
 
 // MARK: JSON Utils
 func importJSONDataIfNeeded(coreDataStack:CoreDataStack) {
@@ -58,6 +67,7 @@ func populateCoreDataModel(coredataStack: CoreDataStack) {
     let bookEntity = Book.entity(coredataStack.context)
     let bookImageEntity = BookImage.entity(coredataStack.context)
     let bookPDFEntity = BookPDF.entity(coredataStack.context)
+    let bookTagEntity = BookTag.entity(coredataStack.context)
     let tagEntity = Tag.entity(coredataStack.context)
     
     //Parse JSON file
@@ -69,15 +79,15 @@ func populateCoreDataModel(coredataStack: CoreDataStack) {
             let book = Book(entity: bookEntity!, insertIntoManagedObjectContext: coredataStack.context)
             book.isFavorite = false
             
-            guard let title = json["title"] as? String else {
+            guard let title = json[JSONKeys.title.rawValue] as? String else {
                 throw HackerBooksError.WrongJSONFormat
             }
             
-            guard let imageURLString = json["image_url"] as? String else {
+            guard let imageURLString = json[JSONKeys.imageURL.rawValue] as? String else {
                 throw HackerBooksError.WrongURLFormatForJSONResource
             }
             
-            guard let pdfURLString = json["pdf_url"] as? String else {
+            guard let pdfURLString = json[JSONKeys.pdfURL.rawValue] as? String else {
                     throw HackerBooksError.WrongURLFormatForJSONResource
             }
             
@@ -91,7 +101,7 @@ func populateCoreDataModel(coredataStack: CoreDataStack) {
             pdf.pdfURL = pdfURLString
             book.pdf = pdf
             
-            guard let authors = json["authors"] as? String else{
+            guard let authors = json[JSONKeys.authors.rawValue] as? String else{
                 throw HackerBooksError.WrongJSONFormat
             }
             let authorsArray = authors.componentsSeparatedByString(", ").removeDuplicates().sort()
@@ -102,15 +112,17 @@ func populateCoreDataModel(coredataStack: CoreDataStack) {
                 book.addAuthorsObject(author)
             }
             
-            guard let tags = json["tags"] as? String else{
+            guard let tags = json[JSONKeys.tags.rawValue] as? String else{
                 throw HackerBooksError.WrongJSONFormat
             }
             let tagsArray = tags.componentsSeparatedByString(", ").removeDuplicates().sort()
             let tagsSet : NSOrderedSet = NSOrderedSet(array: tagsArray)
             for each in tagsSet {
+                let bookTag = BookTag(entity: bookTagEntity!, insertIntoManagedObjectContext: coredataStack.context)
                 let tag = Tag(entity: tagEntity!, insertIntoManagedObjectContext: coredataStack.context)
-                tag.name = (each as! String)
-                book.addTagsObject(tag)
+                book.addBookTagsObject(bookTag)
+                tag.tag = (each as! String)
+                tag.addBookTagsObject(bookTag)
             }
 
         }

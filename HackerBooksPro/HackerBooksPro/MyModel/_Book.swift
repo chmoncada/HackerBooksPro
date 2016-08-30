@@ -11,9 +11,9 @@ public enum BookAttributes: String {
 
 public enum BookRelationships: String {
     case authors = "authors"
+    case bookTags = "bookTags"
     case image = "image"
     case pdf = "pdf"
-    case tags = "tags"
 }
 
 public class _Book: NSManagedObject {
@@ -53,13 +53,13 @@ public class _Book: NSManagedObject {
     var authors: NSOrderedSet
 
     @NSManaged public
+    var bookTags: NSSet
+
+    @NSManaged public
     var image: BookImage
 
     @NSManaged public
     var pdf: BookPDF?
-
-    @NSManaged public
-    var tags: NSOrderedSet
 
 }
 
@@ -93,28 +93,28 @@ extension _Book {
 
 extension _Book {
 
-    func addTags(objects: NSOrderedSet) {
-        let mutable = self.tags.mutableCopy() as! NSMutableOrderedSet
-        mutable.unionOrderedSet(objects)
-        self.tags = mutable.copy() as! NSOrderedSet
+    func addBookTags(objects: NSSet) {
+        let mutable = self.bookTags.mutableCopy() as! NSMutableSet
+        mutable.unionSet(objects as Set<NSObject>)
+        self.bookTags = mutable.copy() as! NSSet
     }
 
-    func removeTags(objects: NSOrderedSet) {
-        let mutable = self.tags.mutableCopy() as! NSMutableOrderedSet
-        mutable.minusOrderedSet(objects)
-        self.tags = mutable.copy() as! NSOrderedSet
+    func removeBookTags(objects: NSSet) {
+        let mutable = self.bookTags.mutableCopy() as! NSMutableSet
+        mutable.minusSet(objects as Set<NSObject>)
+        self.bookTags = mutable.copy() as! NSSet
     }
 
-    func addTagsObject(value: Tag) {
-        let mutable = self.tags.mutableCopy() as! NSMutableOrderedSet
+    func addBookTagsObject(value: BookTag) {
+        let mutable = self.bookTags.mutableCopy() as! NSMutableSet
         mutable.addObject(value)
-        self.tags = mutable.copy() as! NSOrderedSet
+        self.bookTags = mutable.copy() as! NSSet
     }
 
-    func removeTagsObject(value: Tag) {
-        let mutable = self.tags.mutableCopy() as! NSMutableOrderedSet
+    func removeBookTagsObject(value: BookTag) {
+        let mutable = self.bookTags.mutableCopy() as! NSMutableSet
         mutable.removeObject(value)
-        self.tags = mutable.copy() as! NSOrderedSet
+        self.bookTags = mutable.copy() as! NSSet
     }
 
 }

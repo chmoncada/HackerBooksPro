@@ -24,20 +24,35 @@ class LibraryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //To show first row in the table due to searchBar
-        tableView.contentInset = UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
         searchBar.barTintColor = UIColor.blackColor()
         searchBar.searchBarStyle = .Default
         
         //POR AHORA IMPLEMENTRAMOS EL FETCH RESULTS ACA
-        let fetchRequest = NSFetchRequest(entityName: "\(Book.entityName())")
+//        let fetchRequest = NSFetchRequest(entityName: Book.entityName())
+//        
+//        let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
+//        fetchRequest.sortDescriptors = [sortDescriptor]
+//        
+//        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+//                                                              managedObjectContext: coreDataStack.context,
+//                                                              sectionNameKeyPath: nil,
+//                                                              cacheName: nil)
         
-        let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        // PRUEBA 2
+        
+        let fetchRequest = NSFetchRequest(entityName: BookTag.entityName())
+        
+        let sortDescriptor1 = NSSortDescriptor(key: "tag.tag", ascending: true)
+        let sortDescriptor2 = NSSortDescriptor(key: "book.title", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor1,sortDescriptor2]
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                               managedObjectContext: coreDataStack.context,
-                                                              sectionNameKeyPath: nil,
+                                                              sectionNameKeyPath: "tag.tag",
                                                               cacheName: nil)
+        
+        
         do {
             try fetchedResultsController.performFetch()
         } catch let error as NSError {
@@ -94,6 +109,24 @@ extension LibraryViewController: UITableViewDataSource {
         
     }
     
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        let sectionInfo = fetchedResultsController.sections![section]
+        return sectionInfo.name.uppercaseString
+    }
+    
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let title = UILabel()
+        title.textColor = UIColor(red: 1.0, green: 0.737, blue: 0.173, alpha: 1.00)
+        
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.textColor = title.textColor
+        
+    }
+    
+    
+    
+    
 }
 
 
@@ -104,7 +137,40 @@ extension LibraryViewController: UITableViewDelegate {
         return 100
     }
     
+//    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+//        performSegueWithIdentifier("ShowBook", sender: indexPath)
+//    }
+//    
+    
 }
+
+//MARK: - Segue
+
+extension LibraryViewController {
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ShowBook" {
+            
+            let navigationController = segue.destinationViewController as! UINavigationController
+            let controller = navigationController.topViewController as! BookViewController
+            
+            controller.coreDataStack = coreDataStack
+            
+            
+            if let indexPath = tableView.indexPathForSelectedRow {
+                print("pasamos el modelo de la celda")
+                let bookTag = fetchedResultsController.objectAtIndexPath(indexPath) as! BookTag
+                let model = bookTag.book
+                //print(model.title)
+                controller.model = model
+                //print(controller.book!.title)
+            }
+            
+        }
+    }
+    
+}
+
 
 //MARK: - NSFetchedResultControllerDelegate
 

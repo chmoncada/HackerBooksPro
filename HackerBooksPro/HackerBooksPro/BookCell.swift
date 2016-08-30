@@ -19,9 +19,10 @@ class BookCell: UITableViewCell {
     
     func configureCell(fetchResultController: NSFetchedResultsController, indexPath: NSIndexPath, coreDataStack: CoreDataStack) {
         
-        let book = fetchResultController.objectAtIndexPath(indexPath) as! Book
+        let bookTag = fetchResultController.objectAtIndexPath(indexPath) as! BookTag
+        let book = bookTag.book
         self.BookTitle.text = book.title
-        self.BookAuthors.text = "AUTORES"
+        self.BookAuthors.text = book.authorsList()
         
         // Si no hay datos en el modelo se carga y se retorna la info
         guard (book.image.imageData != nil) else {
