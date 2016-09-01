@@ -59,7 +59,7 @@ public class _Book: NSManagedObject {
     var image: BookImage
 
     @NSManaged public
-    var pdf: BookPDF?
+    var pdf: BookPDF
 
 }
 

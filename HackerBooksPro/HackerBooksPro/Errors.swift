@@ -17,3 +17,7 @@ enum HackerBooksError : ErrorType{
     case nilJSONObject
 }
 
+enum PDFDocumentError: ErrorType {
+    case UrlNotValid
+    case BadDocumentType
+}

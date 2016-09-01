@@ -3,6 +3,7 @@ import Foundation
 @objc(Book)
 public class Book: _Book {
 	
+    var pdfDownloaded: Bool?
     
     func authorsList() -> String {
         
@@ -20,7 +21,7 @@ public class Book: _Book {
     func tagsList() -> String? {
         
         if let array = self.bookTags.allObjects as? BookTagArray {
-            let arrayOfTags = array.map({$0.tag.tag!})
+            let arrayOfTags = array.map({$0.tag.tag})
             return arrayOfTags.joinWithSeparator(", ")
         }
         

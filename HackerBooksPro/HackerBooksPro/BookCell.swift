@@ -15,6 +15,8 @@ class BookCell: UITableViewCell {
     @IBOutlet weak var BookAuthors: UILabel!
     @IBOutlet weak var BookCover: UIImageView!
     
+    @IBOutlet weak var FavImage: UIImageView!
+    
     var downloadTask: NSURLSessionDownloadTask?
     
     func configureCell(fetchResultController: NSFetchedResultsController, indexPath: NSIndexPath, coreDataStack: CoreDataStack) {
@@ -23,6 +25,13 @@ class BookCell: UITableViewCell {
         let book = bookTag.book
         self.BookTitle.text = book.title
         self.BookAuthors.text = book.authorsList()
+        print("\(book.title) FAVORITE STATUS: \(book.isFavorite!.boolValue)")
+        //self.FavStar.selected = book.isFavorite!.boolValue
+        if book.isFavorite!.boolValue {
+            FavImage.image = UIImage(named: "filledStar")
+        } else {
+            FavImage.image = UIImage(named: "emptyStar")
+        }
         
         // Si no hay datos en el modelo se carga y se retorna la info
         guard (book.image.imageData != nil) else {

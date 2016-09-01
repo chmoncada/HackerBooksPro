@@ -11,7 +11,6 @@
 		A112A2E21D5E91BC00C29B40 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A2E11D5E91BC00C29B40 /* LibraryViewController.swift */; };
 		A112A2E51D5E91BC00C29B40 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A112A2E31D5E91BC00C29B40 /* Main.storyboard */; };
 		A112A2E81D5E91BC00C29B40 /* HackerBooksPro.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A112A2E61D5E91BC00C29B40 /* HackerBooksPro.xcdatamodeld */; };
-		A112A2EA1D5E91BC00C29B40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A112A2E91D5E91BC00C29B40 /* Assets.xcassets */; };
 		A112A2ED1D5E91BC00C29B40 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A112A2EB1D5E91BC00C29B40 /* LaunchScreen.storyboard */; };
 		A112A2FB1D5E928900C29B40 /* Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A2FA1D5E928900C29B40 /* Foundation.swift */; };
 		A112A2FF1D5E929700C29B40 /* emptyBook.png in Resources */ = {isa = PBXBuildFile; fileRef = A112A2FC1D5E929700C29B40 /* emptyBook.png */; };
@@ -34,8 +33,17 @@
 		A12DEC061D75EE8B008CBBEE /* BookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12DEC051D75EE8B008CBBEE /* BookViewController.swift */; };
 		A14F05731D6D381400D9132D /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14F05721D6D381400D9132D /* BookCell.swift */; };
 		A14F05751D6D45D400D9132D /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14F05741D6D45D400D9132D /* UIImageView.swift */; };
+		A1B9C0441D7649210027A376 /* DownloadPDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B9C0431D7649210027A376 /* DownloadPDF.swift */; };
+		A1B9C0461D7658700027A376 /* SimplePDFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B9C0451D7658700027A376 /* SimplePDFViewController.swift */; };
 		A1D15CAD1D74E13300C2F39B /* _BookTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D15CAB1D74E13300C2F39B /* _BookTag.swift */; };
 		A1D15CAE1D74E13300C2F39B /* BookTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D15CAC1D74E13300C2F39B /* BookTag.swift */; };
+		A1F12BD41D77A226006BE392 /* PDFReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F12BD31D77A226006BE392 /* PDFReaderViewController.swift */; };
+		A1F12BD61D77A251006BE392 /* PDFDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F12BD51D77A251006BE392 /* PDFDocument.swift */; };
+		A1F12BD81D77A2DF006BE392 /* PDFOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */; };
+		A1F12BDA1D77A600006BE392 /* iosreverseengineering.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A1F12BD91D77A600006BE392 /* iosreverseengineering.pdf */; };
+		A1F12BDC1D77A9CE006BE392 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1F12BDB1D77A9CE006BE392 /* Assets.xcassets */; };
+		A1F12BDE1D77AC03006BE392 /* nofile.html in Resources */ = {isa = PBXBuildFile; fileRef = A1F12BDD1D77AC03006BE392 /* nofile.html */; };
+		A1F12BE01D77AD19006BE392 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F12BDF1D77AD19006BE392 /* ImageCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,7 +52,6 @@
 		A112A2E11D5E91BC00C29B40 /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
 		A112A2E41D5E91BC00C29B40 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A112A2E71D5E91BC00C29B40 /* HackerBooksPro.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = HackerBooksPro.xcdatamodel; sourceTree = "<group>"; };
-		A112A2E91D5E91BC00C29B40 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A112A2EC1D5E91BC00C29B40 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A112A2EE1D5E91BC00C29B40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A112A2FA1D5E928900C29B40 /* Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Foundation.swift; sourceTree = "<group>"; };
@@ -68,8 +75,17 @@
 		A12DEC051D75EE8B008CBBEE /* BookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookViewController.swift; sourceTree = "<group>"; };
 		A14F05721D6D381400D9132D /* BookCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookCell.swift; sourceTree = "<group>"; };
 		A14F05741D6D45D400D9132D /* UIImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
+		A1B9C0431D7649210027A376 /* DownloadPDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadPDF.swift; sourceTree = "<group>"; };
+		A1B9C0451D7658700027A376 /* SimplePDFViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePDFViewController.swift; sourceTree = "<group>"; };
 		A1D15CAB1D74E13300C2F39B /* _BookTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _BookTag.swift; path = MyModel/_BookTag.swift; sourceTree = "<group>"; };
 		A1D15CAC1D74E13300C2F39B /* BookTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookTag.swift; path = MyModel/BookTag.swift; sourceTree = "<group>"; };
+		A1F12BD31D77A226006BE392 /* PDFReaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFReaderViewController.swift; sourceTree = "<group>"; };
+		A1F12BD51D77A251006BE392 /* PDFDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFDocument.swift; sourceTree = "<group>"; };
+		A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFOverviewViewController.swift; sourceTree = "<group>"; };
+		A1F12BD91D77A600006BE392 /* iosreverseengineering.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = iosreverseengineering.pdf; sourceTree = "<group>"; };
+		A1F12BDB1D77A9CE006BE392 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1F12BDD1D77AC03006BE392 /* nofile.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = nofile.html; sourceTree = "<group>"; };
+		A1F12BDF1D77AD19006BE392 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +102,7 @@
 		A112A2D31D5E91BC00C29B40 = {
 			isa = PBXGroup;
 			children = (
+				A1F12BDB1D77A9CE006BE392 /* Assets.xcassets */,
 				A112A2DE1D5E91BC00C29B40 /* HackerBooksPro */,
 				A112A2DD1D5E91BC00C29B40 /* Products */,
 			);
@@ -119,7 +136,6 @@
 				A112A2F61D5E925400C29B40 /* Models */,
 				A112A2F51D5E924900C29B40 /* CoreData */,
 				A112A2EE1D5E91BC00C29B40 /* Info.plist */,
-				A112A2E91D5E91BC00C29B40 /* Assets.xcassets */,
 				A112A2EB1D5E91BC00C29B40 /* LaunchScreen.storyboard */,
 			);
 			name = App;
@@ -137,17 +153,18 @@
 			isa = PBXGroup;
 			children = (
 				A1D15CAB1D74E13300C2F39B /* _BookTag.swift */,
-				A1D15CAC1D74E13300C2F39B /* BookTag.swift */,
 				A112A30D1D5EB59400C29B40 /* _Author.swift */,
 				A112A30E1D5EB59400C29B40 /* _Book.swift */,
 				A112A3071D5EB59400C29B40 /* _BookImage.swift */,
 				A112A3081D5EB59400C29B40 /* _BookPDF.swift */,
 				A112A3091D5EB59400C29B40 /* _Tag.swift */,
+				A1D15CAC1D74E13300C2F39B /* BookTag.swift */,
 				A112A30F1D5EB59400C29B40 /* Author.swift */,
 				A112A3101D5EB59400C29B40 /* Book.swift */,
 				A112A30A1D5EB59400C29B40 /* BookImage.swift */,
 				A112A30B1D5EB59400C29B40 /* BookPDF.swift */,
 				A112A30C1D5EB59400C29B40 /* Tag.swift */,
+				A1F12BD51D77A251006BE392 /* PDFDocument.swift */,
 				A112A2E61D5E91BC00C29B40 /* HackerBooksPro.xcdatamodeld */,
 			);
 			name = Models;
@@ -156,9 +173,13 @@
 		A112A2F71D5E925F00C29B40 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A1F12BD31D77A226006BE392 /* PDFReaderViewController.swift */,
+				A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */,
+				A1F12BDF1D77AD19006BE392 /* ImageCell.swift */,
 				A112A2E11D5E91BC00C29B40 /* LibraryViewController.swift */,
 				A14F05721D6D381400D9132D /* BookCell.swift */,
 				A12DEC051D75EE8B008CBBEE /* BookViewController.swift */,
+				A1B9C0451D7658700027A376 /* SimplePDFViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -166,6 +187,8 @@
 		A112A2F81D5E926D00C29B40 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A1F12BDD1D77AC03006BE392 /* nofile.html */,
+				A1F12BD91D77A600006BE392 /* iosreverseengineering.pdf */,
 				A112A2FD1D5E929700C29B40 /* emptyStar.png */,
 				A112A2FC1D5E929700C29B40 /* emptyBook.png */,
 				A112A2FE1D5E929700C29B40 /* filledStar.png */,
@@ -188,6 +211,7 @@
 				A112A31B1D5EBD6D00C29B40 /* Errors.swift */,
 				A112A3051D5EB4B600C29B40 /* JSONUtils.swift */,
 				A112A31D1D5EBF1A00C29B40 /* Utils.swift */,
+				A1B9C0431D7649210027A376 /* DownloadPDF.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -251,9 +275,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A112A2ED1D5E91BC00C29B40 /* LaunchScreen.storyboard in Resources */,
+				A1F12BDA1D77A600006BE392 /* iosreverseengineering.pdf in Resources */,
 				A112A3001D5E929700C29B40 /* emptyStar.png in Resources */,
-				A112A2EA1D5E91BC00C29B40 /* Assets.xcassets in Resources */,
+				A1F12BDE1D77AC03006BE392 /* nofile.html in Resources */,
 				A112A3011D5E929700C29B40 /* filledStar.png in Resources */,
+				A1F12BDC1D77A9CE006BE392 /* Assets.xcassets in Resources */,
 				A112A2FF1D5E929700C29B40 /* emptyBook.png in Resources */,
 				A112A2E51D5E91BC00C29B40 /* Main.storyboard in Resources */,
 			);
@@ -272,12 +298,16 @@
 				A112A3041D5E92FA00C29B40 /* CoreDataStack.swift in Sources */,
 				A112A3141D5EB59400C29B40 /* BookImage.swift in Sources */,
 				A12DEC061D75EE8B008CBBEE /* BookViewController.swift in Sources */,
+				A1F12BD41D77A226006BE392 /* PDFReaderViewController.swift in Sources */,
+				A1F12BD61D77A251006BE392 /* PDFDocument.swift in Sources */,
 				A112A3061D5EB4B600C29B40 /* JSONUtils.swift in Sources */,
 				A14F05731D6D381400D9132D /* BookCell.swift in Sources */,
+				A1F12BD81D77A2DF006BE392 /* PDFOverviewViewController.swift in Sources */,
 				A112A2E21D5E91BC00C29B40 /* LibraryViewController.swift in Sources */,
 				A112A2E81D5E91BC00C29B40 /* HackerBooksPro.xcdatamodeld in Sources */,
 				A112A3121D5EB59400C29B40 /* _BookPDF.swift in Sources */,
 				A112A3181D5EB59400C29B40 /* _Book.swift in Sources */,
+				A1F12BE01D77AD19006BE392 /* ImageCell.swift in Sources */,
 				A112A3191D5EB59400C29B40 /* Author.swift in Sources */,
 				A112A31E1D5EBF1A00C29B40 /* Utils.swift in Sources */,
 				A112A3151D5EB59400C29B40 /* BookPDF.swift in Sources */,
@@ -287,7 +317,9 @@
 				A14F05751D6D45D400D9132D /* UIImageView.swift in Sources */,
 				A112A2FB1D5E928900C29B40 /* Foundation.swift in Sources */,
 				A1D15CAE1D74E13300C2F39B /* BookTag.swift in Sources */,
+				A1B9C0461D7658700027A376 /* SimplePDFViewController.swift in Sources */,
 				A112A3131D5EB59400C29B40 /* _Tag.swift in Sources */,
+				A1B9C0441D7649210027A376 /* DownloadPDF.swift in Sources */,
 				A112A2E01D5E91BC00C29B40 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

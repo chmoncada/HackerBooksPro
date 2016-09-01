@@ -10,7 +10,7 @@
         <relationship name="authors" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Author" inverseName="books" inverseEntity="Author" syncable="YES"/>
         <relationship name="bookTags" toMany="YES" deletionRule="Cascade" destinationEntity="BookTag" inverseName="book" inverseEntity="BookTag" syncable="YES"/>
         <relationship name="image" maxCount="1" deletionRule="Cascade" destinationEntity="BookImage" inverseName="book" inverseEntity="BookImage" syncable="YES"/>
-        <relationship name="pdf" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="BookPDF" inverseName="book" inverseEntity="BookPDF" syncable="YES"/>
+        <relationship name="pdf" maxCount="1" deletionRule="Cascade" destinationEntity="BookPDF" inverseName="book" inverseEntity="BookPDF" syncable="YES"/>
     </entity>
     <entity name="BookImage" representedClassName="BookImage" syncable="YES">
         <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
@@ -28,15 +28,15 @@
         <relationship name="tag" maxCount="1" deletionRule="Nullify" destinationEntity="Tag" inverseName="bookTags" inverseEntity="Tag" syncable="YES"/>
     </entity>
     <entity name="Tag" representedClassName="Tag" syncable="YES">
-        <attribute name="tag" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tag" attributeType="String" syncable="YES"/>
         <relationship name="bookTags" toMany="YES" deletionRule="Cascade" destinationEntity="BookTag" inverseName="tag" inverseEntity="BookTag" syncable="YES"/>
     </entity>
     <elements>
         <element name="Author" positionX="-126" positionY="-192" width="128" height="73"/>
-        <element name="Book" positionX="162" positionY="-108" width="128" height="133"/>
+        <element name="Book" positionX="162" positionY="-108" width="128" height="135"/>
         <element name="BookImage" positionX="-101" positionY="-90" width="128" height="88"/>
         <element name="BookPDF" positionX="-27" positionY="90" width="128" height="88"/>
-        <element name="BookTag" positionX="360" positionY="-63" width="128" height="88"/>
-        <element name="Tag" positionX="565" positionY="-63" width="128" height="73"/>
+        <element name="BookTag" positionX="360" positionY="-63" width="128" height="90"/>
+        <element name="Tag" positionX="565" positionY="-63" width="128" height="75"/>
     </elements>
 </model>

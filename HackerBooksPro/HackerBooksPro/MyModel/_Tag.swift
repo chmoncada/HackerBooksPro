@@ -38,7 +38,7 @@ public class _Tag: NSManagedObject {
     // MARK: - Properties
 
     @NSManaged public
-    var tag: String?
+    var tag: String
 
     // MARK: - Relationships
 
