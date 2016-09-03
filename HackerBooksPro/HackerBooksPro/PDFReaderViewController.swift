@@ -4,6 +4,7 @@
 //
 //  Created by Charles Moncada on 31/08/16.
 //  Copyright © 2016 Charles Moncada Pizarro. All rights reserved.
+//  Ideas from https://github.com/Dean151/PDF-reader-iOS
 //
 
 import UIKit
@@ -30,6 +31,7 @@ class PDFReaderViewController: UIViewController, WKNavigationDelegate {
     
     @IBAction func Done(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
+        print("Ultima pagina leida: \(currentPage)")
     }
 
     func configureView() {
@@ -50,6 +52,8 @@ class PDFReaderViewController: UIViewController, WKNavigationDelegate {
         if let navBarOffset = self.navigationController?.navigationBar.frame.size.height {
              // Preventing having page under Navigation Controller
             self.webview.scrollView.contentInset = UIEdgeInsets(top: navBarOffset, left: 0, bottom: 0, right: 0)
+            //lo hacemos delegado
+            //self.webview.scrollView.delegate = self
         }
         self.view.addSubview(self.webview)
         
@@ -86,10 +90,16 @@ class PDFReaderViewController: UIViewController, WKNavigationDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+//    deinit {
+//        self.webview.scrollView.delegate = nil
+//    }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ShowOverview" {
-            guard let pdf = self.pdf else { return }
+            guard let pdf = self.pdf else {
+                return
+            }
             
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! PDFOverviewViewController
             controller.pdf = pdf
@@ -108,7 +118,9 @@ class PDFReaderViewController: UIViewController, WKNavigationDelegate {
     // MARK: - Page Handling
     
     var currentPage: Int? {
-        guard let nbPages = pdf?.numberOfPages else { return nil }
+        guard let nbPages = pdf?.numberOfPages else {
+            return nil
+        }
         let paddingSize: CGFloat = 10
         
         let allHeight = self.webview.scrollView.contentSize.height
@@ -127,7 +139,9 @@ class PDFReaderViewController: UIViewController, WKNavigationDelegate {
     }
     
     func goToPage(page: Int) {
-        guard let nbPages = pdf?.numberOfPages else { return }
+        guard let nbPages = pdf?.numberOfPages else {
+            return
+        }
         let paddingSize: CGFloat = 10
         
         let allHeight = self.webview.scrollView.contentSize.height
@@ -143,4 +157,13 @@ class PDFReaderViewController: UIViewController, WKNavigationDelegate {
         }
     }
 }
-
+//extension PDFReaderViewController: UIScrollViewDelegate {
+//    
+//    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+//        if currentPage == pdf?.numberOfPages {
+//            print("SE ACABO")            
+//        }
+//        
+//    }
+//    
+//}

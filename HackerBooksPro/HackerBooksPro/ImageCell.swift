@@ -1,9 +1,10 @@
 //
-//  ImageCell.swift
-//  pdf-reader
+//  PDFReaderViewController.swift
+//  HackerBooksPro
 //
-//  Created by Thomas Durand on 20/11/2015.
-//  Copyright © 2015 Thomas Durand. All rights reserved.
+//  Created by Charles Moncada on 31/08/16.
+//  Copyright © 2016 Charles Moncada Pizarro. All rights reserved.
+//  Ideas from https://github.com/Dean151/PDF-reader-iOS
 //
 
 import UIKit

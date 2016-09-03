@@ -21,6 +21,11 @@ class LibraryViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
+    override func viewWillAppear(animated: Bool) {
+        let nc = NSNotificationCenter.defaultCenter()
+        nc.addObserver(self, selector: #selector(favChange), name: favStatusDidChange, object: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //To show first row in the table due to searchBar
@@ -70,6 +75,10 @@ class LibraryViewController: UIViewController {
 
     // MARK: Utils
     
+    func favChange(notification: NSNotification) {
+        self.tableView.reloadData()
+    }
+    
 //    func configureCell(cell: BookCell, indexPath: NSIndexPath) {
 //        
 //        let book = fetchedResultsController.objectAtIndexPath(indexPath) as! Book
@@ -110,9 +119,8 @@ extension LibraryViewController: UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        
-        let sectionInfo = fetchedResultsController.sections![section]
-        return sectionInfo.name.uppercaseString
+            let sectionInfo = fetchedResultsController.sections![section]
+            return sectionInfo.name.uppercaseString
     }
     
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -124,9 +132,6 @@ extension LibraryViewController: UITableViewDataSource {
         
     }
     
-    
-    
-    
 }
 
 
@@ -136,6 +141,7 @@ extension LibraryViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 100
     }
+    
     
 //    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 //        performSegueWithIdentifier("ShowBook", sender: indexPath)
@@ -198,7 +204,20 @@ extension LibraryViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         tableView.endUpdates()
     }
+    
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        let indexSet = NSIndexSet(index: sectionIndex)
+        switch type {
+        case .Insert:
+            tableView.insertSections(indexSet, withRowAnimation: .Automatic)
+        case .Delete:
+            tableView.deleteSections(indexSet, withRowAnimation: .Automatic)
+        default :
+            break
+        }
+    }
 }
+
 
 //MARK: - UISearchBarDelegate
 

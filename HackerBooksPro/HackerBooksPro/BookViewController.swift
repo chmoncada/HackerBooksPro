@@ -19,41 +19,9 @@ class BookViewController: UITableViewController {
     @IBOutlet weak var coverImage: UIImageView!
     
     @IBOutlet weak var favoriteSwitch: UISwitch!
-    
-    
-    // MARK: - IBActions
-    
-    @IBAction func done() {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    @IBAction func startDownload() {
-
-        print("HOLA ME APRETASTE?")
-        print(model!.pdf.pdfURL)
-        if let url = NSURL(string: model!.pdf.pdfURL) {
-            let download = Download(url: model!.pdf.pdfURL)
-            download.downloadTask = downloadSession.downloadTaskWithURL(url)
-            download.downloadTask!.resume()
-        }
-        
-    }
-    
-    
-    @IBAction func switchChange(sender: AnyObject) {
-        
-        if favoriteSwitch.on {
-            print("Switch is ON")
-            model!.isFavorite = NSNumber(bool: favoriteSwitch.on)
-            coreDataStack!.saveContext()
-        } else {
-            print("Switch is OFF")
-            model!.isFavorite = NSNumber(bool: favoriteSwitch.on)
-            coreDataStack!.saveContext()
-        }
-        
-    }
-    
+    @IBOutlet weak var downloadButton: UIButton!
+    @IBOutlet weak var progressBar: UIProgressView!
+    @IBOutlet weak var progressLabel: UILabel!
     
     // MARK: - Properties
     
@@ -69,6 +37,47 @@ class BookViewController: UITableViewController {
         return session
     }()
     
+    // MARK: - IBActions
+    
+    @IBAction func done() {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    @IBAction func startDownload() {
+
+        print("HOLA ME APRETASTE?")
+        if let url = NSURL(string: model!.pdf.pdfURL) {
+            download = Download(url: model!.pdf.pdfURL)
+            download!.downloadTask = downloadSession.downloadTaskWithURL(url)
+            download!.downloadTask!.resume()
+        }
+        
+    }
+    
+    @IBAction func switchChange(sender: AnyObject) {
+        
+        favoriteSwitch.on ? print("Switch is ON") : print("Switch is OFF")
+        
+        model!.isFavorite = NSNumber(bool: favoriteSwitch.on)
+        
+        
+        if favoriteSwitch.on {
+            //cambio la propiedad del modelo isFavorite
+            
+            //añado "tag" favorito al modelo 
+            let newTag = Tag.uniqueTag("__FAVORITO", context: coreDataStack!.context)
+            let bookTag = BookTag(managedObjectContext: coreDataStack!.context)
+            bookTag!.tag = newTag!
+            bookTag!.book = model!
+            
+            //FUNCIONO, FALTA ARREGLAR LAS SECCIONES DEL FETCHED RESULTS CONTROLLER
+            //1 busco si tag existe
+        }
+        model!.isChanged = true
+        
+        coreDataStack!.saveContext()
+        
+    }
     
     // MARK: - View lifecycle
     
@@ -79,13 +88,12 @@ class BookViewController: UITableViewController {
         authorsLabel.text = model!.authorsList()
         coverImage.image = UIImage(data: model!.image.imageData!)
         tagsLabel.text = model!.tagsList()
-        model!.pdfDownloaded = false
         
-        if model!.isFavorite!.boolValue {
-            favoriteSwitch.setOn(true, animated: true)
-        } else {
-            favoriteSwitch.setOn(false, animated: true)
-        }
+        downloadButton.hidden = model!.pdfDownloaded!
+        progressBar.hidden = model!.pdfDownloaded!
+        progressLabel.hidden = model!.pdfDownloaded!
+        
+        favoriteSwitch.setOn(model!.isFavorite!.boolValue, animated: true)
         
     }
 }
@@ -95,36 +103,74 @@ class BookViewController: UITableViewController {
 extension BookViewController {
     
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        if indexPath.section == 0 || indexPath.section == 0 {
+        if indexPath.section == 1 && model!.pdfDownloaded! {
+            print("me apretaste?")
             return indexPath
         } else {
             return nil
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 0 && indexPath.row == 0 && model!.pdfDownloaded! {
-            print("ALGUN DIA SE MOSTRARA EL PDF")
-            performSegueWithIdentifier("ShowPDF", sender: nil)
-        } 
+//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+//        if indexPath.section == 1 && indexPath.row == 0 && model!.pdfDownloaded! {
+//            print("ALGUN DIA SE MOSTRARA EL PDF")
+//            //performSegueWithIdentifier("ShowPDF", sender: nil)
+//        } 
+//    }
+    
+    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.1
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 || section == 1 {
+            return 5
+        } else {
+            return 30
+        }
     }
     
 }
 
-//MARK: NSURLSessionDownloadDelegate 
+//MARK: - NSURLSessionDownloadDelegate
 
 extension BookViewController: NSURLSessionDownloadDelegate {
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
         print("Finished downloading")
         
-        // Grabo en coredata
+        dispatch_async(dispatch_get_main_queue(), {
+            self.downloadButton.hidden = true
+            self.progressBar.hidden = true
+            self.progressLabel.hidden = true
+            
+        })
+        
+//        // Grabo en coredata
         model!.pdf.pdfData = NSData(contentsOfURL: location)
-        model!.pdfDownloaded = true
+        model!.isChanged = true
         
         coreDataStack?.saveContext()
         
+        
     }
+    
+    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        
+        // Calculate the progress
+        download?.progress = Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)
+        // Put total size of file in MB
+        let totalSize = NSByteCountFormatter.stringFromByteCount(totalBytesExpectedToWrite, countStyle: NSByteCountFormatterCountStyle.Binary)
+        
+        print(download?.progress)
+        print(totalSize)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.progressBar.progress = (self.download?.progress)!
+            self.progressLabel.text = String(format: "%.1f%% of %@",  self.download!.progress * 100, totalSize)
+            
+        })
+    }
+    
     
 }
 

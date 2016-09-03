@@ -4,6 +4,7 @@
 //
 //  Created by Charles Moncada on 31/08/16.
 //  Copyright © 2016 Charles Moncada Pizarro. All rights reserved.
+//  Ideas from https://github.com/Dean151/PDF-reader-iOS
 //
 
 import UIKit
@@ -74,8 +75,14 @@ class PDFOverviewViewController: UICollectionViewController {
     
     func goToPageInParentView(page: Int) {
         guard let pdf = self.pdf where pdf.isPageInDocument(page) else { return }
-        guard let parentVC = self.parentVC else { return }
+        guard let parentVC = self.parentVC else {
+            print("no encontre al parentVC")
+            return
+        }
+        
+        print(page)
         parentVC.shouldShowPage = page
+        
         self.closeView()
     }
     

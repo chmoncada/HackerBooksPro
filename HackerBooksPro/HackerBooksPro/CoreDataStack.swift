@@ -28,8 +28,7 @@ class CoreDataStack {
         let coordinator = NSPersistentStoreCoordinator(
             managedObjectModel: self.managedObjectModel)
         
-        let url = self.applicationDocumentsDirectory
-            .URLByAppendingPathComponent(self.modelName)
+        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent(self.modelName)
         
         do {
             let options =
