@@ -83,7 +83,7 @@
 		A1F12BD51D77A251006BE392 /* PDFDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFDocument.swift; sourceTree = "<group>"; };
 		A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFOverviewViewController.swift; sourceTree = "<group>"; };
 		A1F12BD91D77A600006BE392 /* iosreverseengineering.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = iosreverseengineering.pdf; sourceTree = "<group>"; };
-		A1F12BDB1D77A9CE006BE392 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1F12BDB1D77A9CE006BE392 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../Assets.xcassets; sourceTree = "<group>"; };
 		A1F12BDD1D77AC03006BE392 /* nofile.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = nofile.html; sourceTree = "<group>"; };
 		A1F12BDF1D77AD19006BE392 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -102,7 +102,6 @@
 		A112A2D31D5E91BC00C29B40 = {
 			isa = PBXGroup;
 			children = (
-				A1F12BDB1D77A9CE006BE392 /* Assets.xcassets */,
 				A112A2DE1D5E91BC00C29B40 /* HackerBooksPro */,
 				A112A2DD1D5E91BC00C29B40 /* Products */,
 			);
@@ -119,6 +118,7 @@
 		A112A2DE1D5E91BC00C29B40 /* HackerBooksPro */ = {
 			isa = PBXGroup;
 			children = (
+				A1F12BDB1D77A9CE006BE392 /* Assets.xcassets */,
 				A112A2DF1D5E91BC00C29B40 /* AppDelegate.swift */,
 				A112A2E31D5E91BC00C29B40 /* Main.storyboard */,
 				A112A2F91D5E927A00C29B40 /* Frameworks */,
@@ -177,8 +177,8 @@
 				A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */,
 				A1F12BDF1D77AD19006BE392 /* ImageCell.swift */,
 				A112A2E11D5E91BC00C29B40 /* LibraryViewController.swift */,
-				A14F05721D6D381400D9132D /* BookCell.swift */,
 				A12DEC051D75EE8B008CBBEE /* BookViewController.swift */,
+				A14F05721D6D381400D9132D /* BookCell.swift */,
 				A1B9C0451D7658700027A376 /* SimplePDFViewController.swift */,
 			);
 			name = Controllers;

@@ -16,6 +16,7 @@ class BookViewController: UITableViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorsLabel: UILabel!
     @IBOutlet weak var tagsLabel: UILabel!
+    @IBOutlet weak var messagelabel: UILabel!
     @IBOutlet weak var coverImage: UIImageView!
     
     @IBOutlet weak var favoriteSwitch: UISwitch!
@@ -26,7 +27,14 @@ class BookViewController: UITableViewController {
     // MARK: - Properties
     
     var coreDataStack: CoreDataStack?
+//    var model: Book? {
+//        didSet {
+//            print("Me cambiaron!!, no deberias actualizar la vista???")
+//            refreshUI()
+//        }
+//    }
     var model: Book?
+    
     
     var download: Download?
     
@@ -39,14 +47,17 @@ class BookViewController: UITableViewController {
     
     // MARK: - IBActions
     
-    @IBAction func done() {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
+//    @IBAction func done() {
+//        dismissViewControllerAnimated(true, completion: nil)
+//    }
     
     @IBAction func startDownload() {
 
         print("HOLA ME APRETASTE?")
         if let url = NSURL(string: model!.pdf.pdfURL) {
+            progressBar.hidden = false
+            progressLabel.hidden = false
+            
             download = Download(url: model!.pdf.pdfURL)
             download!.downloadTask = downloadSession.downloadTaskWithURL(url)
             download!.downloadTask!.resume()
@@ -83,22 +94,53 @@ class BookViewController: UITableViewController {
     }
     
     // MARK: - View lifecycle
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        refreshUI()
+    }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    // MARK: - Utils
+    
+    func refreshUI() {
         
         titleLabel.text = model!.title
         authorsLabel.text = model!.authorsList()
-        coverImage.image = UIImage(data: model!.image.imageData!)
+        if let data = model?.image.imageData, let img = UIImage(data: data) {
+            coverImage.image = img
+        } else {
+            coverImage.image = UIImage(named: "emptyBook")
+        }
+        
         tagsLabel.text = model!.tagsList()
         
+        // Averiguo el numero de hojas del PDF
+        if (model?.pdf.pdfData) != nil {
+            let paginas = model?.pdf.numberOfPages
+            print("el numero de paginas de \(model!.title) es: \(paginas)")
+        } else {
+            print("Aun no se descarga el PDF")
+        }
+        
+        
+        
+        //progressLabel.text = ""
+        //progressBar.progress = 0
+        
+        if model!.pdfDownloaded! {
+            messagelabel.text = "Read the book"
+        } else {
+            messagelabel.text = "First download the book before read"
+        }
+        
         downloadButton.hidden = model!.pdfDownloaded!
-        progressBar.hidden = model!.pdfDownloaded!
-        progressLabel.hidden = model!.pdfDownloaded!
+        progressBar.hidden = true
+        progressLabel.hidden = true
         
         favoriteSwitch.setOn(model!.isFavorite!.boolValue, animated: true)
-        
     }
+    
+    
 }
 
 // MARK: - UITableViewDelegate
@@ -147,13 +189,19 @@ extension BookViewController: NSURLSessionDownloadDelegate {
             self.progressBar.hidden = true
             self.progressLabel.hidden = true
             
+            self.model!.pdf.pdfData = NSData(contentsOfURL: location)
+            self.model!.isChanged = true
+            
+            self.coreDataStack?.saveContext()
+
+            
         })
         
 //        // Grabo en coredata
-        model!.pdf.pdfData = NSData(contentsOfURL: location)
-        model!.isChanged = true
-        
-        coreDataStack?.saveContext()
+//        model!.pdf.pdfData = NSData(contentsOfURL: location)
+//        model!.isChanged = true
+//        
+//        coreDataStack?.saveContext()
         
         
     }
@@ -165,8 +213,6 @@ extension BookViewController: NSURLSessionDownloadDelegate {
         // Put total size of file in MB
         let totalSize = NSByteCountFormatter.stringFromByteCount(totalBytesExpectedToWrite, countStyle: NSByteCountFormatterCountStyle.Binary)
         
-        print(download?.progress)
-        print(totalSize)
         dispatch_async(dispatch_get_main_queue(), {
             self.progressBar.progress = (self.download?.progress)!
             self.progressLabel.text = String(format: "%.1f%% of %@",  self.download!.progress * 100, totalSize)
@@ -177,14 +223,24 @@ extension BookViewController: NSURLSessionDownloadDelegate {
     
 }
 
+// MARK: - BookSelectionDelegate
+
+extension BookViewController: BookSelectionDelegate {
+    func bookSelected(newBook: Book) {
+        print("se activa el delegado!!")
+        model = newBook
+        refreshUI()
+    }
+}
+
 // MARK: - Segue
 
 extension BookViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ShowPDF" {
             
-            let navigationController = segue.destinationViewController as! UINavigationController
-            let controller = navigationController.topViewController as! PDFReaderViewController
+            let controller = segue.destinationViewController as! PDFReaderViewController
+            //let  = navigationController.topViewController as!
             //let url = NSBundle.mainBundle().URLForResource("iosreverseengineering", withExtension: "pdf")
             
 //            do {

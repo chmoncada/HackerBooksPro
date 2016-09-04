@@ -20,18 +20,20 @@ import UIKit
 
 func loadImage(remoteURL url: NSURL, completion: (image: UIImage?, data: NSData?) -> ())  {
     
-    var imageView = UIImage()
+    var imageView : UIImage?
     
     
     UIApplication.sharedApplication().networkActivityIndicatorVisible = true
     let downloadTask: NSURLSessionDataTask = NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: {(data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
         if (error != nil) {
-            completion(image: nil, data: nil)
+            dispatch_async(dispatch_get_main_queue(), {() in
+                completion(image: nil, data:  nil)
+            })
             return
         }
         if let data = data {
-            imageView = UIImage(data: data)!
+            imageView = UIImage(data: data)
             dispatch_async(dispatch_get_main_queue(), {() in
                 completion(image: imageView, data:  data)
             })

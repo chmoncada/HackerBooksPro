@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  LibraryViewController.swift
 //  HackerBooksPro
 //
 //  Created by Charles Moncada on 12/08/16.
@@ -9,9 +9,16 @@
 import UIKit
 import CoreData
 
+// Defino protocolo para pasar el libro seleccionado de la tabla
+protocol BookSelectionDelegate: class {
+    func bookSelected(newBook: Book)
+}
+
 class LibraryViewController: UIViewController {
 
     var coreDataStack: CoreDataStack!
+    
+    weak var delegate: BookSelectionDelegate?
     
     //POR AHORA IMPLEMENTAREMOS EL FETCHEDRESULTS ACA
     var fetchedResultsController: NSFetchedResultsController!
@@ -143,39 +150,46 @@ extension LibraryViewController: UITableViewDelegate {
     }
     
     
-//    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        performSegueWithIdentifier("ShowBook", sender: indexPath)
-//    }
-//    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let selectedBookTag = fetchedResultsController.objectAtIndexPath(indexPath) as! BookTag
+        let selectedBook = selectedBookTag.book
+        self.delegate?.bookSelected(selectedBook)
+        
+        if let detailViewController = self.delegate as? BookViewController {
+            splitViewController?.showDetailViewController(detailViewController.navigationController!, sender: nil)
+        }
+        
+    }
+    
     
 }
 
 //MARK: - Segue
 
-extension LibraryViewController {
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "ShowBook" {
-            
-            let navigationController = segue.destinationViewController as! UINavigationController
-            let controller = navigationController.topViewController as! BookViewController
-            
-            controller.coreDataStack = coreDataStack
-            
-            
-            if let indexPath = tableView.indexPathForSelectedRow {
-                print("pasamos el modelo de la celda")
-                let bookTag = fetchedResultsController.objectAtIndexPath(indexPath) as! BookTag
-                let model = bookTag.book
-                //print(model.title)
-                controller.model = model
-                //print(controller.book!.title)
-            }
-            
-        }
-    }
-    
-}
+//extension LibraryViewController {
+//    
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//        if segue.identifier == "ShowBook" {
+//            
+//            let navigationController = segue.destinationViewController as! UINavigationController
+//            let controller = navigationController.topViewController as! BookViewController
+//            
+//            controller.coreDataStack = coreDataStack
+//            
+//            
+//            if let indexPath = tableView.indexPathForSelectedRow {
+//                print("pasamos el modelo de la celda")
+//                let bookTag = fetchedResultsController.objectAtIndexPath(indexPath) as! BookTag
+//                let model = bookTag.book
+//                //print(model.title)
+//                controller.model = model
+//                //print(controller.book!.title)
+//            }
+//            
+//        }
+//    }
+//    
+//}
 
 
 //MARK: - NSFetchedResultControllerDelegate

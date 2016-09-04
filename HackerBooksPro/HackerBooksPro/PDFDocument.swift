@@ -15,14 +15,14 @@ class PDFDocument {
     var data: NSData?
     var document: CGPDFDocument? = nil
     
-//    init(name: String, url: NSURL) throws {
-//        self.name = name
-//        self.url = url
-//        guard let doc = CGPDFDocumentCreateWithURL(url) else {
-//            throw PDFDocumentError.BadDocumentType
-//        }
-//        self.document = doc
-//    }
+    init(name: String, url: NSURL) throws {
+        self.name = name
+        self.url = url
+        guard let doc = CGPDFDocumentCreateWithURL(url) else {
+            throw PDFDocumentError.BadDocumentType
+        }
+        self.document = doc
+    }
     
     init(bookPdf: BookPDF) {
         

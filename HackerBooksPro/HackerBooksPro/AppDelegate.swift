@@ -26,10 +26,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         importJSONDataIfNeeded(coreDataStack)
         
-        let navController = window!.rootViewController as! UINavigationController
-        let viewController = navController.topViewController as! LibraryViewController
-        viewController.coreDataStack = coreDataStack
+//        let navController = window!.rootViewController as! UINavigationController
+//        let viewController = navController.topViewController as! LibraryViewController
+//        viewController.coreDataStack = coreDataStack
         
+        let splitViewController = self.window!.rootViewController as! UISplitViewController
+        let leftNavController = splitViewController.viewControllers.first as! UINavigationController
+        let masterViewController = leftNavController.topViewController as! LibraryViewController
+        let rightNavController = splitViewController.viewControllers.last as! UINavigationController
+        let detailViewController = rightNavController.topViewController as! BookViewController
+        
+        masterViewController.coreDataStack = coreDataStack
+        detailViewController.coreDataStack = coreDataStack
+        
+        
+        
+        //POR AHORA LE PASO UN BOOK INICIAL, DESPUES LO CAMBIARE POR EL QUE SE CARGUE DEL USER DEFAULTS
+        let fetchRequest = NSFetchRequest(entityName: Book.entityName())
+        
+        do {
+            let results = try coreDataStack.context.executeFetchRequest(fetchRequest) as! [Book]
+            detailViewController.model = results.first
+            
+        } catch let error as NSError {
+            print("ERROR \(error)")
+        }
+        
+        masterViewController.delegate = detailViewController
+        
+        detailViewController.navigationItem.leftItemsSupplementBackButton = true
+        detailViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem()
         
         return true
     }
