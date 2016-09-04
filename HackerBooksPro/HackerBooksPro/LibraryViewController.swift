@@ -201,10 +201,6 @@ extension LibraryViewController: NSFetchedResultsControllerDelegate {
         tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic) }
     }
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        tableView.endUpdates()
-    }
-    
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
         let indexSet = NSIndexSet(index: sectionIndex)
         switch type {
@@ -215,6 +211,10 @@ extension LibraryViewController: NSFetchedResultsControllerDelegate {
         default :
             break
         }
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        tableView.endUpdates()
     }
 }
 

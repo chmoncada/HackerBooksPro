@@ -67,11 +67,14 @@ class BookViewController: UITableViewController {
             //añado "tag" favorito al modelo 
             let newTag = Tag.uniqueTag("__FAVORITO", context: coreDataStack!.context)
             let bookTag = BookTag(managedObjectContext: coreDataStack!.context)
+            bookTag!.name = "\(model!.title) - Favorite"
             bookTag!.tag = newTag!
             bookTag!.book = model!
             
             //FUNCIONO, FALTA ARREGLAR LAS SECCIONES DEL FETCHED RESULTS CONTROLLER
             //1 busco si tag existe
+        } else {
+            BookTag.removeFavoriteTag(fromBook: model!, inContext: coreDataStack!.context)
         }
         model!.isChanged = true
         

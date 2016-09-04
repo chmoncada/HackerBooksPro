@@ -119,12 +119,12 @@ func populateCoreDataModel(coredataStack: CoreDataStack) {
             let tagsSet : NSOrderedSet = NSOrderedSet(array: tagsArray)
             for each in tagsSet {
                 let bookTag = BookTag(entity: bookTagEntity!, insertIntoManagedObjectContext: coredataStack.context)
+                let tagName = each as! String
+                bookTag.name = "\(book.title) - \(tagName)"
                 //let tag = Tag(entity: tagEntity!, insertIntoManagedObjectContext: coredataStack.context)
                 book.addBookTagsObject(bookTag)
                 //tag.tag = (each as! String)
                 
-                
-                let tagName = each as! String
                 let tag = Tag.uniqueTag(tagName, context: coredataStack.context)
                 
                 tag!.addBookTagsObject(bookTag)
