@@ -33,7 +33,12 @@ class BookViewController: UITableViewController {
 //            refreshUI()
 //        }
 //    }
-    var model: Book?
+    var model: Book? {
+        didSet {
+            print("ahora soy: \(model?.title)")
+            print("deberias grabarme en el NSUserDefaults")
+        }
+    }
     
     var currentPage: Int? {
         didSet {
@@ -103,6 +108,23 @@ class BookViewController: UITableViewController {
     }
     
     // MARK: - View lifecycle
+    override func viewDidLoad() {
+        
+        // Cargo el primer libro por ahora
+        let fetchRequest = NSFetchRequest(entityName: Book.entityName())
+        let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            let results = try coreDataStack!.context.executeFetchRequest(fetchRequest) as! [Book]
+            print("encontre primer libro")
+            model = results.first
+            
+        } catch let error as NSError {
+            print("ERROR \(error)")
+        }
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         

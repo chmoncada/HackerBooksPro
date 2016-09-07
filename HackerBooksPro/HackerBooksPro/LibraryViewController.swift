@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-// Defino protocolo para pasar el libro seleccionado de la tabla
+// Protocol definition to inject the selected book to the delegate
 
 //MARK: - Protocol BookSelectionDelegate
 

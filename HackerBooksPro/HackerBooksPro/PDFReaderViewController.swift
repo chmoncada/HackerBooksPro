@@ -4,7 +4,7 @@
 //
 //  Created by Charles Moncada on 31/08/16.
 //  Copyright © 2016 Charles Moncada Pizarro. All rights reserved.
-//  Ideas from https://github.com/Dean151/PDF-reader-iOS
+//  Ideas and some code from https://github.com/Dean151/PDF-reader-iOS
 //
 
 import UIKit

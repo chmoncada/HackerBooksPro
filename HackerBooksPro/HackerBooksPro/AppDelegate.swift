@@ -20,15 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        // MARK: App appearance
+        // App appearance
         customizeAppearance()
         
-        
+        // Load JSON if needed
         importJSONDataIfNeeded(coreDataStack)
-        
-//        let navController = window!.rootViewController as! UINavigationController
-//        let viewController = navController.topViewController as! LibraryViewController
-//        viewController.coreDataStack = coreDataStack
         
         let splitViewController = self.window!.rootViewController as! UISplitViewController
         let leftNavController = splitViewController.viewControllers.first as! UINavigationController
@@ -36,26 +32,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let rightNavController = splitViewController.viewControllers.last as! UINavigationController
         let detailViewController = rightNavController.topViewController as! BookViewController
         
+        // propagation of de coredatastack
         masterViewController.coreDataStack = coreDataStack
         detailViewController.coreDataStack = coreDataStack
         
-        
-        
-        //POR AHORA LE PASO UN BOOK INICIAL, DESPUES LO CAMBIARE POR EL QUE SE CARGUE DEL USER DEFAULTS
-        let fetchRequest = NSFetchRequest(entityName: Book.entityName())
-        
-        do {
-            let results = try coreDataStack.context.executeFetchRequest(fetchRequest) as! [Book]
-            detailViewController.model = results.first
-            
-        } catch let error as NSError {
-            print("ERROR \(error)")
-        }
-        // TODO ESTE BLOQUE DEBE CAMBIARSE POR EL DE NSUSER O EL DE ICLOUD
-        
-        
+        // delegate set
         masterViewController.delegate = detailViewController
         
+        // tweak to ipad portrait mode
         detailViewController.navigationItem.leftItemsSupplementBackButton = true
         detailViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem()
         
@@ -90,8 +74,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func customizeAppearance() {
         
+        // Status Bar Appearance
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
-        
         // Navigation Bar Appearance
         UINavigationBar.appearance().titleTextAttributes=[NSForegroundColorAttributeName:UIColor.whiteColor()]
         UINavigationBar.appearance().barTintColor = tintColor
@@ -101,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName:backButtonColor]
         // UITableViewHeader appearance
         UITableViewHeaderFooterView.appearance().tintColor = tintColor
-        //UISearchBar.appearance().backgroundColor = tintColor
+
     }
 
 

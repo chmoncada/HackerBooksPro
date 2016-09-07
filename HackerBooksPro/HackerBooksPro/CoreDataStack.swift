@@ -5,6 +5,7 @@
 //  Created by Charles Moncada on 12/08/16.
 //  Copyright © 2016 Charles Moncada Pizarro. All rights reserved.
 //
+//  Boilerplate code from book "Core Data by Tutorial" - Aaron Douglas and others
 
 import CoreData
 
