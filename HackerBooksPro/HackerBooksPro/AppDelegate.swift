@@ -51,6 +51,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch let error as NSError {
             print("ERROR \(error)")
         }
+        // TODO ESTE BLOQUE DEBE CAMBIARSE POR EL DE NSUSER O EL DE ICLOUD
+        
         
         masterViewController.delegate = detailViewController
         

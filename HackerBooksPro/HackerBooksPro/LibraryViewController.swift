@@ -10,12 +10,26 @@ import UIKit
 import CoreData
 
 // Defino protocolo para pasar el libro seleccionado de la tabla
+
+//MARK: - Protocol BookSelectionDelegate
+
 protocol BookSelectionDelegate: class {
     func bookSelected(newBook: Book)
 }
 
+//MARK: - Enum para el tipo de tabla
+enum tableType {
+    case Title
+    case Tag
+    case SearchResults
+}
+
+//MARK: - Class
+
 class LibraryViewController: UIViewController {
 
+    // MARK: - Properties
+    
     var coreDataStack: CoreDataStack!
     
     weak var delegate: BookSelectionDelegate?
@@ -23,10 +37,37 @@ class LibraryViewController: UIViewController {
     //POR AHORA IMPLEMENTAREMOS EL FETCHEDRESULTS ACA
     var fetchedResultsController: NSFetchedResultsController!
     
-    // MARK: IBOutlets
+    var tableToShow: tableType?
+    
+    // MARK: - IBOutlets
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    
+    
+    // MARK: - IBAction
+    
+    
+    @IBAction func tableTypeChanged(sender: UISegmentedControl) {
+        
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            tableToShow = tableType.Title
+            let frc = getFetchedResultsController(tableToShow!)
+            setNewFetchedResultsController(frc)
+        case 1:
+            tableToShow = tableType.Tag
+            let frc = getFetchedResultsController(tableToShow!)
+            setNewFetchedResultsController(frc)
+        default:
+            break
+        }
+        
+    }
+    
+    
+    //MARK: - Lifecycle
     
     override func viewWillAppear(animated: Bool) {
         let nc = NSNotificationCenter.defaultCenter()
@@ -39,38 +80,12 @@ class LibraryViewController: UIViewController {
         tableView.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
         searchBar.barTintColor = UIColor.blackColor()
         searchBar.searchBarStyle = .Default
+        //Seteo la tabla inicial
+        segmentedControl.selectedSegmentIndex = 0
+        tableToShow = tableType.Title
         
-        //POR AHORA IMPLEMENTRAMOS EL FETCH RESULTS ACA
-//        let fetchRequest = NSFetchRequest(entityName: Book.entityName())
-//        
-//        let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
-//        fetchRequest.sortDescriptors = [sortDescriptor]
-//        
-//        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-//                                                              managedObjectContext: coreDataStack.context,
-//                                                              sectionNameKeyPath: nil,
-//                                                              cacheName: nil)
-        
-        // PRUEBA 2
-        
-        let fetchRequest = NSFetchRequest(entityName: BookTag.entityName())
-        
-        let sortDescriptor1 = NSSortDescriptor(key: "tag.tag", ascending: true)
-        let sortDescriptor2 = NSSortDescriptor(key: "book.title", ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor1,sortDescriptor2]
-        
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                              managedObjectContext: coreDataStack.context,
-                                                              sectionNameKeyPath: "tag.tag",
-                                                              cacheName: nil)
-        
-        
-        do {
-            try fetchedResultsController.performFetch()
-        } catch let error as NSError {
-            print("Error: \(error.localizedDescription)")
-        }
-        
+        fetchedResultsController = getFetchedResultsController(tableToShow!)
+        fetch()
         fetchedResultsController.delegate = self
         
     }
@@ -80,20 +95,11 @@ class LibraryViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: Utils
+    // MARK: - Utils
     
     func favChange(notification: NSNotification) {
         self.tableView.reloadData()
     }
-    
-//    func configureCell(cell: BookCell, indexPath: NSIndexPath) {
-//        
-//        let book = fetchedResultsController.objectAtIndexPath(indexPath) as! Book
-//        
-//        cell.BookCover.image = UIImage(named: "emptyBook")
-//        cell.BookTitle.text = book.title
-//        cell.BookAuthors.text = "AUTORES"
-//    }
 
 }
 
@@ -117,9 +123,16 @@ extension LibraryViewController: UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("BookCell", forIndexPath: indexPath) as! BookCell
         
-        //let book = fetchedResultsController.objectAtIndexPath(indexPath) as! Book
+        var book: Book?
+        if segmentedControl.selectedSegmentIndex == 0 {
+            book = fetchedResultsController.objectAtIndexPath(indexPath) as? Book
+        } else {
+            let bookTag = fetchedResultsController.objectAtIndexPath(indexPath) as? BookTag
+            book = bookTag!.book
+        }
+
         
-        cell.configureCell(fetchedResultsController, indexPath: indexPath, coreDataStack: coreDataStack)
+        cell.configureCell(book!, indexPath: indexPath, coreDataStack: coreDataStack)
         
         return cell
         
@@ -146,13 +159,20 @@ extension LibraryViewController: UITableViewDataSource {
 extension LibraryViewController: UITableViewDelegate {
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 100
+        return 110
     }
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let selectedBookTag = fetchedResultsController.objectAtIndexPath(indexPath) as! BookTag
-        let selectedBook = selectedBookTag.book
+        
+        var selectedBook: Book
+        if tableToShow == tableType.Tag {
+            let selectedBookTag = fetchedResultsController.objectAtIndexPath(indexPath) as! BookTag
+            selectedBook = selectedBookTag.book
+        } else {
+            selectedBook = fetchedResultsController.objectAtIndexPath(indexPath) as! Book
+        }
+        
         self.delegate?.bookSelected(selectedBook)
         
         if let detailViewController = self.delegate as? BookViewController {
@@ -164,32 +184,86 @@ extension LibraryViewController: UITableViewDelegate {
     
 }
 
-//MARK: - Segue
+// MARK: - NSFetchedResultsController methods
 
-//extension LibraryViewController {
-//    
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        if segue.identifier == "ShowBook" {
-//            
-//            let navigationController = segue.destinationViewController as! UINavigationController
-//            let controller = navigationController.topViewController as! BookViewController
-//            
-//            controller.coreDataStack = coreDataStack
-//            
-//            
-//            if let indexPath = tableView.indexPathForSelectedRow {
-//                print("pasamos el modelo de la celda")
-//                let bookTag = fetchedResultsController.objectAtIndexPath(indexPath) as! BookTag
-//                let model = bookTag.book
-//                //print(model.title)
-//                controller.model = model
-//                //print(controller.book!.title)
-//            }
-//            
-//        }
-//    }
-//    
-//}
+extension LibraryViewController {
+    
+    func getFetchedResultsController(type: tableType, predicate: NSPredicate = NSPredicate()) -> NSFetchedResultsController {
+        
+        var fReq: NSFetchedResultsController?
+        
+        switch type {
+            
+        case tableType.Title:
+            let fetchRequest = NSFetchRequest(entityName: Book.entityName())
+            
+            let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
+            fetchRequest.sortDescriptors = [sortDescriptor]
+            
+            fReq = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                              managedObjectContext: coreDataStack.context,
+                                              sectionNameKeyPath: nil,
+                                              cacheName: nil)
+        case tableType.Tag:
+            let fetchRequest = NSFetchRequest(entityName: BookTag.entityName())
+            
+            let sortDescriptor1 = NSSortDescriptor(key: "tag.tag", ascending: true)
+            let sortDescriptor2 = NSSortDescriptor(key: "book.title", ascending: true)
+            fetchRequest.sortDescriptors = [sortDescriptor1,sortDescriptor2]
+            
+            fReq = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                              managedObjectContext: coreDataStack.context,
+                                              sectionNameKeyPath: "tag.tag",
+                                              cacheName: nil)
+        case tableType.SearchResults:
+            let fetchRequest = NSFetchRequest(entityName: Book.entityName())
+            
+            fetchRequest.predicate = predicate
+            
+            let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
+            fetchRequest.sortDescriptors = [sortDescriptor]
+            
+            
+            fReq = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                              managedObjectContext: coreDataStack.context,
+                                              sectionNameKeyPath: nil,
+                                              cacheName: nil)
+        
+        }
+        
+        return fReq!
+    }
+    
+    
+    func setNewFetchedResultsController(newfrc: NSFetchedResultsController) {
+        
+        let oldfrc = fetchedResultsController
+        
+        if (newfrc != oldfrc) {
+            fetchedResultsController = newfrc
+            newfrc.delegate = self
+            fetch()
+            tableView.reloadData()
+            
+        }
+        
+        
+    }
+    
+    
+    func fetch() {
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    
+    
+    
+}
+
 
 
 //MARK: - NSFetchedResultControllerDelegate
@@ -206,13 +280,16 @@ extension LibraryViewController: NSFetchedResultsControllerDelegate {
                                 forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         print("Se detecto cambios")
         switch type {
-        case .Insert: tableView.insertRowsAtIndexPaths([newIndexPath!],
-                                                       withRowAnimation: .Automatic)
-        case .Delete: tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
-        case .Update: let cell = tableView.cellForRowAtIndexPath(indexPath!) as! BookCell
-            cell.configureCell(fetchedResultsController, indexPath: indexPath!, coreDataStack: coreDataStack)
-        case .Move: tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
-        tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic) }
+        case .Insert:
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+        case .Delete:
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+        case .Update:
+            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+        case .Move:
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+        }
     }
     
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
@@ -241,6 +318,14 @@ extension LibraryViewController: UISearchBarDelegate {
         searchBar.resignFirstResponder()
         
         print("The search text is: '\(searchBar.text!)'")
+        let searchString = searchBar.text!
+        
+        let predicate = NSPredicate(format: "%K CONTAINS[cd] %@ OR %K CONTAINS[cd] %@ OR %K CONTAINS[cd] %@", "title", searchString, "bookTags.tag.tag", searchString, "authors.name", searchString) 
+        
+        tableToShow = tableType.SearchResults
+        let frc = getFetchedResultsController(tableToShow!, predicate: predicate)
+        setNewFetchedResultsController(frc)
+        
     }
     
     func positionForBar(bar: UIBarPositioning) -> UIBarPosition {

@@ -35,6 +35,15 @@ class BookViewController: UITableViewController {
 //    }
     var model: Book?
     
+    var currentPage: Int? {
+        didSet {
+            print("Obtuve la ultima pagina leida: \(currentPage)")
+            self.model?.pdf.lastPageOpen = currentPage
+            self.model!.isChanged = true
+            
+            self.coreDataStack?.saveContext()
+        }
+    }
     
     var download: Download?
     
@@ -53,7 +62,7 @@ class BookViewController: UITableViewController {
     
     @IBAction func startDownload() {
 
-        print("HOLA ME APRETASTE?")
+        print("Descargando...")
         if let url = NSURL(string: model!.pdf.pdfURL) {
             progressBar.hidden = false
             progressLabel.hidden = false
@@ -115,12 +124,12 @@ class BookViewController: UITableViewController {
         tagsLabel.text = model!.tagsList()
         
         // Averiguo el numero de hojas del PDF
-        if (model?.pdf.pdfData) != nil {
-            let paginas = model?.pdf.numberOfPages
-            print("el numero de paginas de \(model!.title) es: \(paginas)")
-        } else {
-            print("Aun no se descarga el PDF")
-        }
+//        if (model?.pdf.pdfData) != nil {
+//            let paginas = model!.pdf.document!.numberOfPages
+//            print("el numero de paginas de \(model!.title) es: \(paginas)")
+//        } else {
+//            print("Aun no se descarga el PDF")
+//        }
         
         
         
@@ -149,7 +158,7 @@ extension BookViewController {
     
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
         if indexPath.section == 1 && model!.pdfDownloaded! {
-            print("me apretaste?")
+            //print("me apretaste?")
             return indexPath
         } else {
             return nil
@@ -183,14 +192,17 @@ extension BookViewController: NSURLSessionDownloadDelegate {
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
         print("Finished downloading")
-        
+        model!.pdf.pdfData = NSData(contentsOfURL: location)
+
         dispatch_async(dispatch_get_main_queue(), {
-            self.downloadButton.hidden = true
-            self.progressBar.hidden = true
-            self.progressLabel.hidden = true
+            //self.downloadButton.hidden = true
+            //self.progressBar.hidden = true
+            //self.progressLabel.hidden = true
             
-            self.model!.pdf.pdfData = NSData(contentsOfURL: location)
+            //self.model!.pdf.pdfData = NSData(contentsOfURL: location)
             self.model!.isChanged = true
+            
+            self.refreshUI()
             
             self.coreDataStack?.saveContext()
 
@@ -198,8 +210,7 @@ extension BookViewController: NSURLSessionDownloadDelegate {
         })
         
 //        // Grabo en coredata
-//        model!.pdf.pdfData = NSData(contentsOfURL: location)
-//        model!.isChanged = true
+        //        model!.isChanged = true
 //        
 //        coreDataStack?.saveContext()
         
@@ -244,7 +255,13 @@ extension BookViewController {
             //let url = NSBundle.mainBundle().URLForResource("iosreverseengineering", withExtension: "pdf")
             
 //            do {
-                controller.pdf = PDFDocument(bookPdf: model!.pdf)
+            controller.pdf = PDFDocument(bookPdf: model!.pdf)
+            controller.parentVC = self
+            if model?.pdf.lastPageOpen?.integerValue == 0 {
+                controller.shouldShowPage = 1 // To avoid the page 0 in first time loading
+            } else {
+                controller.shouldShowPage = model?.pdf.lastPageOpen?.integerValue
+            }
 //            } catch {
 //                print("PDF could not be created")
 //            }

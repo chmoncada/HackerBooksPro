@@ -68,7 +68,7 @@ func populateCoreDataModel(coredataStack: CoreDataStack) {
     let bookImageEntity = BookImage.entity(coredataStack.context)
     let bookPDFEntity = BookPDF.entity(coredataStack.context)
     let bookTagEntity = BookTag.entity(coredataStack.context)
-    let tagEntity = Tag.entity(coredataStack.context)
+    //let tagEntity = Tag.entity(coredataStack.context)
     
     //Parse JSON file
     do {

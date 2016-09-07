@@ -82,6 +82,7 @@ class PDFOverviewViewController: UICollectionViewController {
         
         print(page)
         parentVC.shouldShowPage = page
+        print(parentVC.shouldShowPage)
         
         self.closeView()
     }

@@ -20,10 +20,10 @@ class BookCell: UITableViewCell {
     
     var downloadTask: NSURLSessionDownloadTask?
     
-    func configureCell(fetchResultController: NSFetchedResultsController, indexPath: NSIndexPath, coreDataStack: CoreDataStack) {
+    func configureCell(book: Book, indexPath: NSIndexPath, coreDataStack: CoreDataStack) {
         
-        let bookTag = fetchResultController.objectAtIndexPath(indexPath) as! BookTag
-        let book = bookTag.book
+//        let bookTag = fetchResultController.objectAtIndexPath(indexPath) as! BookTag
+//        let book = bookTag.book
         
         // Actualizo labels de titulo y autores
         self.BookTitle.text = book.title
@@ -42,7 +42,7 @@ class BookCell: UITableViewCell {
         // Seteo el page status
         //POR AHORA MUESTRO LAS PAGINAS DEL LIBRO
         if book.pdf.pdfData != nil {
-            BookPageStatus.text = "Paginas totales: \(book.pdf.numberOfPages)"
+            BookPageStatus.text = "Page \(book.pdf.lastPageOpen!) of \(book.pdf.document!.numberOfPages)"
         } else {
             BookPageStatus.text = "Not available"
         }

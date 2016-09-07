@@ -5,6 +5,8 @@ import Foundation
 import CoreData
 
 public enum BookPDFAttributes: String {
+    case isFinished = "isFinished"
+    case lastPageOpen = "lastPageOpen"
     case pdfData = "pdfData"
     case pdfURL = "pdfURL"
 }
@@ -37,6 +39,12 @@ public class _BookPDF: NSManagedObject {
     }
 
     // MARK: - Properties
+
+    @NSManaged public
+    var isFinished: NSNumber?
+
+    @NSManaged public
+    var lastPageOpen: NSNumber?
 
     @NSManaged public
     var pdfData: NSData?

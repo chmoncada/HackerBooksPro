@@ -4,17 +4,12 @@ import UIKit
 @objc(BookPDF)
 public class BookPDF: _BookPDF {
 	
-    var document: CGPDFDocument? {
-        let provider = CGDataProviderCreateWithCFData(self.pdfData)
-        let doc = CGPDFDocumentCreateWithProvider(provider)
+    var document: PDFDocument? {
         
-        return doc
+        let pdfDocument = PDFDocument(bookPdf: self)
+        
+        return pdfDocument
     }
-    
-    var numberOfPages: Int {
-        return CGPDFDocumentGetNumberOfPages(self.document)
-    }
-    
     
     
     
