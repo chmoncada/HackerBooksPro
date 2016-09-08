@@ -20,6 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+        // iCloud Setup
+        iCloudSetup()
+        
         // App appearance
         customizeAppearance()
         
@@ -88,6 +91,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     }
 
+    func iCloudSetup() {
+        // iCloud Settings
+        let urlForCloud = NSFileManager.defaultManager().URLForUbiquityContainerIdentifier(nil)
+        
+        if urlForCloud == nil {
+            print("No iCloud")
+        } else {
+            
+            let store = NSUbiquitousKeyValueStore.defaultStore()
+            
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.iCloudKeysChanged(_:)), name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification, object: store)
+            
+            store.synchronize()
+            
+        }
+        
+    }
+    
+    func iCloudKeysChanged(sender: NSNotification) {
+        
+        // Update local store values
+        print("VALOR CAMBIO")
+        
+    }
 
 }
 

@@ -26,6 +26,8 @@ class BookViewController: UITableViewController {
     
     // MARK: - Properties
     
+    let UserDefaults = NSUserDefaults.standardUserDefaults()
+    
     var coreDataStack: CoreDataStack?
 //    var model: Book? {
 //        didSet {
@@ -37,6 +39,12 @@ class BookViewController: UITableViewController {
         didSet {
             print("ahora soy: \(model?.title)")
             print("deberias grabarme en el NSUserDefaults")
+            saveBookInUserDefaults(model!)
+            
+            // Grabamos en iCloud tambien
+            let store = NSUbiquitousKeyValueStore.defaultStore()
+            store.setString("PRUEBA CHARLES \(model?.title)", forKey: "PRUEBA")
+            
         }
     }
     
@@ -110,18 +118,30 @@ class BookViewController: UITableViewController {
     // MARK: - View lifecycle
     override func viewDidLoad() {
         
-        // Cargo el primer libro por ahora
-        let fetchRequest = NSFetchRequest(entityName: Book.entityName())
-        let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        super.viewDidLoad()
         
-        do {
-            let results = try coreDataStack!.context.executeFetchRequest(fetchRequest) as! [Book]
-            print("encontre primer libro")
-            model = results.first
+        // veo si hay algo grabado en el iCloud
+        let store = NSUbiquitousKeyValueStore.defaultStore()
+        let texto = store.stringForKey("PRUEBA")
+        print("encontre esto \(texto)")
+        
+        if let book = loadBookFromUserDefaults() {
+            model = book
+        } else {
             
-        } catch let error as NSError {
-            print("ERROR \(error)")
+            // Cargo el primer libro por ahora
+            let fetchRequest = NSFetchRequest(entityName: Book.entityName())
+            let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
+            fetchRequest.sortDescriptors = [sortDescriptor]
+            
+            do {
+                let results = try coreDataStack!.context.executeFetchRequest(fetchRequest) as! [Book]
+                print("encontre primer libro")
+                model = results.first
+                
+            } catch let error as NSError {
+                print("ERROR \(error)")
+            }
         }
     }
     
@@ -171,6 +191,46 @@ class BookViewController: UITableViewController {
         favoriteSwitch.setOn(model!.isFavorite!.boolValue, animated: true)
     }
     
+    
+}
+
+// MARK: - NSUserDefaults methods
+
+extension BookViewController {
+    
+    
+    func saveBookInUserDefaults(book: Book) {
+        
+        // Obtain the NSData
+        if let data = archiveURIRepresentation(book) {
+            // save in userdefaults
+            UserDefaults.setObject(data, forKey: "lastbookopen")
+        }
+    }
+    
+    func loadBookFromUserDefaults() -> Book? {
+        if let uriDefault = UserDefaults.objectForKey("lastbookopen") as? NSData{
+            return objectWithArchivedURIRepresentation(uriDefault, context: coreDataStack!.context)
+        }
+        
+        return nil
+    }
+    
+    func archiveURIRepresentation(book: Book) -> NSData? {
+        let uri = book.objectID.URIRepresentation()
+        return NSKeyedArchiver.archivedDataWithRootObject(uri)
+        
+    }
+    
+    func objectWithArchivedURIRepresentation(archivedURI: NSData, context: NSManagedObjectContext) -> Book? {
+        
+        if let uri: NSURL = NSKeyedUnarchiver.unarchiveObjectWithData(archivedURI) as? NSURL, let nid = context.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(uri) {
+            let book = context.objectWithID(nid) as! Book
+            return book
+        }
+        
+        return nil
+    }
     
 }
 

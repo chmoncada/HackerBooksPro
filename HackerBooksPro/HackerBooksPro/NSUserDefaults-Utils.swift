@@ -12,9 +12,9 @@ let def = NSUserDefaults.standardUserDefaults()
 
 func saveBookInUserDefaults(book: Book) {
     
-    //obtengo el NSData del UIR
+    // Obtain the NSData
     if let data = archiveURIRepresentation(book) {
-        //gtabo en userdefaults
+        // save in userdefaults
         def.setObject(data, forKey: "lastbookopen")
     }
 }

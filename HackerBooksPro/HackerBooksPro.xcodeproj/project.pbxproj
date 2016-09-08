@@ -73,6 +73,7 @@
 		A112A3101D5EB59400C29B40 /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Book.swift; path = MyModel/Book.swift; sourceTree = "<group>"; };
 		A112A31B1D5EBD6D00C29B40 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		A112A31D1D5EBF1A00C29B40 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		A1157ADE1D810909006A61CF /* HackerBooksPro.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = HackerBooksPro.entitlements; sourceTree = "<group>"; };
 		A12A9D881D8074EB002912E5 /* NSUserDefaults-Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUserDefaults-Utils.swift"; sourceTree = "<group>"; };
 		A12A9D8A1D8075BE002912E5 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A12DEC051D75EE8B008CBBEE /* BookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookViewController.swift; sourceTree = "<group>"; };
@@ -120,6 +121,7 @@
 		A112A2DE1D5E91BC00C29B40 /* HackerBooksPro */ = {
 			isa = PBXGroup;
 			children = (
+				A1157ADE1D810909006A61CF /* HackerBooksPro.entitlements */,
 				A1F12BDB1D77A9CE006BE392 /* Assets.xcassets */,
 				A112A2DF1D5E91BC00C29B40 /* AppDelegate.swift */,
 				A112A2E31D5E91BC00C29B40 /* Main.storyboard */,
@@ -251,6 +253,12 @@
 				TargetAttributes = {
 					A112A2DB1D5E91BC00C29B40 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 692K8L98GH;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -439,6 +447,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = HackerBooksPro/HackerBooksPro.entitlements;
 				INFOPLIST_FILE = HackerBooksPro/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.charlesmoncada.HackerBooksPro;
@@ -450,6 +459,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = HackerBooksPro/HackerBooksPro.entitlements;
 				INFOPLIST_FILE = HackerBooksPro/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.charlesmoncada.HackerBooksPro;
