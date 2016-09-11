@@ -139,8 +139,10 @@ extension LibraryViewController: UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-            let sectionInfo = fetchedResultsController.sections![section]
-            return sectionInfo.name.uppercaseString
+        let sectionInfo = fetchedResultsController.sections![section]
+        
+        if sectionInfo.name == "_favorite" { return "FAVORITE" } else { return sectionInfo.name.uppercaseString}
+
     }
     
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -207,13 +209,13 @@ extension LibraryViewController {
         case tableType.Tag:
             let fetchRequest = NSFetchRequest(entityName: BookTag.entityName())
             
-            let sortDescriptor1 = NSSortDescriptor(key: "tag.tag", ascending: true)
+            let sortDescriptor1 = NSSortDescriptor(key: "tag.proxyForSorting", ascending: true)
             let sortDescriptor2 = NSSortDescriptor(key: "book.title", ascending: true)
             fetchRequest.sortDescriptors = [sortDescriptor1,sortDescriptor2]
             
             fReq = NSFetchedResultsController(fetchRequest: fetchRequest,
                                               managedObjectContext: coreDataStack.context,
-                                              sectionNameKeyPath: "tag.tag",
+                                              sectionNameKeyPath: "tag.proxyForSorting",
                                               cacheName: nil)
         case tableType.SearchResults:
             let fetchRequest = NSFetchRequest(entityName: Book.entityName())

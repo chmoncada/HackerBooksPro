@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15G1004" minimumToolsVersion="Automatic">
+    <entity name="Annotation" representedClassName="Annotation" syncable="YES">
+        <attribute name="creationDate" attributeType="Date" syncable="YES"/>
+        <attribute name="linkedPage" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="modificationDate" attributeType="Date" syncable="YES"/>
+        <attribute name="text" attributeType="String" syncable="YES"/>
+        <attribute name="title" attributeType="String" syncable="YES"/>
+        <relationship name="bookPdf" maxCount="1" deletionRule="Nullify" destinationEntity="BookPDF" inverseName="annotations" inverseEntity="BookPDF" syncable="YES"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Location" inverseName="annotation" inverseEntity="Location" syncable="YES"/>
+        <relationship name="photo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Photo" inverseName="annotation" inverseEntity="Photo" syncable="YES"/>
+    </entity>
     <entity name="Author" representedClassName="Author" syncable="YES">
         <attribute name="name" attributeType="String" syncable="YES"/>
         <relationship name="books" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Book" inverseName="authors" inverseEntity="Book" syncable="YES"/>
@@ -18,10 +28,11 @@
         <relationship name="book" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="image" inverseEntity="Book" syncable="YES"/>
     </entity>
     <entity name="BookPDF" representedClassName="BookPDF" syncable="YES">
-        <attribute name="isFinished" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="isFinished" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="lastPageOpen" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="pdfData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="pdfURL" attributeType="String" syncable="YES"/>
+        <relationship name="annotations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Annotation" inverseName="bookPdf" inverseEntity="Annotation" syncable="YES"/>
         <relationship name="book" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="pdf" inverseEntity="Book" syncable="YES"/>
     </entity>
     <entity name="BookTag" representedClassName="BookTag" syncable="YES">
@@ -34,16 +45,29 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="Location" representedClassName="Location" syncable="YES">
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="annotation" maxCount="1" deletionRule="Nullify" destinationEntity="Annotation" inverseName="location" inverseEntity="Annotation" syncable="YES"/>
+    </entity>
+    <entity name="Photo" representedClassName="Photo" syncable="YES">
+        <attribute name="photoData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <relationship name="annotation" toMany="YES" deletionRule="Nullify" destinationEntity="Annotation" inverseName="photo" inverseEntity="Annotation" syncable="YES"/>
+    </entity>
     <entity name="Tag" representedClassName="Tag" syncable="YES">
+        <attribute name="proxyForSorting" attributeType="String" syncable="YES"/>
         <attribute name="tag" attributeType="String" syncable="YES"/>
         <relationship name="bookTags" toMany="YES" deletionRule="Cascade" destinationEntity="BookTag" inverseName="tag" inverseEntity="BookTag" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Author" positionX="-126" positionY="-192" width="128" height="73"/>
-        <element name="Book" positionX="162" positionY="-108" width="128" height="135"/>
-        <element name="BookImage" positionX="-101" positionY="-90" width="128" height="88"/>
-        <element name="BookPDF" positionX="-27" positionY="90" width="128" height="120"/>
-        <element name="BookTag" positionX="360" positionY="-63" width="128" height="90"/>
-        <element name="Tag" positionX="565" positionY="-63" width="128" height="75"/>
+        <element name="Annotation" positionX="135" positionY="-369" width="128" height="163"/>
+        <element name="Author" positionX="423" positionY="-180" width="128" height="73"/>
+        <element name="Book" positionX="162" positionY="-108" width="128" height="133"/>
+        <element name="BookImage" positionX="169" positionY="83" width="128" height="88"/>
+        <element name="BookPDF" positionX="-74" positionY="-232" width="128" height="133"/>
+        <element name="BookTag" positionX="421" positionY="-63" width="128" height="90"/>
+        <element name="Location" positionX="331" positionY="-432" width="128" height="88"/>
+        <element name="Photo" positionX="351" positionY="-307" width="128" height="73"/>
+        <element name="Tag" positionX="603" positionY="-48" width="128" height="88"/>
     </elements>
 </model>

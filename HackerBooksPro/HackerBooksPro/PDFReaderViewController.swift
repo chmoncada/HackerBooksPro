@@ -17,6 +17,8 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     
     @IBOutlet weak var webview : UIWebView!
     
+    var coreDataStack: CoreDataStack?
+    var book: Book?
     var shouldShowPage: Int?
     var shouldReload = false
     
@@ -114,6 +116,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ShowOverview" {
+            
             guard let pdf = self.pdf else {
                 return
             }
@@ -125,6 +128,17 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
                 print("Estamos en la pagina: \(currentPage)")
                 controller.currentPage = currentPage
             }
+            
+        } else if segue.identifier == "AddAnnotation" {
+            
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AnnotationViewController
+            if let currentPage = self.currentPage {
+                print("Estamos en la pagina: \(currentPage)")
+                controller.currentPage = currentPage
+            }
+            controller.coreDataStack = coreDataStack
+            controller.book = book
+            
         }
     }
     

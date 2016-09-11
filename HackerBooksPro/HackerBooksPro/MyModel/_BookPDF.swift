@@ -12,6 +12,7 @@ public enum BookPDFAttributes: String {
 }
 
 public enum BookPDFRelationships: String {
+    case annotations = "annotations"
     case book = "book"
 }
 
@@ -55,7 +56,38 @@ public class _BookPDF: NSManagedObject {
     // MARK: - Relationships
 
     @NSManaged public
+    var annotations: NSSet
+
+    @NSManaged public
     var book: Book
+
+}
+
+extension _BookPDF {
+
+    func addAnnotations(objects: NSSet) {
+        let mutable = self.annotations.mutableCopy() as! NSMutableSet
+        mutable.unionSet(objects as Set<NSObject>)
+        self.annotations = mutable.copy() as! NSSet
+    }
+
+    func removeAnnotations(objects: NSSet) {
+        let mutable = self.annotations.mutableCopy() as! NSMutableSet
+        mutable.minusSet(objects as Set<NSObject>)
+        self.annotations = mutable.copy() as! NSSet
+    }
+
+    func addAnnotationsObject(value: Annotation) {
+        let mutable = self.annotations.mutableCopy() as! NSMutableSet
+        mutable.addObject(value)
+        self.annotations = mutable.copy() as! NSSet
+    }
+
+    func removeAnnotationsObject(value: Annotation) {
+        let mutable = self.annotations.mutableCopy() as! NSMutableSet
+        mutable.removeObject(value)
+        self.annotations = mutable.copy() as! NSSet
+    }
 
 }
 

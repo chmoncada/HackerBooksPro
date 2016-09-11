@@ -1,24 +1,23 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
-// Make changes to Tag.swift instead.
+// Make changes to Photo.swift instead.
 
 import Foundation
 import CoreData
 
-public enum TagAttributes: String {
-    case proxyForSorting = "proxyForSorting"
-    case tag = "tag"
+public enum PhotoAttributes: String {
+    case photoData = "photoData"
 }
 
-public enum TagRelationships: String {
-    case bookTags = "bookTags"
+public enum PhotoRelationships: String {
+    case annotation = "annotation"
 }
 
-public class _Tag: NSManagedObject {
+public class _Photo: NSManagedObject {
 
     // MARK: - Class methods
 
     public class func entityName () -> String {
-        return "Tag"
+        return "Photo"
     }
 
     public class func entity(managedObjectContext: NSManagedObjectContext) -> NSEntityDescription? {
@@ -32,49 +31,46 @@ public class _Tag: NSManagedObject {
     }
 
     public convenience init?(managedObjectContext: NSManagedObjectContext) {
-        guard let entity = _Tag.entity(managedObjectContext) else { return nil }
+        guard let entity = _Photo.entity(managedObjectContext) else { return nil }
         self.init(entity: entity, insertIntoManagedObjectContext: managedObjectContext)
     }
 
     // MARK: - Properties
 
     @NSManaged public
-    var proxyForSorting: String
-
-    @NSManaged public
-    var tag: String
+    var photoData: NSData?
 
     // MARK: - Relationships
 
     @NSManaged public
-    var bookTags: NSSet
+    var annotation: NSSet
 
 }
 
-extension _Tag {
+extension _Photo {
 
-    func addBookTags(objects: NSSet) {
-        let mutable = self.bookTags.mutableCopy() as! NSMutableSet
+    func addAnnotation(objects: NSSet) {
+        let mutable = self.annotation.mutableCopy() as! NSMutableSet
         mutable.unionSet(objects as Set<NSObject>)
-        self.bookTags = mutable.copy() as! NSSet
+        self.annotation = mutable.copy() as! NSSet
     }
 
-    func removeBookTags(objects: NSSet) {
-        let mutable = self.bookTags.mutableCopy() as! NSMutableSet
+    func removeAnnotation(objects: NSSet) {
+        let mutable = self.annotation.mutableCopy() as! NSMutableSet
         mutable.minusSet(objects as Set<NSObject>)
-        self.bookTags = mutable.copy() as! NSSet
+        self.annotation = mutable.copy() as! NSSet
     }
 
-    func addBookTagsObject(value: BookTag) {
-        let mutable = self.bookTags.mutableCopy() as! NSMutableSet
+    func addAnnotationObject(value: Annotation) {
+        let mutable = self.annotation.mutableCopy() as! NSMutableSet
         mutable.addObject(value)
-        self.bookTags = mutable.copy() as! NSSet
+        self.annotation = mutable.copy() as! NSSet
     }
 
-    func removeBookTagsObject(value: BookTag) {
-        let mutable = self.bookTags.mutableCopy() as! NSMutableSet
+    func removeAnnotationObject(value: Annotation) {
+        let mutable = self.annotation.mutableCopy() as! NSMutableSet
         mutable.removeObject(value)
-        self.bookTags = mutable.copy() as! NSSet
+        self.annotation = mutable.copy() as! NSSet
     }
 
 }

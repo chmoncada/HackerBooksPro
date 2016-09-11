@@ -98,7 +98,7 @@ class BookViewController: UITableViewController {
             //cambio la propiedad del modelo isFavorite
             
             //añado "tag" favorito al modelo 
-            let newTag = Tag.uniqueTag("__FAVORITO", context: coreDataStack!.context)
+            let newTag = Tag.uniqueTag("favorite", context: coreDataStack!.context)
             let bookTag = BookTag(managedObjectContext: coreDataStack!.context)
             bookTag!.name = "\(model!.title) - Favorite"
             bookTag!.tag = newTag!
@@ -338,6 +338,8 @@ extension BookViewController {
             
 //            do {
             controller.pdf = PDFDocument(bookPdf: model!.pdf)
+            controller.coreDataStack = coreDataStack
+            controller.book = model
             controller.parentVC = self
             if model?.pdf.lastPageOpen?.integerValue == 0 {
                 controller.shouldShowPage = 1 // To avoid the page 0 in first time loading
