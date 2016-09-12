@@ -35,10 +35,12 @@
 		A12DEC061D75EE8B008CBBEE /* BookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12DEC051D75EE8B008CBBEE /* BookViewController.swift */; };
 		A14F05731D6D381400D9132D /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14F05721D6D381400D9132D /* BookCell.swift */; };
 		A14F05751D6D45D400D9132D /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14F05741D6D45D400D9132D /* UIImageView.swift */; };
+		A15DE4BC1D85D722008C7888 /* localization@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A15DE4BB1D85D722008C7888 /* localization@2x.png */; };
+		A15DE4C01D8639ED008C7888 /* UIImage+Alpha.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BD1D8639ED008C7888 /* UIImage+Alpha.swift */; };
+		A15DE4C11D8639ED008C7888 /* UIImage+ReSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BE1D8639ED008C7888 /* UIImage+ReSize.swift */; };
+		A15DE4C21D8639ED008C7888 /* UIImage+RoundCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BF1D8639ED008C7888 /* UIImage+RoundCorner.swift */; };
 		A17F085C1D84D149001F4A68 /* AnnotationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17F085B1D84D149001F4A68 /* AnnotationViewController.swift */; };
-		A17F08641D851DC2001F4A68 /* localization.png in Resources */ = {isa = PBXBuildFile; fileRef = A17F08631D851DC2001F4A68 /* localization.png */; };
 		A1B9C0441D7649210027A376 /* DownloadPDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B9C0431D7649210027A376 /* DownloadPDF.swift */; };
-		A1B9C0461D7658700027A376 /* SimplePDFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B9C0451D7658700027A376 /* SimplePDFViewController.swift */; };
 		A1D15CAD1D74E13300C2F39B /* _BookTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D15CAB1D74E13300C2F39B /* _BookTag.swift */; };
 		A1D15CAE1D74E13300C2F39B /* BookTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D15CAC1D74E13300C2F39B /* BookTag.swift */; };
 		A1D602B51D8326CC0007E736 /* _Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D602AF1D8326CC0007E736 /* _Annotation.swift */; };
@@ -87,10 +89,12 @@
 		A12DEC051D75EE8B008CBBEE /* BookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookViewController.swift; sourceTree = "<group>"; };
 		A14F05721D6D381400D9132D /* BookCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookCell.swift; sourceTree = "<group>"; };
 		A14F05741D6D45D400D9132D /* UIImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
+		A15DE4BB1D85D722008C7888 /* localization@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "localization@2x.png"; sourceTree = "<group>"; };
+		A15DE4BD1D8639ED008C7888 /* UIImage+Alpha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Alpha.swift"; sourceTree = "<group>"; };
+		A15DE4BE1D8639ED008C7888 /* UIImage+ReSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+ReSize.swift"; sourceTree = "<group>"; };
+		A15DE4BF1D8639ED008C7888 /* UIImage+RoundCorner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+RoundCorner.swift"; sourceTree = "<group>"; };
 		A17F085B1D84D149001F4A68 /* AnnotationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationViewController.swift; sourceTree = "<group>"; };
-		A17F08631D851DC2001F4A68 /* localization.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = localization.png; sourceTree = "<group>"; };
 		A1B9C0431D7649210027A376 /* DownloadPDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadPDF.swift; sourceTree = "<group>"; };
-		A1B9C0451D7658700027A376 /* SimplePDFViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePDFViewController.swift; sourceTree = "<group>"; };
 		A1D15CAB1D74E13300C2F39B /* _BookTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _BookTag.swift; path = MyModel/_BookTag.swift; sourceTree = "<group>"; };
 		A1D15CAC1D74E13300C2F39B /* BookTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookTag.swift; path = MyModel/BookTag.swift; sourceTree = "<group>"; };
 		A1D602AF1D8326CC0007E736 /* _Annotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _Annotation.swift; path = MyModel/_Annotation.swift; sourceTree = "<group>"; };
@@ -199,14 +203,13 @@
 		A112A2F71D5E925F00C29B40 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				A1F12BD31D77A226006BE392 /* PDFReaderViewController.swift */,
-				A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */,
-				A1F12BDF1D77AD19006BE392 /* ImageCell.swift */,
 				A112A2E11D5E91BC00C29B40 /* LibraryViewController.swift */,
 				A12DEC051D75EE8B008CBBEE /* BookViewController.swift */,
-				A14F05721D6D381400D9132D /* BookCell.swift */,
-				A1B9C0451D7658700027A376 /* SimplePDFViewController.swift */,
+				A1F12BD31D77A226006BE392 /* PDFReaderViewController.swift */,
+				A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */,
 				A17F085B1D84D149001F4A68 /* AnnotationViewController.swift */,
+				A1F12BDF1D77AD19006BE392 /* ImageCell.swift */,
+				A14F05721D6D381400D9132D /* BookCell.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -214,7 +217,7 @@
 		A112A2F81D5E926D00C29B40 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A17F08631D851DC2001F4A68 /* localization.png */,
+				A15DE4BB1D85D722008C7888 /* localization@2x.png */,
 				A1F12BDD1D77AC03006BE392 /* nofile.html */,
 				A112A2FD1D5E929700C29B40 /* emptyStar.png */,
 				A112A2FC1D5E929700C29B40 /* emptyBook.png */,
@@ -235,6 +238,9 @@
 		A112A3021D5E92BD00C29B40 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				A15DE4BD1D8639ED008C7888 /* UIImage+Alpha.swift */,
+				A15DE4BE1D8639ED008C7888 /* UIImage+ReSize.swift */,
+				A15DE4BF1D8639ED008C7888 /* UIImage+RoundCorner.swift */,
 				A112A31B1D5EBD6D00C29B40 /* Errors.swift */,
 				A112A3051D5EB4B600C29B40 /* JSONUtils.swift */,
 				A112A31D1D5EBF1A00C29B40 /* Utils.swift */,
@@ -313,9 +319,9 @@
 				A112A3001D5E929700C29B40 /* emptyStar.png in Resources */,
 				A1F12BDE1D77AC03006BE392 /* nofile.html in Resources */,
 				A112A3011D5E929700C29B40 /* filledStar.png in Resources */,
-				A17F08641D851DC2001F4A68 /* localization.png in Resources */,
 				A1F12BDC1D77A9CE006BE392 /* Assets.xcassets in Resources */,
 				A112A2FF1D5E929700C29B40 /* emptyBook.png in Resources */,
+				A15DE4BC1D85D722008C7888 /* localization@2x.png in Resources */,
 				A112A2E51D5E91BC00C29B40 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,6 +337,7 @@
 				A1D602BA1D8326CC0007E736 /* Photo.swift in Sources */,
 				A112A3161D5EB59400C29B40 /* Tag.swift in Sources */,
 				A112A3111D5EB59400C29B40 /* _BookImage.swift in Sources */,
+				A15DE4C01D8639ED008C7888 /* UIImage+Alpha.swift in Sources */,
 				A112A3041D5E92FA00C29B40 /* CoreDataStack.swift in Sources */,
 				A112A3141D5EB59400C29B40 /* BookImage.swift in Sources */,
 				A12DEC061D75EE8B008CBBEE /* BookViewController.swift in Sources */,
@@ -339,6 +346,7 @@
 				A1F12BD61D77A251006BE392 /* PDFDocument.swift in Sources */,
 				A112A3061D5EB4B600C29B40 /* JSONUtils.swift in Sources */,
 				A12A9D8B1D8075BE002912E5 /* Constants.swift in Sources */,
+				A15DE4C11D8639ED008C7888 /* UIImage+ReSize.swift in Sources */,
 				A12A9D891D8074EB002912E5 /* NSUserDefaults-Utils.swift in Sources */,
 				A14F05731D6D381400D9132D /* BookCell.swift in Sources */,
 				A1F12BD81D77A2DF006BE392 /* PDFOverviewViewController.swift in Sources */,
@@ -359,8 +367,8 @@
 				A1D602B81D8326CC0007E736 /* Annotation.swift in Sources */,
 				A14F05751D6D45D400D9132D /* UIImageView.swift in Sources */,
 				A112A2FB1D5E928900C29B40 /* Foundation.swift in Sources */,
+				A15DE4C21D8639ED008C7888 /* UIImage+RoundCorner.swift in Sources */,
 				A1D15CAE1D74E13300C2F39B /* BookTag.swift in Sources */,
-				A1B9C0461D7658700027A376 /* SimplePDFViewController.swift in Sources */,
 				A1D602B71D8326CC0007E736 /* _Photo.swift in Sources */,
 				A112A3131D5EB59400C29B40 /* _Tag.swift in Sources */,
 				A1B9C0441D7649210027A376 /* DownloadPDF.swift in Sources */,

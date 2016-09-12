@@ -18,9 +18,38 @@ import UIKit
 //    
 //}
 
-func loadImage(remoteURL url: NSURL, completion: (image: UIImage?, data: NSData?) -> ())  {
+//func loadImage(remoteURL url: NSURL, completion: (image: UIImage?, data: NSData?) -> ())  {
+//    
+//    var imageView : UIImage?
+//    
+//    
+//    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+//    let downloadTask: NSURLSessionDataTask = NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: {(data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+//        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+//        if (error != nil) {
+//            dispatch_async(dispatch_get_main_queue(), {() in
+//                completion(image: nil, data:  nil)
+//            })
+//            return
+//        }
+//        if let data = data {
+//            imageView = UIImage(data: data)
+//            dispatch_async(dispatch_get_main_queue(), {() in
+//                completion(image: imageView, data:  data)
+//            })
+//            return
+//        }
+//        
+//    })
+//    
+//    downloadTask.resume()
+//    
+//}
+
+
+func loadImage(remoteURL url: NSURL, completion: (data: NSData?) -> ())  {
     
-    var imageView : UIImage?
+    //var imageView : UIImage?
     
     
     UIApplication.sharedApplication().networkActivityIndicatorVisible = true
@@ -28,14 +57,14 @@ func loadImage(remoteURL url: NSURL, completion: (image: UIImage?, data: NSData?
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
         if (error != nil) {
             dispatch_async(dispatch_get_main_queue(), {() in
-                completion(image: nil, data:  nil)
+                completion(data:  nil)
             })
             return
         }
         if let data = data {
-            imageView = UIImage(data: data)
+            //imageView = UIImage(data: data)
             dispatch_async(dispatch_get_main_queue(), {() in
-                completion(image: imageView, data:  data)
+                completion(data:  data)
             })
             return
         }

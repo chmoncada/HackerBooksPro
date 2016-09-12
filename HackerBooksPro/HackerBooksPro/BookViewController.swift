@@ -123,7 +123,7 @@ class BookViewController: UITableViewController {
         // veo si hay algo grabado en el iCloud
         let store = NSUbiquitousKeyValueStore.defaultStore()
         let texto = store.stringForKey("PRUEBA")
-        print("encontre esto \(texto)")
+        print("encontre esto en iCloud: \(texto)")
         
         if let book = loadBookFromUserDefaults() {
             model = book

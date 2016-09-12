@@ -12,26 +12,44 @@ import CoreData
 
 class AnnotationViewController: UITableViewController, CLLocationManagerDelegate {
 
-    // MARK: Properties
+    // MARK: - IBOutlets
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var pageNumberLabel: UILabel!
     @IBOutlet weak var latitudeLabel: UILabel!
     @IBOutlet weak var longitudeLabel: UILabel!
     @IBOutlet weak var creationDateLabel: UILabel!
     @IBOutlet weak var modificationDateLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var addPhotoLabel: UILabel!
     
-    // Location Properties
+    // MARK: - Location Properties
     let locationManager = CLLocationManager()
     var location: CLLocation?
     var updatingLocation = false
     var lastLocationError: NSError?
     var timer: NSTimer?
     
-    // Other properties
+    // MARK: - Other properties
     var coreDataStack : CoreDataStack?
     var book: Book?
     var currentPage: Int?
+    var image: UIImage?
     
+    var observer: AnyObject!
+    
+    // dateFormatter
+    
+    var creationDate = NSDate()
+    
+    private let dateFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .MediumStyle
+        formatter.timeStyle = .ShortStyle
+        return formatter
+    }()
+    
+    
+    // MARK: - IBAction
     @IBAction func done() {
         
         // Creo una instancia de Annotation
@@ -41,18 +59,23 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         let locationEntity = Location.entity(coreDataStack!.context)
         let locationObject = Location(entity: locationEntity!, insertIntoManagedObjectContext: coreDataStack!.context)
         
+        let photoEntity = Photo.entity(coreDataStack!.context)
+        let photoObject = Photo(entity: photoEntity!, insertIntoManagedObjectContext: coreDataStack!.context)
+        
         locationObject.latitude = location?.coordinate.latitude
         locationObject.longitude = location?.coordinate.longitude
         annotation.location = locationObject
         
-        annotation.creationDate = NSDate()
-        annotation.modificationDate = NSDate()
+        if let photoImage = image {
+            photoObject.photoData = UIImageJPEGRepresentation(photoImage, 0.5)
+        }
+        annotation.photo = photoObject
+        
+        annotation.creationDate = creationDate
+        annotation.modificationDate = creationDate
         annotation.linkedPage = currentPage
-        
-        //POR AHORA
-        annotation.text = "PRUEBA"
-        annotation.title = "HOLA"
-        
+        annotation.text = descriptionTextView.text
+        annotation.title = "\(book!.title) -  Pag: \(currentPage!) - \(formatDate(creationDate))"
         
         //GRABO LOS VALORES AL MODELO
 
@@ -60,6 +83,10 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         
         coreDataStack?.saveContext()
         
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    @IBAction func cancel() {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -83,10 +110,18 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         updateLabels()
     }
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         updateLabels()
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(AnnotationViewController.hideKeyboard(_:)))
+        gestureRecognizer.cancelsTouchesInView = false
+        tableView.addGestureRecognizer(gestureRecognizer)
+        
+        listenForBackgroundNotification()        
         
     }
 
@@ -95,6 +130,10 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         // Dispose of any resources that can be recreated.
     }
 
+    deinit {
+        print("*** deinit \(self)")
+        NSNotificationCenter.defaultCenter().removeObserver(observer)
+    }
     
 
 
@@ -103,17 +142,14 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
 // MARK: - Utils
 extension AnnotationViewController {
     
-    // Show a alert if the Location Services is disabled in the phone
-    func showLocationServicesDeniedAlert() {
-        let alert = UIAlertController(title: "Location Services Disabled ", message: "Please enable location services for this app in Settings.", preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
-        alert.addAction(okAction)
-        presentViewController(alert, animated: true, completion: nil)
-    }
+    
     
     func updateLabels() {
         
         pageNumberLabel.text = "\(currentPage!)"
+        
+        creationDateLabel.text = formatDate(creationDate)
+        modificationDateLabel.text = formatDate(creationDate)
         
         if let location = location {
             latitudeLabel.text = String(format: "%.8f", location.coordinate.latitude)
@@ -122,6 +158,7 @@ extension AnnotationViewController {
             latitudeLabel.text = ""
             longitudeLabel.text = ""
             
+            // TEST
             let statusMessage: String
             if let error = lastLocationError {
                 if error.domain == kCLErrorDomain && error.code == CLError.Denied.rawValue {
@@ -139,6 +176,83 @@ extension AnnotationViewController {
             
         }
     }
+    
+    func formatDate(date: NSDate) -> String {
+        return dateFormatter.stringFromDate(date)
+    }
+    
+    func showImage(image: UIImage) {
+        imageView.image = image
+        imageView.hidden = false
+        imageView.frame = CGRect(x: 10, y: 10, width: 260, height: 260)
+        addPhotoLabel.hidden = true
+    }
+    
+    func hideKeyboard(gestureRecognizer: UIGestureRecognizer) {
+        let point = gestureRecognizer.locationInView(tableView)
+        let indexPath = tableView.indexPathForRowAtPoint(point)
+        
+        if indexPath != nil && indexPath!.section == 00 && indexPath!.row == 0 {
+            return
+        }
+        
+        descriptionTextView.resignFirstResponder()
+    }
+    
+    func listenForBackgroundNotification() {
+        
+        observer = NSNotificationCenter.defaultCenter().addObserverForName(UIApplicationDidEnterBackgroundNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] _ in
+            if let strongSelf = self {
+                if strongSelf.presentedViewController != nil {
+                    strongSelf.dismissViewControllerAnimated(false, completion: nil)
+                }
+                strongSelf.descriptionTextView.resignFirstResponder()
+            }
+
+            }
+    }
+    
+    
+}
+
+// MARK: - UITableViewDelegate
+
+extension AnnotationViewController {
+    
+    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        if (indexPath.section == 0 && indexPath.row == 0) || indexPath.section == 1 {
+            return indexPath
+        } else {
+            return nil
+        }
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.section == 0 && indexPath.row == 0 {
+            descriptionTextView.becomeFirstResponder()
+        } else if indexPath.section == 1 && indexPath.row == 0 {
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            pickPhoto()
+        }
+        
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        switch (indexPath.section, indexPath.row) {
+        case (0,0):
+            return 88
+        case (1,_):
+            return imageView.hidden ? 44 : 280
+        default:
+            return 44
+        }
+    }
+}
+
+// MARK: - CLLocationManagerDelegate
+
+extension AnnotationViewController {
     
     func startLocationManager() {
         if CLLocationManager.locationServicesEnabled() {
@@ -163,6 +277,14 @@ extension AnnotationViewController {
         }
     }
     
+    // Show a alert if the Location Services is disabled in the phone
+    func showLocationServicesDeniedAlert() {
+        let alert = UIAlertController(title: "Location Services Disabled ", message: "Please enable location services for this app in Settings.", preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(okAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
     func didTimeOut() {
         print("*** Time out")
         if location == nil {
@@ -172,12 +294,6 @@ extension AnnotationViewController {
             
         }
     }
-    
-}
-
-// MARK: - CLLocationManagerDelegate
-
-extension AnnotationViewController {
     
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("didFailWithError \(error)")
@@ -232,6 +348,76 @@ extension AnnotationViewController {
             
         }
     }
+}
+
+// MARK: - UIImagePickerControllerDelegate & Camera methods
+
+extension AnnotationViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func pickPhoto() {
+        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+            showPhotoMenu()
+        } else {
+            choosePhotoFromLibrary()
+        }
+    }
+    
+    func showPhotoMenu() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let takePhotoAction = UIAlertAction(title: "Take Photo", style: .Default, handler: { _ in self.takePhotoWithCamera() })
+        let chooseFromLibrary = UIAlertAction(title: "Choose From Library", style: .Default, handler: { _ in self.choosePhotoFromLibrary() })
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(takePhotoAction)
+        alertController.addAction(chooseFromLibrary)
+        
+        presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    func takePhotoWithCamera() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .Camera
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        presentViewController(imagePicker, animated: true, completion: nil)
+    }
+    
+    func choosePhotoFromLibrary() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .PhotoLibrary
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        presentViewController(imagePicker, animated: true, completion: nil)
+    }
+    
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        let rawImage = info[UIImagePickerControllerEditedImage] as? UIImage
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0)) {
+            self.image = rawImage?.resizedImageWithContentMode(.ScaleAspectFit, bounds: CGSize(width: 260, height: 260), interpolationQuality: .Medium)
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                if let image = self.image {
+                    print("Tengo imagen")
+                    self.showImage(image)
+                }
+                
+                self.tableView.reloadData()
+            }
+        }
+        
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
     
     
 }
+
+

@@ -24,8 +24,6 @@ enum tableType {
     case SearchResults
 }
 
-//MARK: - Class
-
 class LibraryViewController: UIViewController {
 
     // MARK: - Properties
@@ -201,6 +199,7 @@ extension LibraryViewController {
             
             let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
             fetchRequest.sortDescriptors = [sortDescriptor]
+            fetchRequest.fetchBatchSize = 20
             
             fReq = NSFetchedResultsController(fetchRequest: fetchRequest,
                                               managedObjectContext: coreDataStack.context,
@@ -212,6 +211,7 @@ extension LibraryViewController {
             let sortDescriptor1 = NSSortDescriptor(key: "tag.proxyForSorting", ascending: true)
             let sortDescriptor2 = NSSortDescriptor(key: "book.title", ascending: true)
             fetchRequest.sortDescriptors = [sortDescriptor1,sortDescriptor2]
+            fetchRequest.fetchBatchSize = 20
             
             fReq = NSFetchedResultsController(fetchRequest: fetchRequest,
                                               managedObjectContext: coreDataStack.context,
@@ -224,7 +224,7 @@ extension LibraryViewController {
             
             let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
             fetchRequest.sortDescriptors = [sortDescriptor]
-            
+            fetchRequest.fetchBatchSize = 20
             
             fReq = NSFetchedResultsController(fetchRequest: fetchRequest,
                                               managedObjectContext: coreDataStack.context,
