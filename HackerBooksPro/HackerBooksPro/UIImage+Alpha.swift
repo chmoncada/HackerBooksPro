@@ -13,7 +13,7 @@ extension UIImage
     // Returns true if the image has an alpha layer
     func hasAlpha() -> Bool
     {
-        let alpha: CGImageAlphaInfo = CGImageGetAlphaInfo(self.CGImage)
+        let alpha: CGImageAlphaInfo = CGImageGetAlphaInfo(self.CGImage!)
         return (alpha == CGImageAlphaInfo.First || alpha == CGImageAlphaInfo.Last || alpha == CGImageAlphaInfo.PremultipliedFirst || alpha == CGImageAlphaInfo.PremultipliedLast)
     }
     
@@ -31,7 +31,7 @@ extension UIImage
         let height: Int = CGImageGetHeight(imageRef)
         
         // The bitsPerComponent and bitmapInfo values are hard-coded to prevent an "unsupported parameter combination" error
-        let offscreenContext: CGContextRef = CGBitmapContextCreate(nil, width, height, 8, 0, CGImageGetColorSpace(imageRef), CGBitmapInfo.ByteOrderDefault.rawValue | CGImageAlphaInfo.PremultipliedFirst.rawValue)!
+        let offscreenContext: CGContextRef = CGBitmapContextCreate(nil, width, height, 8, 0, CGImageGetColorSpace(imageRef)!, CGBitmapInfo.ByteOrderDefault.rawValue | CGImageAlphaInfo.PremultipliedFirst.rawValue)!
         
         // Draw the image into the context and retrieve the new image, which will now have an alpha layer
         
@@ -56,11 +56,11 @@ extension UIImage
 
         
         // Build a context that's the same dimensions as the new size
-        let bitmap: CGContextRef = CGBitmapContextCreate(nil, Int(newRect.size.width), Int(newRect.size.height), CGImageGetBitsPerComponent(self.CGImage), 0, CGImageGetColorSpace(self.CGImage), bitmapInfo.rawValue)!
+        let bitmap: CGContextRef = CGBitmapContextCreate(nil, Int(newRect.size.width), Int(newRect.size.height), CGImageGetBitsPerComponent(self.CGImage!), 0, CGImageGetColorSpace(self.CGImage!)!, bitmapInfo.rawValue)!
         
         // Draw the image in the center of the context, leaving a gap around the edges
         let imageLocation: CGRect = CGRectMake(borderSize, borderSize, image.size.width, image.size.height)
-        CGContextDrawImage(bitmap, imageLocation, self.CGImage)
+        CGContextDrawImage(bitmap, imageLocation, self.CGImage!)
         let borderImageRef: CGImageRef = CGBitmapContextCreateImage(bitmap)!
         
         // Create a mask to make the border transparent, and combine it with the image
@@ -77,7 +77,7 @@ extension UIImage
     
     private func newBorderMask(borderSize: CGFloat, size: CGSize) -> CGImageRef
     {
-        let colorSpace: CGColorSpaceRef = CGColorSpaceCreateDeviceGray()!
+        let colorSpace: CGColorSpaceRef = CGColorSpaceCreateDeviceGray()
         
         // Build a context that's the same dimensions as the new size
         let maskContext: CGContextRef = CGBitmapContextCreate(nil, Int(size.width), Int(size.height), 8, 0, colorSpace, CGBitmapInfo.ByteOrderDefault.rawValue | CGImageAlphaInfo.None.rawValue)!

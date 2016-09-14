@@ -20,7 +20,7 @@ extension UIImage {
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue)
 
         // Build a context that's the same dimensions as the new size
-        let context: CGContextRef! = CGBitmapContextCreate(nil, Int(image.size.width), Int(image.size.height), CGImageGetBitsPerComponent(image.CGImage), CGImageGetBytesPerRow(image.CGImage), CGImageGetColorSpace(image.CGImage),bitmapInfo.rawValue)
+        let context: CGContextRef! = CGBitmapContextCreate(nil, Int(image.size.width), Int(image.size.height), CGImageGetBitsPerComponent(image.CGImage!), CGImageGetBytesPerRow(image.CGImage!), CGImageGetColorSpace(image.CGImage!)!,bitmapInfo.rawValue)
         
         // Create a clipping path with rounded corners
         CGContextBeginPath(context)
@@ -30,7 +30,7 @@ extension UIImage {
         CGContextClip(context)
         
         // Draw the image to the context; the clipping path will make anything outside the rounded rect transparent
-        CGContextDrawImage(context, CGRectMake(0, 0, image.size.width, image.size.height), image.CGImage)
+        CGContextDrawImage(context, CGRectMake(0, 0, image.size.width, image.size.height), image.CGImage!)
         
         // Create a CGImage from the context
         let clippedImage: CGImageRef = CGBitmapContextCreateImage(context)!

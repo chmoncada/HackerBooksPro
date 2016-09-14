@@ -16,8 +16,8 @@ extension UIImage {
     func getCenterMaxSquareImageByCroppingImage(image: UIImage) -> UIImage
     {
         var centerSquareSize: CGSize = image.size
-        let oriImgWid: CGFloat = CGFloat(CGImageGetWidth(image.CGImage))
-        let oriImgHgt: CGFloat = CGFloat(CGImageGetHeight(image.CGImage))
+        let oriImgWid: CGFloat = CGFloat(CGImageGetWidth(image.CGImage!))
+        let oriImgHgt: CGFloat = CGFloat(CGImageGetHeight(image.CGImage!))
         if oriImgHgt <= oriImgWid {
             centerSquareSize.width = oriImgHgt
             centerSquareSize.height = oriImgHgt
@@ -29,7 +29,7 @@ extension UIImage {
         let x: CGFloat = (oriImgWid - centerSquareSize.width) / 2.0
         let y: CGFloat = (oriImgHgt - centerSquareSize.height) / 2.0
         let cropRect: CGRect = CGRectMake(x, y, centerSquareSize.height, centerSquareSize.width)
-        let imageRef: CGImageRef = CGImageCreateWithImageInRect(image.CGImage, cropRect)!
+        let imageRef: CGImageRef = CGImageCreateWithImageInRect(image.CGImage!, cropRect)!
         let cropped: UIImage = UIImage(CGImage: imageRef)
         return cropped
     }
@@ -39,7 +39,7 @@ extension UIImage {
     // This method ignores the image's imageOrientation setting.
     func croppedImage(bounds: CGRect) -> UIImage
     {
-        let imageRef: CGImageRef = CGImageCreateWithImageInRect(self.CGImage, bounds)!
+        let imageRef: CGImageRef = CGImageCreateWithImageInRect(self.CGImage!, bounds)!
         let croppedImage: UIImage = UIImage(CGImage:imageRef)
         return croppedImage
     }
@@ -111,7 +111,7 @@ extension UIImage {
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue)
         
         // Build a context that's the same dimensions as the new size
-        let bitmap: CGContextRef = CGBitmapContextCreate(nil, Int(newRect.size.width), Int(newRect.size.height), CGImageGetBitsPerComponent(imageRef), 0, CGImageGetColorSpace(imageRef),bitmapInfo.rawValue)!
+        let bitmap: CGContextRef = CGBitmapContextCreate(nil, Int(newRect.size.width), Int(newRect.size.height), CGImageGetBitsPerComponent(imageRef), 0, CGImageGetColorSpace(imageRef)!,bitmapInfo.rawValue)!
         
         // Rotate and/or flip the image if required by its orientation
         CGContextConcatCTM(bitmap, transform)

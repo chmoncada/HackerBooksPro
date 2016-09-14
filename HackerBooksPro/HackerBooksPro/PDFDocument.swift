@@ -30,14 +30,14 @@ class PDFDocument {
         
         self.data = bookPdf.pdfData!
         let pdfDataRef = data
-        let provider = CGDataProviderCreateWithCFData(pdfDataRef)
-        let doc = CGPDFDocumentCreateWithProvider(provider)
+        let provider = CGDataProviderCreateWithCFData(pdfDataRef!)
+        let doc = CGPDFDocumentCreateWithProvider(provider!)
         
         self.document = doc
     }
     
     var numberOfPages: Int {
-        return CGPDFDocumentGetNumberOfPages(self.document)
+        return CGPDFDocumentGetNumberOfPages(self.document!)
     }
     
     func isPageInDocument(page: Int) -> Bool {
@@ -70,7 +70,7 @@ class PDFDocument {
         CGContextDrawPDFPage(context, docPage)
         CGContextRestoreGState(context)
         
-        let image:UIImage = UIGraphicsGetImageFromCurrentImageContext();
+        let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()!;
         UIGraphicsEndImageContext();
         return image;
     }

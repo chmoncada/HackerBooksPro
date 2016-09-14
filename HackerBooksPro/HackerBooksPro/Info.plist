@@ -20,6 +20,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app lets you add a photo in your annotations. It needs access to your Photo Library so you can pick a photo if you want.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app lets you keep track of position of your annotations.  It needs access to the GPS coordinates for your location.</string>
 	<key>LSRequiresIPhoneOS</key>

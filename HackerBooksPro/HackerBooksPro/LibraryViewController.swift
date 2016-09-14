@@ -122,13 +122,19 @@ extension LibraryViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCellWithIdentifier("BookCell", forIndexPath: indexPath) as! BookCell
         
         var book: Book?
-        if segmentedControl.selectedSegmentIndex == 0 {
+        
+        switch tableToShow! {
+        case tableType.Title:
+            print("soy tipo titulo")
             book = fetchedResultsController.objectAtIndexPath(indexPath) as? Book
-        } else {
+        case tableType.Tag:
+            print("soy tipo tag")
             let bookTag = fetchedResultsController.objectAtIndexPath(indexPath) as? BookTag
             book = bookTag!.book
+        case tableType.SearchResults:
+            print("soy tipo search")
+            book = fetchedResultsController.objectAtIndexPath(indexPath) as? Book
         }
-
         
         cell.configureCell(book!, indexPath: indexPath, coreDataStack: coreDataStack)
         

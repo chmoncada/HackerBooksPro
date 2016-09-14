@@ -30,33 +30,43 @@ func importJSONDataIfNeeded(coreDataStack:CoreDataStack) {
     
     // First we checked if exists any Book object in Core Data
     let fetchRequest = NSFetchRequest(entityName: Book.entityName())
-    var error: NSError? = nil
     
-    let results = coreDataStack.context.countForFetchRequest(fetchRequest, error: &error)
-    
-    if (results == 0) {
-        
-        print("Cargando modelo del JSON...")
-        do {
-            // Fist we erase any remaining object just in case
-            let results =
-                try coreDataStack.context.executeFetchRequest(fetchRequest) as! [Book]
+    //var error: NSError? = nil
 
-            // Fist we erase any remaining object just in case
-            for object in results {
-                let team = object as Book
-                coreDataStack.context.deleteObject(team)
+    do {
+        let results =  try coreDataStack.context.countForFetchRequest(fetchRequest)
+        
+        if (results == 0) {
+            
+            print("Cargando modelo del JSON...")
+            do {
+                // Fist we erase any remaining object just in case
+                let results =
+                    try coreDataStack.context.executeFetchRequest(fetchRequest) as! [Book]
+                
+                // Fist we erase any remaining object just in case
+                for object in results {
+                    let team = object as Book
+                    coreDataStack.context.deleteObject(team)
+                }
+                
+                coreDataStack.saveContext()
+                populateCoreDataModel(coreDataStack)
+                
+            } catch let error as NSError {
+                print("Error fetching: \(error.localizedDescription)")
             }
-            
-            coreDataStack.saveContext()
-            populateCoreDataModel(coreDataStack)
-            
-        } catch let error as NSError {
-            print("Error fetching: \(error.localizedDescription)")
+        } else {
+            print("Se usara modelo existente")
         }
-    } else {
-        print("Se usara modelo existente")
+
+        
+    } catch let error as NSError? {
+        print("Error: \(error?.localizedDescription)")
     }
+    
+    //let results = coreDataStack.context.countForFetchRequest(fetchRequest)
+    
 }
 
 //JSON Remote loading
@@ -148,9 +158,9 @@ func loadJSONFromRemoteFile() throws -> JSONArray{
     let inputURL = "https://t.co/K9ziV0z3SJ"
     
     if let url = NSURL(string: inputURL),
-        data = NSData(contentsOfURL: url),
-        maybeArray = try? NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? JSONArray,
-        array = maybeArray {
+        let data = NSData(contentsOfURL: url),
+        let maybeArray = try? NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? JSONArray,
+        let array = maybeArray {
         return array
     } else {
         throw HackerBooksError.jsonParsingError
