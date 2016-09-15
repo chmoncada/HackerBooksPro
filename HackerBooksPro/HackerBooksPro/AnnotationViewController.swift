@@ -88,7 +88,8 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     }
     
     @IBAction func cancel() {
-        dismissViewControllerAnimated(true, completion: nil)
+       dismissViewControllerAnimated(true, completion: nil)
+        
     }
     
     @IBAction func getLocation() {
@@ -114,38 +115,33 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     
     @IBAction func shareAnnotation(sender: UIBarButtonItem) {
         
-//        var objectsToShare =  [AnyObject]()
-//        
-//        let textToShare = descriptionTextView.text
-//        objectsToShare.append(textToShare)
-//        
-//        if let photoToShare = imageView.image {
-//            objectsToShare.append(photoToShare)
-//        }
-//
-//        
-//        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-//        
-//        activityVC.popoverPresentationController?.barButtonItem = sender
-//        self.presentViewController(activityVC, animated: true, completion: nil)
 
-        //Facebook
-//        let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-//        vc.setInitialText("\(descriptionTextView.text)")
-//        if let photoToShare = imageView.image {
-//            vc.addImage(photoToShare)
-//        }
-//        self.presentViewController(vc, animated: true, completion: nil)
-        
-        //Twitter
-        let vc = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
-        vc.setInitialText("\(descriptionTextView.text)")
-        if let photoToShare = imageView.image {
-            vc.addImage(photoToShare)
+        let alert = UIAlertController(title: "Sharing note...", message: nil, preferredStyle: .Alert)
+        let twitterAction = UIAlertAction(title: "Share in Twitter", style: .Default) { _ in
+            let vc = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
+            vc.setInitialText("\(self.descriptionTextView.text)")
+            if let photoToShare = self.imageView.image {
+                vc.addImage(photoToShare)
+            }
+            
+            self.presentViewController(vc, animated: true, completion: nil)
         }
+        alert.addAction(twitterAction)
         
-        self.presentViewController(vc, animated: true, completion: nil)
-
+        let facebookAction = UIAlertAction(title: "Share in Facebok", style: .Default) { _ in
+            let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
+            vc.setInitialText("\(self.descriptionTextView.text)")
+            if let photoToShare = self.imageView.image {
+                vc.addImage(photoToShare)
+            }
+            self.presentViewController(vc, animated: true, completion: nil)
+        }
+        alert.addAction(facebookAction)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        presentViewController(alert, animated: true, completion: nil)
         
     }
     

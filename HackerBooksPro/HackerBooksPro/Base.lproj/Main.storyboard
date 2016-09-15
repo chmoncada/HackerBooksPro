@@ -343,9 +343,7 @@
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="63t-ae-8on">
                                 <connections>
-                                    <segue destination="NZk-V0-9IS" kind="popoverPresentation" identifier="AddAnnotation" popoverAnchorBarButtonItem="63t-ae-8on" id="y2y-ed-tWo">
-                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                    </segue>
+                                    <segue destination="NZk-V0-9IS" kind="presentation" identifier="AddAnnotation" id="y2y-ed-tWo"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem image="notes" id="1r1-mX-d5K">
@@ -444,25 +442,39 @@
             <point key="canvasLocation" x="3436" y="2689"/>
         </scene>
         <!--Notes-->
-        <scene sceneID="hp5-Qq-eFq">
+        <scene sceneID="Vi4-bX-Jbf">
             <objects>
-                <viewController title="Notes" id="fGm-1W-4Zk" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="s2L-Qt-UmN"/>
-                        <viewControllerLayoutGuide type="bottom" id="2ux-k2-fNW"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Pkb-NR-sD6">
+                <collectionViewController title="Notes" id="3a4-Wq-fCt" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="Gx6-sF-Kx1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Notes" image="list" id="M11-Xh-caG"/>
-                    <toolbarItems/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="IVE-ff-Uey" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="JlT-VM-n5r">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Hz0-Yl-n75">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </view>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="3a4-Wq-fCt" id="hbg-DL-bvH"/>
+                            <outlet property="delegate" destination="3a4-Wq-fCt" id="v66-DC-8bS"/>
+                        </connections>
+                    </collectionView>
+                    <tabBarItem key="tabBarItem" title="Notes" image="list" id="lwd-5c-erf"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RrX-Bg-ZHu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3464" y="1913"/>
+            <point key="canvasLocation" x="3436" y="1879"/>
         </scene>
         <!--Annotation-->
         <scene sceneID="Omo-iU-540">
@@ -716,7 +728,7 @@
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
-                        <segue destination="fGm-1W-4Zk" kind="relationship" relationship="viewControllers" id="zjs-k0-ci6"/>
+                        <segue destination="3a4-Wq-fCt" kind="relationship" relationship="viewControllers" id="bF5-Mk-Dc3"/>
                         <segue destination="OAC-4p-QIx" kind="relationship" relationship="viewControllers" id="Wyc-XN-kUr"/>
                     </connections>
                 </tabBarController>
