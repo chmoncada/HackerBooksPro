@@ -9,6 +9,7 @@
 import UIKit
 import CoreLocation
 import CoreData
+import Social
 
 class AnnotationViewController: UITableViewController, CLLocationManagerDelegate {
 
@@ -108,6 +109,44 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         
         startLocationManager()
         updateLabels()
+    }
+    
+    
+    @IBAction func shareAnnotation(sender: UIBarButtonItem) {
+        
+//        var objectsToShare =  [AnyObject]()
+//        
+//        let textToShare = descriptionTextView.text
+//        objectsToShare.append(textToShare)
+//        
+//        if let photoToShare = imageView.image {
+//            objectsToShare.append(photoToShare)
+//        }
+//
+//        
+//        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+//        
+//        activityVC.popoverPresentationController?.barButtonItem = sender
+//        self.presentViewController(activityVC, animated: true, completion: nil)
+
+        //Facebook
+//        let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
+//        vc.setInitialText("\(descriptionTextView.text)")
+//        if let photoToShare = imageView.image {
+//            vc.addImage(photoToShare)
+//        }
+//        self.presentViewController(vc, animated: true, completion: nil)
+        
+        //Twitter
+        let vc = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
+        vc.setInitialText("\(descriptionTextView.text)")
+        if let photoToShare = imageView.image {
+            vc.addImage(photoToShare)
+        }
+        
+        self.presentViewController(vc, animated: true, completion: nil)
+
+        
     }
     
     // MARK: - Lifecycle

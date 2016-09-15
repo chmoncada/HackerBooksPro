@@ -35,7 +35,6 @@
 		A12DEC061D75EE8B008CBBEE /* BookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12DEC051D75EE8B008CBBEE /* BookViewController.swift */; };
 		A14F05731D6D381400D9132D /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14F05721D6D381400D9132D /* BookCell.swift */; };
 		A14F05751D6D45D400D9132D /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14F05741D6D45D400D9132D /* UIImageView.swift */; };
-		A15DE4BC1D85D722008C7888 /* localization@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A15DE4BB1D85D722008C7888 /* localization@2x.png */; };
 		A15DE4C01D8639ED008C7888 /* UIImage+Alpha.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BD1D8639ED008C7888 /* UIImage+Alpha.swift */; };
 		A15DE4C11D8639ED008C7888 /* UIImage+ReSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BE1D8639ED008C7888 /* UIImage+ReSize.swift */; };
 		A15DE4C21D8639ED008C7888 /* UIImage+RoundCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BF1D8639ED008C7888 /* UIImage+RoundCorner.swift */; };
@@ -89,7 +88,6 @@
 		A12DEC051D75EE8B008CBBEE /* BookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookViewController.swift; sourceTree = "<group>"; };
 		A14F05721D6D381400D9132D /* BookCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookCell.swift; sourceTree = "<group>"; };
 		A14F05741D6D45D400D9132D /* UIImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
-		A15DE4BB1D85D722008C7888 /* localization@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "localization@2x.png"; sourceTree = "<group>"; };
 		A15DE4BD1D8639ED008C7888 /* UIImage+Alpha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Alpha.swift"; sourceTree = "<group>"; };
 		A15DE4BE1D8639ED008C7888 /* UIImage+ReSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+ReSize.swift"; sourceTree = "<group>"; };
 		A15DE4BF1D8639ED008C7888 /* UIImage+RoundCorner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+RoundCorner.swift"; sourceTree = "<group>"; };
@@ -217,7 +215,6 @@
 		A112A2F81D5E926D00C29B40 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A15DE4BB1D85D722008C7888 /* localization@2x.png */,
 				A1F12BDD1D77AC03006BE392 /* nofile.html */,
 				A112A2FD1D5E929700C29B40 /* emptyStar.png */,
 				A112A2FC1D5E929700C29B40 /* emptyBook.png */,
@@ -322,7 +319,6 @@
 				A112A3011D5E929700C29B40 /* filledStar.png in Resources */,
 				A1F12BDC1D77A9CE006BE392 /* Assets.xcassets in Resources */,
 				A112A2FF1D5E929700C29B40 /* emptyBook.png in Resources */,
-				A15DE4BC1D85D722008C7888 /* localization@2x.png in Resources */,
 				A112A2E51D5E91BC00C29B40 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -489,7 +485,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = HackerBooksPro/HackerBooksPro.entitlements;
+				DEVELOPMENT_TEAM = 692K8L98GH;
 				INFOPLIST_FILE = HackerBooksPro/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.charlesmoncada.HackerBooksPro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -502,7 +500,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = HackerBooksPro/HackerBooksPro.entitlements;
+				DEVELOPMENT_TEAM = 692K8L98GH;
 				INFOPLIST_FILE = HackerBooksPro/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.charlesmoncada.HackerBooksPro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
