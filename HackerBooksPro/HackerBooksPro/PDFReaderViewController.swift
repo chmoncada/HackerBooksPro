@@ -14,8 +14,9 @@ import WebKit
 class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 
     @IBOutlet weak var overviewButton: UIBarButtonItem!
-    
     @IBOutlet weak var webview : UIWebView!
+    @IBOutlet weak var bookmarkButton: UIBarButtonItem!
+    
     
     var coreDataStack: CoreDataStack?
     var book: Book?
@@ -49,6 +50,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         //self.webview = WKWebView(frame: self.view.bounds)
         
         //self.webview = UIWebView(frame: self.view.bounds)
+        //bookmarkButton.image = UIImage(named: "bookmarkRibbonFilled")
         
         self.webview.delegate = self
         if let navBarOffset = self.navigationController?.navigationBar.frame.size.height {
@@ -58,6 +60,8 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             self.webview.scrollView.delegate = self
         }
         //self.view.addSubview(self.webview)
+        //self.webview.scrollView.delegate = self
+        
         
         self.configureView()
     }

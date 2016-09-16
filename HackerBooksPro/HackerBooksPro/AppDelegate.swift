@@ -83,11 +83,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().titleTextAttributes=[NSForegroundColorAttributeName:UIColor.whiteColor()]
         UINavigationBar.appearance().barTintColor = tintColor
         UINavigationBar.appearance().translucent = false
+        // ToolBar Appearance
+        UIToolbar.appearance().tintColor = backButtonColor
+        UIToolbar.appearance().barTintColor = tintColor
         // Back Button Appearance
         UINavigationBar.appearance().tintColor = backButtonColor
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName:backButtonColor]
         // UITableViewHeader appearance
         UITableViewHeaderFooterView.appearance().tintColor = tintColor
+        // UITabBar appearance
+        UITabBar.appearance().tintColor = backButtonColor
+        UITabBar.appearance().barTintColor = tintColor
 
     }
 
