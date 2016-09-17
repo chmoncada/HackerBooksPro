@@ -125,14 +125,14 @@ extension LibraryViewController: UITableViewDataSource {
         
         switch tableToShow! {
         case tableType.Title:
-            print("soy tipo titulo")
+            //print("soy tipo titulo")
             book = fetchedResultsController.objectAtIndexPath(indexPath) as? Book
         case tableType.Tag:
-            print("soy tipo tag")
+            //print("soy tipo tag")
             let bookTag = fetchedResultsController.objectAtIndexPath(indexPath) as? BookTag
             book = bookTag!.book
         case tableType.SearchResults:
-            print("soy tipo search")
+            //print("soy tipo search")
             book = fetchedResultsController.objectAtIndexPath(indexPath) as? Book
         }
         

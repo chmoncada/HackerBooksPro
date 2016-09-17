@@ -29,22 +29,17 @@ class BookViewController: UITableViewController {
     let UserDefaults = NSUserDefaults.standardUserDefaults()
     
     var coreDataStack: CoreDataStack?
-//    var model: Book? {
-//        didSet {
-//            print("Me cambiaron!!, no deberias actualizar la vista???")
-//            refreshUI()
-//        }
-//    }
+
     var model: Book? {
         didSet {
-            print("ahora soy: \(model?.title)")
-            print("deberias grabarme en el NSUserDefaults")
+            
+            // Save book in NSUserDefaults
             saveBookInUserDefaults(model!)
             
-            // Grabamos en iCloud tambien
-            let store = NSUbiquitousKeyValueStore.defaultStore()
-            store.setString("PRUEBA CHARLES \(model?.title)", forKey: "PRUEBA")
-            
+            // Save book in iCloud
+            saveBookIniCloud(model!)
+//            let store = NSUbiquitousKeyValueStore.defaultStore()
+//            store.setString("PRUEBA CHARLES \(model?.title)", forKey: "PRUEBA")
         }
     }
     
@@ -121,11 +116,15 @@ class BookViewController: UITableViewController {
         super.viewDidLoad()
         
         // veo si hay algo grabado en el iCloud
-        let store = NSUbiquitousKeyValueStore.defaultStore()
-        let texto = store.stringForKey("PRUEBA")
-        print("encontre esto en iCloud: \(texto)")
+//        let store = NSUbiquitousKeyValueStore.defaultStore()
+        //let texto = store.stringForKey("PRUEBA")
+        //print("encontre esto en iCloud: \(texto)")
         
-        if let book = loadBookFromUserDefaults() {
+        if let book = loadBookFromiCloud() {
+            print("encontre modelo en iCloud: \(book.title)")
+            model = book
+        } else if let book = loadBookFromUserDefaults() {
+            print("encontre modelo en NSUserDefaults: \(book.title)")
             model = book
         } else {
             
@@ -136,7 +135,7 @@ class BookViewController: UITableViewController {
             
             do {
                 let results = try coreDataStack!.context.executeFetchRequest(fetchRequest) as! [Book]
-                print("encontre primer libro")
+                print("No encontre nada, muestro el libro: \(results.first!.title)")
                 model = results.first
                 
             } catch let error as NSError {
@@ -194,7 +193,7 @@ class BookViewController: UITableViewController {
     
 }
 
-// MARK: - NSUserDefaults methods
+// MARK: - NSUserDefaults methods & iCloud
 
 extension BookViewController {
     
@@ -210,6 +209,27 @@ extension BookViewController {
     
     func loadBookFromUserDefaults() -> Book? {
         if let uriDefault = UserDefaults.objectForKey("lastbookopen") as? NSData {
+            return objectWithArchivedURIRepresentation(uriDefault, context: coreDataStack!.context)
+        }
+        
+        return nil
+    }
+    
+    func saveBookIniCloud(book: Book) {
+        
+        // Set the iCloud store
+        let store = NSUbiquitousKeyValueStore.defaultStore()
+        // Obtain the NSData
+        if let data = archiveURIRepresentation(book) {
+            store.setObject(data, forKey: "lastbookopen")
+
+        }
+
+    }
+    
+    func loadBookFromiCloud() -> Book? {
+        let store = NSUbiquitousKeyValueStore.defaultStore()
+        if let uriDefault = store.objectForKey("lastbookopen") as? NSData {
             return objectWithArchivedURIRepresentation(uriDefault, context: coreDataStack!.context)
         }
         

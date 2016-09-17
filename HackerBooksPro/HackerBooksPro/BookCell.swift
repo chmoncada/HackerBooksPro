@@ -74,7 +74,7 @@ class BookCell: UITableViewCell {
             return
         }
         
-        print(" se usa los datos de Core Data")
+        //print(" se usa los datos de Core Data")
         self.BookCover.image = UIImage(data:book.image.imageData!)
         
         
