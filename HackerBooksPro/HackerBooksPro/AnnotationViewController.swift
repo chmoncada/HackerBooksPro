@@ -22,10 +22,14 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     @IBOutlet weak var modificationDateLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var addPhotoLabel: UILabel!
+    @IBOutlet weak var locationButton: UIBarButtonItem!
+    
+    
     
     // MARK: - Location Properties
     let locationManager = CLLocationManager()
     var location: CLLocation?
+    var coordinate: CLLocationCoordinate2D?
     var updatingLocation = false
     var lastLocationError: NSError?
     var timer: NSTimer?
@@ -33,6 +37,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     // MARK: - Other properties
     var coreDataStack : CoreDataStack?
     var book: Book?
+
     var currentPage: Int?
     var image: UIImage?
     
@@ -49,30 +54,68 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         return formatter
     }()
     
+    var annotationToEdit: Annotation? {
+        didSet {
+            if let annotation = annotationToEdit {
+                // Put the value of annotation to the variables so the labels and photo appears!
+                descriptionText = annotation.text
+                creationDate = annotation.creationDate
+                currentPage = annotation.linkedPage?.integerValue
+                if let latitude = annotation.location?.latitude, let longitude = annotation.location?.longitude {
+                    coordinate = CLLocationCoordinate2DMake(latitude.doubleValue, longitude.doubleValue)
+                }
+            }
+        }
+    }
+    
+    var descriptionText = "(Text Goes Here)..."
     
     // MARK: - IBAction
     @IBAction func done() {
         
-        // Creo una instancia de Annotation
-        let annotationEntity = Annotation.entity(coreDataStack!.context)
-        let annotation = Annotation(entity: annotationEntity!, insertIntoManagedObjectContext: coreDataStack!.context)
+        let annotation: Annotation
+        let locationObject: Location
+        let photoObject: Photo
+
+        // Paso los mismo valores de los objetos si se edita, sino se crean nuevos
+        if let temp = annotationToEdit {
+            annotation = temp
+            photoObject = annotation.photo!
+            
+            //If it is in editing mode, the coordinates are the same as initial
+            //locationObject.latitude = coordinate!.latitude
+            //locationObject.longitude = coordinate!.longitude
+            
+        } else {
+            // Creo una instancia de Annotation
+            let annotationEntity = Annotation.entity(coreDataStack!.context)
+            annotation = Annotation(entity: annotationEntity!, insertIntoManagedObjectContext: coreDataStack!.context)
+            
+            let locationEntity = Location.entity(coreDataStack!.context)
+            locationObject = Location(entity: locationEntity!, insertIntoManagedObjectContext: coreDataStack!.context)
+
+            let photoEntity = Photo.entity(coreDataStack!.context)
+            photoObject = Photo(entity: photoEntity!, insertIntoManagedObjectContext: coreDataStack!.context)
+            
+            // If it is a new note, the coordinates are new and we need to save it
+            locationObject.latitude = location?.coordinate.latitude
+            locationObject.longitude = location?.coordinate.longitude
+            
+            // we need to add these values that only changes in editing mode
+            annotation.creationDate = creationDate
+            annotation.location = locationObject
+        }
         
-        let locationEntity = Location.entity(coreDataStack!.context)
-        let locationObject = Location(entity: locationEntity!, insertIntoManagedObjectContext: coreDataStack!.context)
-        
-        let photoEntity = Photo.entity(coreDataStack!.context)
-        let photoObject = Photo(entity: photoEntity!, insertIntoManagedObjectContext: coreDataStack!.context)
-        
-        locationObject.latitude = location?.coordinate.latitude
-        locationObject.longitude = location?.coordinate.longitude
-        annotation.location = locationObject
         
         if let photoImage = image {
             photoObject.photoData = UIImageJPEGRepresentation(photoImage, 0.5)
         }
+        
+        // it links location and photo with annotation
+        
         annotation.photo = photoObject
         
-        annotation.creationDate = creationDate
+        
         annotation.modificationDate = creationDate
         annotation.linkedPage = currentPage
         annotation.text = descriptionTextView.text
@@ -150,6 +193,15 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if let annotation = annotationToEdit {
+            title = "Edit Annotation"
+            locationButton.enabled = false
+            if let data = annotation.photo?.photoData, let image = UIImage(data: data) {
+                showImage(image)
+            }
+        
+        }
+        
         updateLabels()
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(AnnotationViewController.hideKeyboard(_:)))
@@ -177,37 +229,38 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
 // MARK: - Utils
 extension AnnotationViewController {
     
-    
-    
     func updateLabels() {
         
         pageNumberLabel.text = "\(currentPage!)"
-        
         creationDateLabel.text = formatDate(creationDate)
-        modificationDateLabel.text = formatDate(creationDate)
+        modificationDateLabel.text = formatDate(NSDate())
+        descriptionTextView.text = descriptionText
         
         if let location = location {
             latitudeLabel.text = String(format: "%.8f", location.coordinate.latitude)
             longitudeLabel.text = String(format: "%.8f", location.coordinate.longitude)
+        } else if let coordinate = coordinate {
+            latitudeLabel.text = String(format: "%.8f", coordinate.latitude)
+            longitudeLabel.text = String(format: "%.8f", coordinate.longitude)
         } else {
             latitudeLabel.text = ""
             longitudeLabel.text = ""
             
             // TEST
-            let statusMessage: String
-            if let error = lastLocationError {
-                if error.domain == kCLErrorDomain && error.code == CLError.Denied.rawValue {
-                    statusMessage = "Location Services Disabled" } else {
-                    statusMessage = "Error Getting Location" }
-            } else if !CLLocationManager.locationServicesEnabled() {
-                statusMessage = "Location Services Disabled"
-            } else if updatingLocation {
-                statusMessage = "Searching..."
-            } else {
-                statusMessage = "Ready to search"
-            }
-            
-            print(statusMessage)
+            //            let statusMessage: String
+            //            if let error = lastLocationError {
+            //                if error.domain == kCLErrorDomain && error.code == CLError.Denied.rawValue {
+            //                    statusMessage = "Location Services Disabled" } else {
+            //                    statusMessage = "Error Getting Location" }
+            //            } else if !CLLocationManager.locationServicesEnabled() {
+            //                statusMessage = "Location Services Disabled"
+            //            } else if updatingLocation {
+            //                statusMessage = "Searching..."
+            //            } else {
+            //                statusMessage = "Ready to search"
+            //            }
+            //            
+            //            print(statusMessage)
             
         }
     }

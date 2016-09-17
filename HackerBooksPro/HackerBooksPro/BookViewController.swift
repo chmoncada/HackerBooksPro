@@ -209,7 +209,7 @@ extension BookViewController {
     }
     
     func loadBookFromUserDefaults() -> Book? {
-        if let uriDefault = UserDefaults.objectForKey("lastbookopen") as? NSData{
+        if let uriDefault = UserDefaults.objectForKey("lastbookopen") as? NSData {
             return objectWithArchivedURIRepresentation(uriDefault, context: coreDataStack!.context)
         }
         
@@ -352,6 +352,9 @@ extension BookViewController {
             
             controller.navigationItem.leftItemsSupplementBackButton = true
         }
+        
+                
+        
     }
 }
 

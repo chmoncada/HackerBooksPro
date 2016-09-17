@@ -9,7 +9,7 @@
 
 import UIKit
 import WebKit
-
+import CoreData
 
 class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 
@@ -33,6 +33,30 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             //self.shouldShowPage = nil
         }
     }
+    
+//    var annotations: [Annotation]? {
+//        
+//        var foundNotes = [Annotation]()
+//        
+//        let fetchRequest = NSFetchRequest()
+//        let entity = Annotation.entity()
+//        fetchRequest.entity = entity
+//        
+//        let predicate = NSPredicate(format: "bookPdf.book == %@", book!)
+//        fetchRequest.predicate = predicate
+//        
+//        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
+//        fetchRequest.sortDescriptors = [sortDescriptor]
+//        
+//        do {
+//            foundNotes = try coreDataStack?.context.executeFetchRequest(fetchRequest) as! [Annotation]
+//            return foundNotes
+//        } catch let error as NSError {
+//            print("\(error.localizedDescription)")
+//            return nil
+//        }
+//        
+//    }
 
     func configureView() {
         // Update the user interface for the detail item.
@@ -143,7 +167,17 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             controller.coreDataStack = coreDataStack
             controller.book = book
             
+        } else if segue.identifier == "ShowAnnotations" {
+            
+            let controller = segue.destinationViewController as! UITabBarController
+            let barViewController = controller.viewControllers
+            let notesCollection = barViewController![0] as! AnnotationsCollectionViewController
+            notesCollection.coreDataStack = coreDataStack
+            notesCollection.book = book
+            //notesCollection.prueba = "HOLA"
+            
         }
+
     }
     
 //    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {

@@ -48,6 +48,8 @@
 		A1D602B81D8326CC0007E736 /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D602B21D8326CC0007E736 /* Annotation.swift */; };
 		A1D602B91D8326CC0007E736 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D602B31D8326CC0007E736 /* Location.swift */; };
 		A1D602BA1D8326CC0007E736 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D602B41D8326CC0007E736 /* Photo.swift */; };
+		A1E502D71D8DA39300644693 /* AnnotationsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E502D61D8DA39300644693 /* AnnotationsCollectionViewController.swift */; };
+		A1E502D91D8DA61300644693 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E502D81D8DA61300644693 /* NoteCell.swift */; };
 		A1F12BD41D77A226006BE392 /* PDFReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F12BD31D77A226006BE392 /* PDFReaderViewController.swift */; };
 		A1F12BD61D77A251006BE392 /* PDFDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F12BD51D77A251006BE392 /* PDFDocument.swift */; };
 		A1F12BD81D77A2DF006BE392 /* PDFOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */; };
@@ -101,6 +103,8 @@
 		A1D602B21D8326CC0007E736 /* Annotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Annotation.swift; path = MyModel/Annotation.swift; sourceTree = "<group>"; };
 		A1D602B31D8326CC0007E736 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Location.swift; path = MyModel/Location.swift; sourceTree = "<group>"; };
 		A1D602B41D8326CC0007E736 /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Photo.swift; path = MyModel/Photo.swift; sourceTree = "<group>"; };
+		A1E502D61D8DA39300644693 /* AnnotationsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationsCollectionViewController.swift; sourceTree = "<group>"; };
+		A1E502D81D8DA61300644693 /* NoteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		A1F12BD31D77A226006BE392 /* PDFReaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFReaderViewController.swift; sourceTree = "<group>"; };
 		A1F12BD51D77A251006BE392 /* PDFDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFDocument.swift; sourceTree = "<group>"; };
 		A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFOverviewViewController.swift; sourceTree = "<group>"; };
@@ -208,6 +212,8 @@
 				A17F085B1D84D149001F4A68 /* AnnotationViewController.swift */,
 				A1F12BDF1D77AD19006BE392 /* ImageCell.swift */,
 				A14F05721D6D381400D9132D /* BookCell.swift */,
+				A1E502D81D8DA61300644693 /* NoteCell.swift */,
+				A1E502D61D8DA39300644693 /* AnnotationsCollectionViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -330,6 +336,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1E502D71D8DA39300644693 /* AnnotationsCollectionViewController.swift in Sources */,
 				A112A31A1D5EB59400C29B40 /* Book.swift in Sources */,
 				A1D602BA1D8326CC0007E736 /* Photo.swift in Sources */,
 				A112A3161D5EB59400C29B40 /* Tag.swift in Sources */,
@@ -362,6 +369,7 @@
 				A112A31C1D5EBD6D00C29B40 /* Errors.swift in Sources */,
 				A1D15CAD1D74E13300C2F39B /* _BookTag.swift in Sources */,
 				A1D602B81D8326CC0007E736 /* Annotation.swift in Sources */,
+				A1E502D91D8DA61300644693 /* NoteCell.swift in Sources */,
 				A14F05751D6D45D400D9132D /* UIImageView.swift in Sources */,
 				A112A2FB1D5E928900C29B40 /* Foundation.swift in Sources */,
 				A15DE4C21D8639ED008C7888 /* UIImage+RoundCorner.swift in Sources */,
