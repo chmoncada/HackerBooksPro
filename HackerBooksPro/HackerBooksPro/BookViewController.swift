@@ -292,29 +292,41 @@ extension BookViewController {
 
 extension BookViewController: NSURLSessionDownloadDelegate {
     
+//    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
+//        if response.MIMEType == "application/pdf" {
+//            print("SI ES PDF")
+//            completionHandler(NSURLSessionResponseDisposition.BecomeDownload)
+//        } else {
+//            print("NO ES PDF, no se que hago?")
+//        }
+//    }
+    
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
         print("Finished downloading")
-        model!.pdf.pdfData = NSData(contentsOfURL: location)
-
-        dispatch_async(dispatch_get_main_queue(), {
-            //self.downloadButton.hidden = true
-            //self.progressBar.hidden = true
-            //self.progressLabel.hidden = true
-            
-            //self.model!.pdf.pdfData = NSData(contentsOfURL: location)
-            self.model!.isChanged = true
-            
-            self.refreshUI()
-            
-            self.coreDataStack?.saveContext()
-
-            
-        })
+        let data = NSData(contentsOfURL: location)
         
-//        // Grabo en coredata
-        //        model!.isChanged = true
-//        
-//        coreDataStack?.saveContext()
+        var c = [UInt32](count: 1, repeatedValue: 0)
+        data!.getBytes(&c, length: 1)
+        switch (c[0]) {
+        case 0x25:
+            print("es un PDF")
+            model!.pdf.pdfData = data
+            dispatch_async(dispatch_get_main_queue(), {
+                self.model!.isChanged = true
+                self.refreshUI()
+                self.coreDataStack?.saveContext()
+            })
+        default:
+            print("no es un PDF")
+            //model!.pdf.pdfData = nil
+            dispatch_async(dispatch_get_main_queue(), {
+                let alert = UIAlertController(title: "No PDF found", message: "Try to select another book from the list.  Sorry for the inconviniences", preferredStyle: .Alert)
+                let okAction = UIAlertAction(title: "OK", style: .Cancel , handler: nil)
+                alert.addAction(okAction)
+                self.presentViewController(alert, animated: true, completion: nil)
+            })
+        }
+    
         
         
     }

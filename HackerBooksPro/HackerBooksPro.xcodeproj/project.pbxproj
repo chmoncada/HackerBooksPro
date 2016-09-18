@@ -201,8 +201,8 @@
 				A112A30B1D5EB59400C29B40 /* BookPDF.swift */,
 				A112A30C1D5EB59400C29B40 /* Tag.swift */,
 				A1F12BD51D77A251006BE392 /* PDFDocument.swift */,
-				A112A2E61D5E91BC00C29B40 /* HackerBooksPro.xcdatamodeld */,
 				A18ABD5C1D8E3AF100C9AE6E /* MapLocation.swift */,
+				A112A2E61D5E91BC00C29B40 /* HackerBooksPro.xcdatamodeld */,
 			);
 			name = Models;
 			sourceTree = "<group>";

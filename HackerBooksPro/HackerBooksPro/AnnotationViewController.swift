@@ -119,7 +119,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         annotation.modificationDate = creationDate
         annotation.linkedPage = currentPage
         annotation.text = descriptionTextView.text
-        annotation.title = "\(book!.title) -  Pag: \(currentPage!) - \(formatDate(creationDate))"
+        annotation.title = "\(formatDate(creationDate))"
         
         //GRABO LOS VALORES AL MODELO
 

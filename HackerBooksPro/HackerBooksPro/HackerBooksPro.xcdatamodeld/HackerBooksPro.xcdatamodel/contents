@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15G1004" minimumToolsVersion="Automatic">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G1004" minimumToolsVersion="Xcode 7.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="Annotation" representedClassName="Annotation" syncable="YES">
-        <attribute name="creationDate" attributeType="Date" syncable="YES"/>
-        <attribute name="linkedPage" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="modificationDate" attributeType="Date" syncable="YES"/>
+        <attribute name="creationDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="linkedPage" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="modificationDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="text" attributeType="String" syncable="YES"/>
         <attribute name="title" attributeType="String" syncable="YES"/>
         <relationship name="bookPdf" maxCount="1" deletionRule="Nullify" destinationEntity="BookPDF" inverseName="annotations" inverseEntity="BookPDF" syncable="YES"/>
@@ -15,7 +15,7 @@
         <relationship name="books" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Book" inverseName="authors" inverseEntity="Book" syncable="YES"/>
     </entity>
     <entity name="Book" representedClassName="Book" syncable="YES">
-        <attribute name="isFavorite" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="isFavorite" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="title" attributeType="String" syncable="YES"/>
         <relationship name="authors" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Author" inverseName="books" inverseEntity="Author" syncable="YES"/>
         <relationship name="bookTags" toMany="YES" deletionRule="Cascade" destinationEntity="BookTag" inverseName="book" inverseEntity="BookTag" syncable="YES"/>
@@ -28,8 +28,8 @@
         <relationship name="book" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="image" inverseEntity="Book" syncable="YES"/>
     </entity>
     <entity name="BookPDF" representedClassName="BookPDF" syncable="YES">
-        <attribute name="isFinished" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="lastPageOpen" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
+        <attribute name="isFinished" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="lastPageOpen" attributeType="Integer 16" minValueString="0" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="pdfData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="pdfURL" attributeType="String" syncable="YES"/>
         <relationship name="annotations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Annotation" inverseName="bookPdf" inverseEntity="Annotation" syncable="YES"/>
@@ -46,8 +46,8 @@
         </uniquenessConstraints>
     </entity>
     <entity name="Location" representedClassName="Location" syncable="YES">
-        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="annotation" maxCount="1" deletionRule="Nullify" destinationEntity="Annotation" inverseName="location" inverseEntity="Annotation" syncable="YES"/>
     </entity>
     <entity name="Photo" representedClassName="Photo" syncable="YES">
@@ -61,7 +61,7 @@
     </entity>
     <elements>
         <element name="Annotation" positionX="135" positionY="-369" width="128" height="163"/>
-        <element name="Author" positionX="423" positionY="-180" width="128" height="73"/>
+        <element name="Author" positionX="423" positionY="-180" width="128" height="75"/>
         <element name="Book" positionX="162" positionY="-108" width="128" height="133"/>
         <element name="BookImage" positionX="169" positionY="83" width="128" height="88"/>
         <element name="BookPDF" positionX="-74" positionY="-232" width="128" height="133"/>
