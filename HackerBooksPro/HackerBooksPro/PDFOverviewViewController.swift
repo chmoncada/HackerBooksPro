@@ -131,7 +131,14 @@ class PDFOverviewViewController: UICollectionViewController {
             dispatch_async(dispatch_get_main_queue()) {
                 // Changing the image only if the cell is on screen
                 if cell.indexPath == indexPath {
-                    cell.imageView.image = image
+                    
+                    // Calculate the Size of the PDF page and resize it to the cell size, because the cell size is dynamic, we need to perform this calculations
+                    let pageSize = self.pdf?.rectFromPDFWithPage(pageNumber)?.size
+                    let scale = self.widthForPage/pageSize!.width
+                    let height = pageSize!.height*scale
+                    
+                    cell.imageView.image = image.resizedImageWithContentMode(.ScaleAspectFit, bounds: CGSizeMake(self.widthForPage, height), interpolationQuality: .High)
+                    
                 }
             }
         }

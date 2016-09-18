@@ -178,7 +178,8 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             
             notesCollection.book = book
             mapView.book = book
-            //notesCollection.prueba = "HOLA"
+            
+            notesCollection.pdf = pdf
             
         }
 

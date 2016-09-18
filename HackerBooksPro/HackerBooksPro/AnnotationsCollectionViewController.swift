@@ -78,9 +78,27 @@ class AnnotationsCollectionViewController: UICollectionViewController {
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("NoteCell", forIndexPath: indexPath) as! NoteCell
+    
+        let pageNumber = annotations![indexPath.row].linkedPage?.integerValue
         
-        cell.textLabel.text = "\(annotations![indexPath.row].linkedPage!.integerValue)"
         // Configure the cell
+        cell.textLabel.text = "Page \(pageNumber!)"
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .MediumStyle
+        formatter.timeStyle = .ShortStyle
+        
+        cell.titleLabel.text = "\(formatter.stringFromDate(annotations![indexPath.row].creationDate))"
+        
+        // We put it async
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+            // If nil, useless to go further
+            guard let image = self.pdf?.imageFromPDFWithPage(pageNumber!) else { return }
+            dispatch_async(dispatch_get_main_queue()) {
+                    cell.imageView.image = image.resizedImageWithContentMode(.ScaleAspectFit, bounds: CGSizeMake(121, 156), interpolationQuality: .High)
+            }
+        }
+        
+        
     
         return cell
     }
