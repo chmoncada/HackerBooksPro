@@ -114,8 +114,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         // it links location and photo with annotation
         
         annotation.photo = photoObject
-        
-        
+
         annotation.modificationDate = creationDate
         annotation.linkedPage = currentPage
         annotation.text = descriptionTextView.text
@@ -132,7 +131,6 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     
     @IBAction func cancel() {
        dismissViewControllerAnimated(true, completion: nil)
-        
     }
     
     @IBAction func getLocation() {
@@ -219,7 +217,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
 
     deinit {
         print("*** deinit \(self)")
-        NSNotificationCenter.defaultCenter().removeObserver(observer)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
 
@@ -234,7 +232,10 @@ extension AnnotationViewController {
         pageNumberLabel.text = "\(currentPage!)"
         creationDateLabel.text = formatDate(creationDate)
         modificationDateLabel.text = formatDate(NSDate())
-        descriptionTextView.text = descriptionText
+        
+        if let _ = annotationToEdit {
+            descriptionTextView.text = descriptionText
+        }
         
         if let location = location {
             latitudeLabel.text = String(format: "%.8f", location.coordinate.latitude)

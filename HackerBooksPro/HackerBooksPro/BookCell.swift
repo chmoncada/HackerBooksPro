@@ -63,6 +63,8 @@ class BookCell: UITableViewCell {
                         self.BookCover.image = resizeImage
 //                        book.image.imageData = UIImagePNGRepresentation(UIImage(data: dataExist)!)
                         book.image.imageData = UIImageJPEGRepresentation(resizeImage, 0.9)
+                        // Send notification that the image finish loading
+                        book.imageIsLoaded = true
                         coreDataStack.saveContext()
                     } else {
                         print("No se pudo descargar imagen, se usara la imagen por defecto")
@@ -76,9 +78,7 @@ class BookCell: UITableViewCell {
         
         //print(" se usa los datos de Core Data")
         self.BookCover.image = UIImage(data:book.image.imageData!)
-        
-        
-        
+     
     }
 
 }

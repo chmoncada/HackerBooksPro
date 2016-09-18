@@ -1,6 +1,7 @@
 import Foundation
 
 let favStatusDidChange = "Favorite status did change"
+let imageDidDownload = "Image did download"
 
 @objc(Book)
 
@@ -22,6 +23,14 @@ public class Book: _Book {
         willSet {
             print("MODELO \(self.title) CAMBIO!!!")
             let notif = NSNotification(name: favStatusDidChange, object: self)
+            NSNotificationCenter.defaultCenter().postNotification(notif)
+        }
+    }
+    
+    var imageIsLoaded: Bool? {
+        willSet {
+            print("IMAGEN de \(self.title) SE DESCARGO!!!")
+            let notif = NSNotification(name: imageDidDownload, object: self)
             NSNotificationCenter.defaultCenter().postNotification(notif)
         }
     }

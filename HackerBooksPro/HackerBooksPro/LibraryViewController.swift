@@ -93,6 +93,11 @@ class LibraryViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    deinit {
+        print("*** deinit \(self)")
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     // MARK: - Utils
     
     func favChange(notification: NSNotification) {

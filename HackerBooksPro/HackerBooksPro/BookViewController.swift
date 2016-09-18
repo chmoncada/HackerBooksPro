@@ -62,12 +62,6 @@ class BookViewController: UITableViewController {
         return session
     }()
     
-    // MARK: - IBActions
-    
-//    @IBAction func done() {
-//        dismissViewControllerAnimated(true, completion: nil)
-//    }
-    
     @IBAction func startDownload() {
 
         print("Descargando...")
@@ -115,11 +109,6 @@ class BookViewController: UITableViewController {
         
         super.viewDidLoad()
         
-        // veo si hay algo grabado en el iCloud
-//        let store = NSUbiquitousKeyValueStore.defaultStore()
-        //let texto = store.stringForKey("PRUEBA")
-        //print("encontre esto en iCloud: \(texto)")
-        
         if let book = loadBookFromiCloud() {
             print("encontre modelo en iCloud: \(book.title)")
             model = book
@@ -142,6 +131,10 @@ class BookViewController: UITableViewController {
                 print("ERROR \(error)")
             }
         }
+        
+        let nc = NSNotificationCenter.defaultCenter()
+        nc.addObserver(self, selector: #selector(imageLoaded), name: imageDidDownload, object: model!)
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -150,7 +143,13 @@ class BookViewController: UITableViewController {
         refreshUI()
     }
     
+    
     // MARK: - Utils
+    
+    func imageLoaded() {
+        coverImage.image = UIImage(data: (model?.image.imageData)!)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
     func refreshUI() {
         
@@ -164,18 +163,6 @@ class BookViewController: UITableViewController {
         
         tagsLabel.text = model!.tagsList()
         
-        // Averiguo el numero de hojas del PDF
-//        if (model?.pdf.pdfData) != nil {
-//            let paginas = model!.pdf.document!.numberOfPages
-//            print("el numero de paginas de \(model!.title) es: \(paginas)")
-//        } else {
-//            print("Aun no se descarga el PDF")
-//        }
-        
-        
-        
-        //progressLabel.text = ""
-        //progressBar.progress = 0
         
         if model!.pdfDownloaded! {
             messagelabel.text = "Read the book"
@@ -184,8 +171,12 @@ class BookViewController: UITableViewController {
         }
         
         downloadButton.hidden = model!.pdfDownloaded!
+        
+        // Hide Progress text and set to initial values
         progressBar.hidden = true
         progressLabel.hidden = true
+        progressLabel.text = ""
+        progressBar.progress = 0
         
         favoriteSwitch.setOn(model!.isFavorite!.boolValue, animated: true)
     }
@@ -292,43 +283,31 @@ extension BookViewController {
 
 extension BookViewController: NSURLSessionDownloadDelegate {
     
-//    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
-//        if response.MIMEType == "application/pdf" {
-//            print("SI ES PDF")
-//            completionHandler(NSURLSessionResponseDisposition.BecomeDownload)
-//        } else {
-//            print("NO ES PDF, no se que hago?")
-//        }
-//    }
-    
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
-        print("Finished downloading")
+        
         let data = NSData(contentsOfURL: location)
         
+        // Check if the data is a PDF, we check the first byte for MIME type
         var c = [UInt32](count: 1, repeatedValue: 0)
         data!.getBytes(&c, length: 1)
         switch (c[0]) {
-        case 0x25:
-            print("es un PDF")
+        case 0x25: //MIME type for PDF
             model!.pdf.pdfData = data
             dispatch_async(dispatch_get_main_queue(), {
                 self.model!.isChanged = true
                 self.refreshUI()
                 self.coreDataStack?.saveContext()
             })
-        default:
-            print("no es un PDF")
-            //model!.pdf.pdfData = nil
+        default: // all other cases
             dispatch_async(dispatch_get_main_queue(), {
+                self.progressBar.hidden = true
+                self.progressLabel.hidden = true
                 let alert = UIAlertController(title: "No PDF found", message: "Try to select another book from the list.  Sorry for the inconviniences", preferredStyle: .Alert)
                 let okAction = UIAlertAction(title: "OK", style: .Cancel , handler: nil)
                 alert.addAction(okAction)
                 self.presentViewController(alert, animated: true, completion: nil)
             })
         }
-    
-        
-        
     }
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
@@ -341,11 +320,8 @@ extension BookViewController: NSURLSessionDownloadDelegate {
         dispatch_async(dispatch_get_main_queue(), {
             self.progressBar.progress = (self.download?.progress)!
             self.progressLabel.text = String(format: "%.1f%% of %@",  self.download!.progress * 100, totalSize)
-            
         })
     }
-    
-    
 }
 
 // MARK: - BookSelectionDelegate
@@ -384,9 +360,6 @@ extension BookViewController {
             
             controller.navigationItem.leftItemsSupplementBackButton = true
         }
-        
-                
-        
     }
 }
 
