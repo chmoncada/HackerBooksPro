@@ -39,6 +39,8 @@
 		A15DE4C11D8639ED008C7888 /* UIImage+ReSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BE1D8639ED008C7888 /* UIImage+ReSize.swift */; };
 		A15DE4C21D8639ED008C7888 /* UIImage+RoundCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BF1D8639ED008C7888 /* UIImage+RoundCorner.swift */; };
 		A17F085C1D84D149001F4A68 /* AnnotationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17F085B1D84D149001F4A68 /* AnnotationViewController.swift */; };
+		A18ABD5B1D8E1CAD00C9AE6E /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18ABD5A1D8E1CAD00C9AE6E /* MapViewController.swift */; };
+		A18ABD5D1D8E3AF100C9AE6E /* MapLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18ABD5C1D8E3AF100C9AE6E /* MapLocation.swift */; };
 		A1B9C0441D7649210027A376 /* DownloadPDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B9C0431D7649210027A376 /* DownloadPDF.swift */; };
 		A1D15CAD1D74E13300C2F39B /* _BookTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D15CAB1D74E13300C2F39B /* _BookTag.swift */; };
 		A1D15CAE1D74E13300C2F39B /* BookTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D15CAC1D74E13300C2F39B /* BookTag.swift */; };
@@ -94,6 +96,8 @@
 		A15DE4BE1D8639ED008C7888 /* UIImage+ReSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+ReSize.swift"; sourceTree = "<group>"; };
 		A15DE4BF1D8639ED008C7888 /* UIImage+RoundCorner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+RoundCorner.swift"; sourceTree = "<group>"; };
 		A17F085B1D84D149001F4A68 /* AnnotationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationViewController.swift; sourceTree = "<group>"; };
+		A18ABD5A1D8E1CAD00C9AE6E /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		A18ABD5C1D8E3AF100C9AE6E /* MapLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapLocation.swift; sourceTree = "<group>"; };
 		A1B9C0431D7649210027A376 /* DownloadPDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadPDF.swift; sourceTree = "<group>"; };
 		A1D15CAB1D74E13300C2F39B /* _BookTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _BookTag.swift; path = MyModel/_BookTag.swift; sourceTree = "<group>"; };
 		A1D15CAC1D74E13300C2F39B /* BookTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookTag.swift; path = MyModel/BookTag.swift; sourceTree = "<group>"; };
@@ -198,6 +202,7 @@
 				A112A30C1D5EB59400C29B40 /* Tag.swift */,
 				A1F12BD51D77A251006BE392 /* PDFDocument.swift */,
 				A112A2E61D5E91BC00C29B40 /* HackerBooksPro.xcdatamodeld */,
+				A18ABD5C1D8E3AF100C9AE6E /* MapLocation.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -214,6 +219,7 @@
 				A14F05721D6D381400D9132D /* BookCell.swift */,
 				A1E502D81D8DA61300644693 /* NoteCell.swift */,
 				A1E502D61D8DA39300644693 /* AnnotationsCollectionViewController.swift */,
+				A18ABD5A1D8E1CAD00C9AE6E /* MapViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -361,6 +367,7 @@
 				A1D602B61D8326CC0007E736 /* _Location.swift in Sources */,
 				A112A3181D5EB59400C29B40 /* _Book.swift in Sources */,
 				A1F12BE01D77AD19006BE392 /* ImageCell.swift in Sources */,
+				A18ABD5B1D8E1CAD00C9AE6E /* MapViewController.swift in Sources */,
 				A112A3191D5EB59400C29B40 /* Author.swift in Sources */,
 				A112A31E1D5EBF1A00C29B40 /* Utils.swift in Sources */,
 				A1D602B91D8326CC0007E736 /* Location.swift in Sources */,
@@ -374,6 +381,7 @@
 				A112A2FB1D5E928900C29B40 /* Foundation.swift in Sources */,
 				A15DE4C21D8639ED008C7888 /* UIImage+RoundCorner.swift in Sources */,
 				A1D15CAE1D74E13300C2F39B /* BookTag.swift in Sources */,
+				A18ABD5D1D8E3AF100C9AE6E /* MapLocation.swift in Sources */,
 				A1D602B71D8326CC0007E736 /* _Photo.swift in Sources */,
 				A112A3131D5EB59400C29B40 /* _Tag.swift in Sources */,
 				A1B9C0441D7649210027A376 /* DownloadPDF.swift in Sources */,

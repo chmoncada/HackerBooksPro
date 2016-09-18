@@ -54,6 +54,8 @@ class AnnotationsCollectionViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
 
     }
 

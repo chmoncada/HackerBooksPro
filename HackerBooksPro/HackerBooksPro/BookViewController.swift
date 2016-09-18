@@ -340,7 +340,7 @@ extension BookViewController: NSURLSessionDownloadDelegate {
 
 extension BookViewController: BookSelectionDelegate {
     func bookSelected(newBook: Book) {
-        print("se activa el delegado!!")
+        //print("se activa el delegado!!")
         model = newBook
         refreshUI()
     }

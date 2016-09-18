@@ -172,8 +172,12 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             let controller = segue.destinationViewController as! UITabBarController
             let barViewController = controller.viewControllers
             let notesCollection = barViewController![0] as! AnnotationsCollectionViewController
+            let mapView = barViewController![1] as! MapViewController
             notesCollection.coreDataStack = coreDataStack
+            mapView.coreDataStack = coreDataStack
+            
             notesCollection.book = book
+            mapView.book = book
             //notesCollection.prueba = "HOLA"
             
         }

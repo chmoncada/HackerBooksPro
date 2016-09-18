@@ -10,10 +10,10 @@ public class Book: _Book {
     
     var pdfDownloaded: Bool? {
         if self.pdf.pdfData != nil {
-            print("valor del libro: \(self.title) es: TRUE")
+            //print("valor del libro: \(self.title) es: TRUE")
             return true
         } else {
-            print("valor del libro: \(self.title) es: FALSE")
+            //print("valor del libro: \(self.title) es: FALSE")
             return false
         }
     }

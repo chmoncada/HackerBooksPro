@@ -296,11 +296,8 @@ extension AnnotationViewController {
                 }
                 strongSelf.descriptionTextView.resignFirstResponder()
             }
-
-            }
+        }
     }
-    
-    
 }
 
 // MARK: - UITableViewDelegate

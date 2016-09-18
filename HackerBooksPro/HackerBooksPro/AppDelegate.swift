@@ -98,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // UITabBar appearance
         UITabBar.appearance().tintColor = backButtonColor
         UITabBar.appearance().barTintColor = tintColor
-
+    
     }
 
     func iCloudSetup() {
