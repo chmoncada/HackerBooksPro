@@ -25,7 +25,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     var shouldShowPage: Int?
     var shouldReload = false
     
-    weak var parentVC : BookViewController?
+    //weak var parentVC : BookViewController?
     
     var pdf: PDFDocument? {
         didSet {
@@ -151,16 +151,6 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             shouldReload = false
         }
     }
-
-    override func viewWillDisappear(animated: Bool) {
-        print("Me quede leyendo la pagina: \(currentPage)")
-        guard let parentVC = self.parentVC else {
-            print("no encontre al parentVC")
-            return
-        }
-        parentVC.currentPage = currentPage
-        
-    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -245,6 +235,8 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         return currentPage
     }
     
+    var oldPage: Int = 0
+    
     func changePage() {
         if let page = self.shouldShowPage {
             self.shouldShowPage = nil // Prevent for changing page again
@@ -281,19 +273,30 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 extension PDFReaderViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        // Check if we are in the last page
         if currentPage == pdf?.numberOfPages {
-            print("SE ACABO")
+            // Check if the bool value are not nil
             if book!.isFinished != nil {
+                // to avoid assing true to the variable that is already true
+                if !(book?.isFinished)!  {
+                    book?.isFinished = true
+                }
+            } else {
                 book?.isFinished = true
             }
-
         } else {
             book?.isFinished = false
         }
-        
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        if currentPage! != oldPage && currentPage! > 0 {
+            print("pagina nueva: \(currentPage!), debo lanzar notificacion")
+            book?.pdf.lastPageOpen = currentPage!
+            book?.pageIsChanged = true
+            oldPage = currentPage!
+        }
         
         if annotationPages.contains(currentPage!) {
             bookmarkButton.image = UIImage(named: "bookmarkRibbonFilled")
@@ -301,6 +304,7 @@ extension PDFReaderViewController: UIScrollViewDelegate {
             bookmarkButton.image = UIImage(named: "bookmarkRibbon")
         }
         
+        //book?.pdf.lastPageOpen = currentPage
     }
     
 }

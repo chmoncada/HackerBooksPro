@@ -1,9 +1,11 @@
 import Foundation
 
+let modelDidChange = "Model did change"
 let favStatusDidChange = "Favorite status did change"
 let imageDidDownload = "Image did download"
 let annotationsDidChange = "Annotations changed"
 let pdfWasFinished = "Book finished"
+let newPageOpened = "Change page in reader"
 
 @objc(Book)
 
@@ -22,7 +24,25 @@ public class Book: _Book {
     var isChanged: Bool? {
         willSet {
             print("MODELO \(self.title) CAMBIO!!!")
+            let notif = NSNotification(name: modelDidChange, object: self)
+            NSNotificationCenter.defaultCenter().postNotification(notif)
+            
+        }
+    }
+    
+    var favIsChanged: Bool? {
+        willSet {
+            print("Status de Favorito del libro \(self.title) CAMBIO!!!")
             let notif = NSNotification(name: favStatusDidChange, object: self)
+            NSNotificationCenter.defaultCenter().postNotification(notif)
+            
+        }
+    }
+    
+    var pageIsChanged: Bool? {
+        willSet {
+            print("cambiamos la pagina, ahora es \(self.pdf.lastPageOpen!.integerValue) !!!")
+            let notif = NSNotification(name: newPageOpened, object: self)
             NSNotificationCenter.defaultCenter().postNotification(notif)
             
         }
@@ -46,12 +66,10 @@ public class Book: _Book {
     
     var isFinished: Bool? {
         didSet {
-            
-            
             // Crear tag "Finished" y lanzar la notificacion para que la tabla se recargue?, con el fetched se supone que deberia recargarse sola
             if isFinished! {
 
-                print("Libro \(self.title) Termino de leerse!!!")
+                // Create and add "Finished tag"
                 let newTag = Tag.uniqueTag("finished", context: self.managedObjectContext!)
                 let bookTag = BookTag(managedObjectContext: self.managedObjectContext!)
                 bookTag!.name = "\(self.title) - Finished"
@@ -64,11 +82,10 @@ public class Book: _Book {
                 
             } else {
                 print("ya no estoy leido hasta el final")
+                //Quito el tag
+                BookTag.removeTag("\(self.title) - Finished", fromBook: self, inContext: self.managedObjectContext!)
             }
-            
-            
-            
-            
+    
         }
     }
     

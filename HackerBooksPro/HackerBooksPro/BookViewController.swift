@@ -96,7 +96,7 @@ class BookViewController: UITableViewController {
         } else {
             BookTag.removeFavoriteTag(fromBook: model!, inContext: coreDataStack!.context)
         }
-        model!.isChanged = true
+        model!.favIsChanged = true
         
         coreDataStack!.saveContext()
         
@@ -346,7 +346,7 @@ extension BookViewController {
             controller.pdf = PDFDocument(bookPdf: model!.pdf)
             controller.coreDataStack = coreDataStack
             controller.book = model
-            controller.parentVC = self
+            //controller.parentVC = self
             if model?.pdf.lastPageOpen?.integerValue == 0 {
                 controller.shouldShowPage = 1 // To avoid the page 0 in first time loading
             } else {

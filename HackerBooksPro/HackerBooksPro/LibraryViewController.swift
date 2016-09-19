@@ -68,8 +68,8 @@ class LibraryViewController: UIViewController {
     //MARK: - Lifecycle
     
     override func viewWillAppear(animated: Bool) {
-        let nc = NSNotificationCenter.defaultCenter()
-        nc.addObserver(self, selector: #selector(favChange), name: favStatusDidChange, object: nil)
+        //let nc = NSNotificationCenter.defaultCenter()
+        //nc.addObserver(self, selector: #selector(favChange), name: favStatusDidChange, object: nil)
     }
     
     override func viewDidLoad() {
@@ -95,7 +95,7 @@ class LibraryViewController: UIViewController {
 
     deinit {
         print("*** deinit \(self)")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        //NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     // MARK: - Utils
@@ -141,7 +141,9 @@ extension LibraryViewController: UITableViewDataSource {
             book = fetchedResultsController.objectAtIndexPath(indexPath) as? Book
         }
         
-        cell.configureCell(book!, indexPath: indexPath, coreDataStack: coreDataStack)
+        cell.startObserving(book!)
+        
+        //cell.configureCell(book!, indexPath: indexPath, coreDataStack: coreDataStack)
         
         return cell
         

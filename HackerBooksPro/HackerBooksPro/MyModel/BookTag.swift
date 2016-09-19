@@ -36,7 +36,7 @@ public class BookTag: _BookTag {
     class func removeTag(tag: String, fromBook book: Book, inContext context: NSManagedObjectContext) {
         
         let fetchRequest = NSFetchRequest(entityName: BookTag.entityName())
-        fetchRequest.predicate = NSPredicate(format: "name == %@", "\(book.title) - Favorite")
+        fetchRequest.predicate = NSPredicate(format: "name == %@", tag)
         
         do {
             let result = try context.executeFetchRequest(fetchRequest) as! BookTagArray
