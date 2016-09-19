@@ -35,6 +35,7 @@
 		A12DEC061D75EE8B008CBBEE /* BookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12DEC051D75EE8B008CBBEE /* BookViewController.swift */; };
 		A14F05731D6D381400D9132D /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14F05721D6D381400D9132D /* BookCell.swift */; };
 		A14F05751D6D45D400D9132D /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14F05741D6D45D400D9132D /* UIImageView.swift */; };
+		A15723E21D8F56BD00F44647 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A15723E11D8F56BD00F44647 /* MapKit.framework */; };
 		A15DE4C01D8639ED008C7888 /* UIImage+Alpha.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BD1D8639ED008C7888 /* UIImage+Alpha.swift */; };
 		A15DE4C11D8639ED008C7888 /* UIImage+ReSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BE1D8639ED008C7888 /* UIImage+ReSize.swift */; };
 		A15DE4C21D8639ED008C7888 /* UIImage+RoundCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BF1D8639ED008C7888 /* UIImage+RoundCorner.swift */; };
@@ -92,6 +93,7 @@
 		A12DEC051D75EE8B008CBBEE /* BookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookViewController.swift; sourceTree = "<group>"; };
 		A14F05721D6D381400D9132D /* BookCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookCell.swift; sourceTree = "<group>"; };
 		A14F05741D6D45D400D9132D /* UIImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
+		A15723E11D8F56BD00F44647 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A15DE4BD1D8639ED008C7888 /* UIImage+Alpha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Alpha.swift"; sourceTree = "<group>"; };
 		A15DE4BE1D8639ED008C7888 /* UIImage+ReSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+ReSize.swift"; sourceTree = "<group>"; };
 		A15DE4BF1D8639ED008C7888 /* UIImage+RoundCorner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+RoundCorner.swift"; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A15723E21D8F56BD00F44647 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +136,7 @@
 			children = (
 				A112A2DE1D5E91BC00C29B40 /* HackerBooksPro */,
 				A112A2DD1D5E91BC00C29B40 /* Products */,
+				A15723E01D8F56BD00F44647 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -260,6 +264,14 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
+		A15723E01D8F56BD00F44647 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A15723E11D8F56BD00F44647 /* MapKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -295,6 +307,9 @@
 						DevelopmentTeam = 692K8L98GH;
 						LastSwiftMigration = 0800;
 						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
 							com.apple.iCloud = {
 								enabled = 1;
 							};

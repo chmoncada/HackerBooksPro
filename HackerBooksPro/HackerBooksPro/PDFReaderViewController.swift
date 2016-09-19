@@ -13,11 +13,13 @@ import CoreData
 
 class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 
+    // MARK: - IBOutlets
+    
     @IBOutlet weak var overviewButton: UIBarButtonItem!
     @IBOutlet weak var webview : UIWebView!
     @IBOutlet weak var bookmarkButton: UIBarButtonItem!
     
-    
+    // MARK: - Properties
     var coreDataStack: CoreDataStack?
     var book: Book?
     var shouldShowPage: Int?
@@ -34,6 +36,8 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         }
     }
     
+    var annotationPages = Set<Int>()
+    //var annotationPages: Set<Int> = [1,5,10,12]
 //    var annotations: [Annotation]? {
 //        
 //        var foundNotes = [Annotation]()
@@ -45,11 +49,16 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 //        let predicate = NSPredicate(format: "bookPdf.book == %@", book!)
 //        fetchRequest.predicate = predicate
 //        
-//        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
+//        let sortDescriptor = NSSortDescriptor(key: "linkedPage", ascending: true)
 //        fetchRequest.sortDescriptors = [sortDescriptor]
 //        
 //        do {
 //            foundNotes = try coreDataStack?.context.executeFetchRequest(fetchRequest) as! [Annotation]
+//            
+//            for each in foundNotes {
+//                
+//            }
+//            
 //            return foundNotes
 //        } catch let error as NSError {
 //            print("\(error.localizedDescription)")
@@ -58,6 +67,8 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 //        
 //    }
 
+    // MARK: - Utils
+    
     func configureView() {
         // Update the user interface for the detail item.
         guard let pdf = self.pdf else {
@@ -66,15 +77,44 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         }
         self.navigationItem.title = pdf.name
     }
+    
+    func getAnnotationPages() {
+      
+        // First we need to fetch all the annotations that belongs to the book
+        var foundNotes = [Annotation]()
+        
+        let fetchRequest = NSFetchRequest()
+        let entity = Annotation.entity()
+        fetchRequest.entity = entity
+        let predicate = NSPredicate(format: "bookPdf.book == %@", book!)
+        fetchRequest.predicate = predicate
+        let sortDescriptor = NSSortDescriptor(key: "linkedPage", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            foundNotes = try coreDataStack?.context.executeFetchRequest(fetchRequest) as! [Annotation]
+            for each in foundNotes {
+                let page = each.linkedPage!.integerValue
+                annotationPages.insert(page)
+            }
+            print("las paginas que tienen anotaciones son: \(annotationPages)")
+        } catch let error as NSError {
+            print("\(error.localizedDescription)")
+            
+        }
+        
+    }
+    
+    func annotationSetChanged() {
+        print("detecte el cambio de las anotaciones, debo refrescar el set")
+        getAnnotationPages()
+    }
+    
 
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        //self.webview = WKWebView(frame: self.view.bounds)
-        
-        //self.webview = UIWebView(frame: self.view.bounds)
-        //bookmarkButton.image = UIImage(named: "bookmarkRibbonFilled")
         
         self.webview.delegate = self
         if let navBarOffset = self.navigationController?.navigationBar.frame.size.height {
@@ -85,37 +125,26 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         }
         //self.view.addSubview(self.webview)
         //self.webview.scrollView.delegate = self
+        let nc = NSNotificationCenter.defaultCenter()
+        nc.addObserver(self, selector: #selector(annotationSetChanged), name: annotationsDidChange, object: book!)
         
-        
+        getAnnotationPages()
         self.configureView()
     }
     
     deinit {
         self.webview.scrollView.delegate = nil
+        self.webview = nil
     }
     
     override func viewWillAppear(animated: Bool) {
         // Opening pdf file
-//        guard let url = pdf?.url else {
-//            print("no URL for file")
-//            self.navigationItem.rightBarButtonItem?.enabled = false
-//            let url = NSBundle.mainBundle().URLForResource("nofile", withExtension: "html")!
-//            let request = NSURLRequest(URL: url)
-//            webview.loadRequest(request)
-//            webview.scrollView.scrollEnabled = false
-//            return
-//        }
-        
-        //webview.loadData(pdf!.data!, MIMEType: "application/pdf", characterEncodingName: "", baseURL: NSURL())
         webview.loadData(pdf!.data!, MIMEType: "application/pdf", textEncodingName: "", baseURL: NSURL())
         
         
         if shouldReload {
             print("se recarga pdf")
             self.navigationItem.rightBarButtonItem?.enabled = true
-            //let request = NSURLRequest(URL: url)
-            //webview.loadRequest(request)
-            //webview.loadData(pdf!.data!, MIMEType: "application/pdf", characterEncodingName: "", baseURL: NSURL())
             webview.loadData(pdf!.data!, MIMEType: "application/pdf", textEncodingName: "", baseURL: NSURL())
             
             webview.scrollView.scrollEnabled = true
@@ -142,6 +171,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 //        self.webview.scrollView.delegate = nil
 //    }
 
+    // MARK: - Segue
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ShowOverview" {
             
@@ -159,6 +189,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             
         } else if segue.identifier == "AddAnnotation" {
             
+            shouldShowPage = currentPage
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AnnotationViewController
             if let currentPage = self.currentPage {
                 print("Estamos en la pagina: \(currentPage)")
@@ -169,6 +200,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             
         } else if segue.identifier == "ShowAnnotations" {
             
+            shouldShowPage = currentPage
             let controller = segue.destinationViewController as! UITabBarController
             let barViewController = controller.viewControllers
             let notesCollection = barViewController![0] as! AnnotationsCollectionViewController
@@ -189,10 +221,12 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 //        self.changePage()
 //    }
     
+    // MARK: - Web Methods
+    
     func webViewDidFinishLoad(webView: UIWebView) {
         print("termino de cargar LA VISTA")
-        print(self.shouldShowPage)
-            self.changePage()
+        //print(self.shouldShowPage)
+        self.changePage()
     }
     
     // MARK: - Page Handling
@@ -241,11 +275,25 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         }
     }
 }
+
+// MARK: - UIScrollViewDelegate
+
 extension PDFReaderViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         if currentPage == pdf?.numberOfPages {
-            print("SE ACABO")            
+            print("SE ACABO")
+            book!.isFinished = true
+        }
+        
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        if annotationPages.contains(currentPage!) {
+            bookmarkButton.image = UIImage(named: "bookmarkRibbonFilled")
+        } else {
+            bookmarkButton.image = UIImage(named: "bookmarkRibbon")
         }
         
     }

@@ -123,6 +123,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         //GRABO LOS VALORES AL MODELO
 
         book?.pdf.addAnnotationsObject(annotation)
+        book?.annotationsChanged = true
         
         coreDataStack?.saveContext()
         

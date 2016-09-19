@@ -2,6 +2,8 @@ import Foundation
 
 let favStatusDidChange = "Favorite status did change"
 let imageDidDownload = "Image did download"
+let annotationsDidChange = "Annotations changed"
+let pdfWasFinished = "Book finished"
 
 @objc(Book)
 
@@ -31,6 +33,22 @@ public class Book: _Book {
         willSet {
             print("IMAGEN de \(self.title) SE DESCARGO!!!")
             let notif = NSNotification(name: imageDidDownload, object: self)
+            NSNotificationCenter.defaultCenter().postNotification(notif)
+        }
+    }
+    
+    var annotationsChanged: Bool? {
+        willSet {
+            print("Las anotaciones de \(self.title) cambiaron!!!")
+            let notif = NSNotification(name: annotationsDidChange, object: self)
+            NSNotificationCenter.defaultCenter().postNotification(notif)
+        }
+    }
+    
+    var isFinished: Bool? {
+        willSet {
+            print("Libro \(self.title) Termino de leerse!!!")
+            let notif = NSNotification(name: pdfWasFinished, object: self)
             NSNotificationCenter.defaultCenter().postNotification(notif)
         }
     }
