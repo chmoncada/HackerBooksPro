@@ -8,8 +8,6 @@ let pdfWasFinished = "Book finished"
 @objc(Book)
 
 public class Book: _Book {
-	
-    
     
     var pdfDownloaded: Bool? {
         if self.pdf.pdfData != nil {
@@ -26,6 +24,7 @@ public class Book: _Book {
             print("MODELO \(self.title) CAMBIO!!!")
             let notif = NSNotification(name: favStatusDidChange, object: self)
             NSNotificationCenter.defaultCenter().postNotification(notif)
+            
         }
     }
     
@@ -46,10 +45,30 @@ public class Book: _Book {
     }
     
     var isFinished: Bool? {
-        willSet {
-            print("Libro \(self.title) Termino de leerse!!!")
-            let notif = NSNotification(name: pdfWasFinished, object: self)
-            NSNotificationCenter.defaultCenter().postNotification(notif)
+        didSet {
+            
+            
+            // Crear tag "Finished" y lanzar la notificacion para que la tabla se recargue?, con el fetched se supone que deberia recargarse sola
+            if isFinished! {
+
+                print("Libro \(self.title) Termino de leerse!!!")
+                let newTag = Tag.uniqueTag("finished", context: self.managedObjectContext!)
+                let bookTag = BookTag(managedObjectContext: self.managedObjectContext!)
+                bookTag!.name = "\(self.title) - Finished"
+                bookTag!.tag = newTag!
+                bookTag!.book = self
+                
+                // Send notification
+                let notif = NSNotification(name: pdfWasFinished, object: self)
+                NSNotificationCenter.defaultCenter().postNotification(notif)
+                
+            } else {
+                print("ya no estoy leido hasta el final")
+            }
+            
+            
+            
+            
         }
     }
     

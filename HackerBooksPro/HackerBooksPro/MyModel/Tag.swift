@@ -40,8 +40,20 @@ public class Tag: _Tag {
             result = Tag(managedObjectContext: context)
         }
         result?.tag = tag
+//        switch tag {
+//        case "favorite":
+//            result?.proxyForSorting = "__" + "favorite"
+//        case "finished":
+//            result?.proxyForSorting = "_" + "finished"
+//        default:
+//            result?.proxyForSorting = tag
+//        }
+        
         if tag == "favorite" {
-           result?.proxyForSorting = "_" + "favorite"
+           result?.proxyForSorting = "__" + "favorite"
+        } else if tag == "finished"{
+            result?.proxyForSorting = "_" + "finished"
+
         } else {
             result?.proxyForSorting = tag
         }

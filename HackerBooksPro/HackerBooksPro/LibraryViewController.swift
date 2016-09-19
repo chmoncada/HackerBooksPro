@@ -150,7 +150,13 @@ extension LibraryViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let sectionInfo = fetchedResultsController.sections![section]
         
-        if sectionInfo.name == "_favorite" { return "FAVORITE" } else { return sectionInfo.name.uppercaseString}
+        if sectionInfo.name == "__favorite" {
+            return "FAVORITE"
+        } else if sectionInfo.name == "_finished" {
+            return "FINISHED"
+        } else {
+            return sectionInfo.name.uppercaseString
+        }
 
     }
     

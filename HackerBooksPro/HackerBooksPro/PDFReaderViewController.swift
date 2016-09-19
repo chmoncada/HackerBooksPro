@@ -283,7 +283,12 @@ extension PDFReaderViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         if currentPage == pdf?.numberOfPages {
             print("SE ACABO")
-            book!.isFinished = true
+            if book!.isFinished != nil {
+                book?.isFinished = true
+            }
+
+        } else {
+            book?.isFinished = false
         }
         
     }

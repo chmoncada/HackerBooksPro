@@ -93,8 +93,6 @@ class BookViewController: UITableViewController {
             bookTag!.tag = newTag!
             bookTag!.book = model!
             
-            //FUNCIONO, FALTA ARREGLAR LAS SECCIONES DEL FETCHED RESULTS CONTROLLER
-            //1 busco si tag existe
         } else {
             BookTag.removeFavoriteTag(fromBook: model!, inContext: coreDataStack!.context)
         }
