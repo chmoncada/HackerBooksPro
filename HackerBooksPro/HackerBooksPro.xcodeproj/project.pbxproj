@@ -57,7 +57,6 @@
 		A1F12BD61D77A251006BE392 /* PDFDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F12BD51D77A251006BE392 /* PDFDocument.swift */; };
 		A1F12BD81D77A2DF006BE392 /* PDFOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */; };
 		A1F12BDC1D77A9CE006BE392 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1F12BDB1D77A9CE006BE392 /* Assets.xcassets */; };
-		A1F12BDE1D77AC03006BE392 /* nofile.html in Resources */ = {isa = PBXBuildFile; fileRef = A1F12BDD1D77AC03006BE392 /* nofile.html */; };
 		A1F12BE01D77AD19006BE392 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F12BDF1D77AD19006BE392 /* ImageCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -115,7 +114,6 @@
 		A1F12BD51D77A251006BE392 /* PDFDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFDocument.swift; sourceTree = "<group>"; };
 		A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFOverviewViewController.swift; sourceTree = "<group>"; };
 		A1F12BDB1D77A9CE006BE392 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../Assets.xcassets; sourceTree = "<group>"; };
-		A1F12BDD1D77AC03006BE392 /* nofile.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = nofile.html; sourceTree = "<group>"; };
 		A1F12BDF1D77AD19006BE392 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -195,15 +193,15 @@
 				A112A3071D5EB59400C29B40 /* _BookImage.swift */,
 				A112A3081D5EB59400C29B40 /* _BookPDF.swift */,
 				A112A3091D5EB59400C29B40 /* _Tag.swift */,
-				A1D602B21D8326CC0007E736 /* Annotation.swift */,
-				A112A30F1D5EB59400C29B40 /* Author.swift */,
 				A112A3101D5EB59400C29B40 /* Book.swift */,
 				A112A30A1D5EB59400C29B40 /* BookImage.swift */,
 				A112A30B1D5EB59400C29B40 /* BookPDF.swift */,
 				A1D15CAC1D74E13300C2F39B /* BookTag.swift */,
+				A112A30C1D5EB59400C29B40 /* Tag.swift */,
+				A1D602B21D8326CC0007E736 /* Annotation.swift */,
+				A112A30F1D5EB59400C29B40 /* Author.swift */,
 				A1D602B31D8326CC0007E736 /* Location.swift */,
 				A1D602B41D8326CC0007E736 /* Photo.swift */,
-				A112A30C1D5EB59400C29B40 /* Tag.swift */,
 				A1F12BD51D77A251006BE392 /* PDFDocument.swift */,
 				A18ABD5C1D8E3AF100C9AE6E /* MapLocation.swift */,
 				A112A2E61D5E91BC00C29B40 /* HackerBooksPro.xcdatamodeld */,
@@ -231,7 +229,6 @@
 		A112A2F81D5E926D00C29B40 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A1F12BDD1D77AC03006BE392 /* nofile.html */,
 				A112A2FD1D5E929700C29B40 /* emptyStar.png */,
 				A112A2FC1D5E929700C29B40 /* emptyBook.png */,
 				A112A2FE1D5E929700C29B40 /* filledStar.png */,
@@ -342,7 +339,6 @@
 			files = (
 				A112A2ED1D5E91BC00C29B40 /* LaunchScreen.storyboard in Resources */,
 				A112A3001D5E929700C29B40 /* emptyStar.png in Resources */,
-				A1F12BDE1D77AC03006BE392 /* nofile.html in Resources */,
 				A112A3011D5E929700C29B40 /* filledStar.png in Resources */,
 				A1F12BDC1D77A9CE006BE392 /* Assets.xcassets in Resources */,
 				A112A2FF1D5E929700C29B40 /* emptyBook.png in Resources */,

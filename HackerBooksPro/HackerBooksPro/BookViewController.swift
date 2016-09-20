@@ -38,8 +38,6 @@ class BookViewController: UITableViewController {
             
             // Save book in iCloud
             saveBookIniCloud(model!)
-//            let store = NSUbiquitousKeyValueStore.defaultStore()
-//            store.setString("PRUEBA CHARLES \(model?.title)", forKey: "PRUEBA")
         }
     }
     
@@ -56,7 +54,8 @@ class BookViewController: UITableViewController {
     var download: Download?
     
     lazy var downloadSession: NSURLSession = {
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+      
+        let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("backgroundSessionConfiguration")
         let session = NSURLSession(configuration: configuration, delegate: self, delegateQueue: nil)
         
         return session
@@ -82,7 +81,6 @@ class BookViewController: UITableViewController {
         
         model!.isFavorite = NSNumber(bool: favoriteSwitch.on)
         
-        
         if favoriteSwitch.on {
             //cambio la propiedad del modelo isFavorite
             
@@ -94,7 +92,9 @@ class BookViewController: UITableViewController {
             bookTag!.book = model!
             
         } else {
+            
             BookTag.removeFavoriteTag(fromBook: model!, inContext: coreDataStack!.context)
+        
         }
         model!.favIsChanged = true
         
@@ -106,6 +106,8 @@ class BookViewController: UITableViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        _ = self.downloadSession
         
         if let book = loadBookFromiCloud() {
             print("encontre modelo en iCloud: \(book.title)")
@@ -161,7 +163,6 @@ class BookViewController: UITableViewController {
         
         tagsLabel.text = model!.tagsList()
         
-        
         if model!.pdfDownloaded! {
             messagelabel.text = "Read the book"
         } else {
@@ -185,7 +186,6 @@ class BookViewController: UITableViewController {
 // MARK: - NSUserDefaults methods & iCloud
 
 extension BookViewController {
-    
     
     func saveBookInUserDefaults(book: Book) {
         
@@ -256,13 +256,6 @@ extension BookViewController {
         }
     }
     
-//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        if indexPath.section == 1 && indexPath.row == 0 && model!.pdfDownloaded! {
-//            print("ALGUN DIA SE MOSTRARA EL PDF")
-//            //performSegueWithIdentifier("ShowPDF", sender: nil)
-//        } 
-//    }
-    
     override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.1
     }
@@ -320,6 +313,18 @@ extension BookViewController: NSURLSessionDownloadDelegate {
             self.progressLabel.text = String(format: "%.1f%% of %@",  self.download!.progress * 100, totalSize)
         })
     }
+    
+    func URLSessionDidFinishEventsForBackgroundURLSession(session: NSURLSession) {
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            if let completionHandler = appDelegate.backgroundSessionCompletionHandler {
+                appDelegate.backgroundSessionCompletionHandler = nil
+                dispatch_async(dispatch_get_main_queue(), {
+                    completionHandler()
+                })
+            }
+        }
+    }
+    
 }
 
 // MARK: - BookSelectionDelegate
@@ -339,22 +344,15 @@ extension BookViewController {
         if segue.identifier == "ShowPDF" {
             
             let controller = segue.destinationViewController as! PDFReaderViewController
-            //let  = navigationController.topViewController as!
-            //let url = NSBundle.mainBundle().URLForResource("iosreverseengineering", withExtension: "pdf")
-            
-//            do {
+
             controller.pdf = PDFDocument(bookPdf: model!.pdf)
             controller.coreDataStack = coreDataStack
             controller.book = model
-            //controller.parentVC = self
             if model?.pdf.lastPageOpen?.integerValue == 0 {
                 controller.shouldShowPage = 1 // To avoid the page 0 in first time loading
             } else {
                 controller.shouldShowPage = model?.pdf.lastPageOpen?.integerValue
             }
-//            } catch {
-//                print("PDF could not be created")
-//            }
             
             controller.navigationItem.leftItemsSupplementBackButton = true
         }

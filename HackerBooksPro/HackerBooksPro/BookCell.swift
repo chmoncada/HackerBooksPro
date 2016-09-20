@@ -28,6 +28,7 @@ class BookCell: UITableViewCell {
     
     func startObserving(book: Book){
         _book = book
+        // Add observers
         _nc.addObserverForName(favStatusDidChange, object: _book, queue: nil) { (n: NSNotification) in
             self.syncWithBook()
         }
@@ -71,7 +72,6 @@ class BookCell: UITableViewCell {
         }
         
         // Seteo el page status
-        //POR AHORA MUESTRO LAS PAGINAS DEL LIBRO
         if _book!.pdf.pdfData != nil {
             BookPageStatus.text = "Page \(_book!.pdf.lastPageOpen!) of \(_book!.pdf.document!.numberOfPages)"
         } else {
@@ -92,7 +92,6 @@ class BookCell: UITableViewCell {
                         //let image = UIImage(data: dataExist)
                         let resizeImage = UIImage(data: dataExist)!.resizedImageWithContentMode(.ScaleAspectFill, bounds: CGSize(width: 112, height: 144), interpolationQuality: .Default)
                         self.BookCover.image = resizeImage
-                        //                        book.image.imageData = UIImagePNGRepresentation(UIImage(data: dataExist)!)
                         self._book!.image.imageData = UIImageJPEGRepresentation(resizeImage, 0.9)
                         // Send notification that the image finish loading
                         self._book!.imageIsLoaded = true
@@ -100,13 +99,12 @@ class BookCell: UITableViewCell {
                         print("No se pudo descargar imagen, se usara la imagen por defecto")
                         self.BookCover.image = UIImage(named: "emptyBook")
                     }
-                    
                 }
             }
             return
         }
         
-        //print(" se usa los datos de Core Data")
+        // Se usa los datos de Core Data
         self.BookCover.image = UIImage(data:_book!.image.imageData!)
         
     }

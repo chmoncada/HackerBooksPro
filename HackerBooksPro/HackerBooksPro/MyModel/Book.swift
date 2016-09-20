@@ -109,8 +109,8 @@ public class Book: _Book {
         var arrayOfTags = [String]()
         if let array = self.bookTags.allObjects as? BookTagArray {
             // go through the array except the tags __FAVORITO
-            for each in array where !(each.tag.tag == "__FAVORITO") {
-                arrayOfTags.append(each.tag.tag)
+            for each in array where (!(each.tag.tag == "favorite") && !(each.tag.tag == "finished")) {
+                arrayOfTags.append(each.tag.tag.capitalizedString)
             }
             arrayOfTags.sortInPlace()
             let list = arrayOfTags.joinWithSeparator(", ")

@@ -25,8 +25,6 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     var shouldShowPage: Int?
     var shouldReload = false
     
-    //weak var parentVC : BookViewController?
-    
     var pdf: PDFDocument? {
         didSet {
             // Update the view.
@@ -37,35 +35,6 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     }
     
     var annotationPages = Set<Int>()
-    //var annotationPages: Set<Int> = [1,5,10,12]
-//    var annotations: [Annotation]? {
-//        
-//        var foundNotes = [Annotation]()
-//        
-//        let fetchRequest = NSFetchRequest()
-//        let entity = Annotation.entity()
-//        fetchRequest.entity = entity
-//        
-//        let predicate = NSPredicate(format: "bookPdf.book == %@", book!)
-//        fetchRequest.predicate = predicate
-//        
-//        let sortDescriptor = NSSortDescriptor(key: "linkedPage", ascending: true)
-//        fetchRequest.sortDescriptors = [sortDescriptor]
-//        
-//        do {
-//            foundNotes = try coreDataStack?.context.executeFetchRequest(fetchRequest) as! [Annotation]
-//            
-//            for each in foundNotes {
-//                
-//            }
-//            
-//            return foundNotes
-//        } catch let error as NSError {
-//            print("\(error.localizedDescription)")
-//            return nil
-//        }
-//        
-//    }
 
     // MARK: - Utils
     
@@ -123,8 +92,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             //lo hacemos delegado
             self.webview.scrollView.delegate = self
         }
-        //self.view.addSubview(self.webview)
-        //self.webview.scrollView.delegate = self
+        
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(annotationSetChanged), name: annotationsDidChange, object: book!)
         
@@ -157,10 +125,6 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-//    deinit {
-//        self.webview.scrollView.delegate = nil
-//    }
-
     // MARK: - Segue
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ShowOverview" {
@@ -207,15 +171,10 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 
     }
     
-//    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-//        self.changePage()
-//    }
-    
     // MARK: - Web Methods
     
     func webViewDidFinishLoad(webView: UIWebView) {
         print("termino de cargar LA VISTA")
-        //print(self.shouldShowPage)
         self.changePage()
     }
     
@@ -304,7 +263,6 @@ extension PDFReaderViewController: UIScrollViewDelegate {
             bookmarkButton.image = UIImage(named: "bookmarkRibbon")
         }
         
-        //book?.pdf.lastPageOpen = currentPage
     }
     
 }

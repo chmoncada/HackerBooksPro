@@ -53,15 +53,9 @@ class AnnotationsCollectionViewController: UICollectionViewController {
     }
 
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
-        
-
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: UICollectionViewDataSource
@@ -98,8 +92,6 @@ class AnnotationsCollectionViewController: UICollectionViewController {
             }
         }
         
-        
-    
         return cell
     }
 
@@ -149,8 +141,6 @@ extension AnnotationsCollectionViewController {
                 controller.annotationToEdit = annotation
             }
             
-            // ARREGLAR ESTO
-            //controller.currentPage = 1
             controller.coreDataStack = coreDataStack
             controller.book = book
         }

@@ -32,7 +32,6 @@ class LibraryViewController: UIViewController {
     
     weak var delegate: BookSelectionDelegate?
     
-    //POR AHORA IMPLEMENTAREMOS EL FETCHEDRESULTS ACA
     var fetchedResultsController: NSFetchedResultsController!
     
     var tableToShow: tableType?
@@ -43,9 +42,7 @@ class LibraryViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
-    
     // MARK: - IBAction
-    
     
     @IBAction func tableTypeChanged(sender: UISegmentedControl) {
         
@@ -64,13 +61,7 @@ class LibraryViewController: UIViewController {
         
     }
     
-    
     //MARK: - Lifecycle
-    
-    override func viewWillAppear(animated: Bool) {
-        //let nc = NSNotificationCenter.defaultCenter()
-        //nc.addObserver(self, selector: #selector(favChange), name: favStatusDidChange, object: nil)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -142,8 +133,6 @@ extension LibraryViewController: UITableViewDataSource {
         }
         
         cell.startObserving(book!)
-        
-        //cell.configureCell(book!, indexPath: indexPath, coreDataStack: coreDataStack)
         
         return cell
         
@@ -268,7 +257,6 @@ extension LibraryViewController {
             
         }
         
-        
     }
     
     
@@ -280,12 +268,7 @@ extension LibraryViewController {
         }
     }
     
-    
-    
-    
 }
-
-
 
 //MARK: - NSFetchedResultControllerDelegate
 

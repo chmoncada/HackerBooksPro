@@ -24,8 +24,6 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     @IBOutlet weak var addPhotoLabel: UILabel!
     @IBOutlet weak var locationButton: UIBarButtonItem!
     
-    
-    
     // MARK: - Location Properties
     let locationManager = CLLocationManager()
     var location: CLLocation?
@@ -44,7 +42,6 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     var observer: AnyObject!
     
     // dateFormatter
-    
     var creationDate = NSDate()
     
     private let dateFormatter: NSDateFormatter = {
@@ -82,10 +79,6 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
             annotation = temp
             photoObject = annotation.photo!
             
-            //If it is in editing mode, the coordinates are the same as initial
-            //locationObject.latitude = coordinate!.latitude
-            //locationObject.longitude = coordinate!.longitude
-            
         } else {
             // Creo una instancia de Annotation
             let annotationEntity = Annotation.entity(coreDataStack!.context)
@@ -112,7 +105,6 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         }
         
         // it links location and photo with annotation
-        
         annotation.photo = photoObject
 
         annotation.modificationDate = creationDate
@@ -157,7 +149,6 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     
     @IBAction func shareAnnotation(sender: UIBarButtonItem) {
         
-
         let alert = UIAlertController(title: "Sharing note...", message: nil, preferredStyle: .Alert)
         let twitterAction = UIAlertAction(title: "Share in Twitter", style: .Default) { _ in
             let vc = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
@@ -221,8 +212,6 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-
-
 }
 
 // MARK: - Utils
@@ -247,22 +236,6 @@ extension AnnotationViewController {
         } else {
             latitudeLabel.text = ""
             longitudeLabel.text = ""
-            
-            // TEST
-            //            let statusMessage: String
-            //            if let error = lastLocationError {
-            //                if error.domain == kCLErrorDomain && error.code == CLError.Denied.rawValue {
-            //                    statusMessage = "Location Services Disabled" } else {
-            //                    statusMessage = "Error Getting Location" }
-            //            } else if !CLLocationManager.locationServicesEnabled() {
-            //                statusMessage = "Location Services Disabled"
-            //            } else if updatingLocation {
-            //                statusMessage = "Searching..."
-            //            } else {
-            //                statusMessage = "Ready to search"
-            //            }
-            //            
-            //            print(statusMessage)
             
         }
     }
@@ -503,7 +476,6 @@ extension AnnotationViewController: UIImagePickerControllerDelegate, UINavigatio
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
     }
-    
     
 }
 
