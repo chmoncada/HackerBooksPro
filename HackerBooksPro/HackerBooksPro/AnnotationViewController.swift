@@ -423,14 +423,28 @@ extension AnnotationViewController: UIImagePickerControllerDelegate, UINavigatio
     }
     
     func showPhotoMenu() {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
         let takePhotoAction = UIAlertAction(title: "Take Photo", style: .Default, handler: { _ in self.takePhotoWithCamera() })
         let chooseFromLibrary = UIAlertAction(title: "Choose From Library", style: .Default, handler: { _ in self.choosePhotoFromLibrary() })
         
+        
         alertController.addAction(cancelAction)
         alertController.addAction(takePhotoAction)
         alertController.addAction(chooseFromLibrary)
+        
+        //alertController.modalInPopover = true
+//        UIPopoverPresentationController *popPresenter = [alertController popoverPresentationController];
+//        popPresenter.sourceView = sender.view;
+//        popPresenter.sourceRect = sender.view.bounds;
+        
+        alertController.popoverPresentationController?.sourceView = view
+        
+        // FALTA ARREGLAR ESTO PARA EL IPAD
+        alertController.popoverPresentationController?.sourceRect = view.frame
+        
+        
+        
         
         presentViewController(alertController, animated: true, completion: nil)
     }

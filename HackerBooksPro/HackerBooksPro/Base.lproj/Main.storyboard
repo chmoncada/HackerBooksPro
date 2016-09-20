@@ -368,7 +368,9 @@
                     <navigationItem key="navigationItem" title="Title" id="zMb-e1-bqN">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="63t-ae-8on">
                             <connections>
-                                <segue destination="NZk-V0-9IS" kind="presentation" identifier="AddAnnotation" id="y2y-ed-tWo"/>
+                                <segue destination="NZk-V0-9IS" kind="popoverPresentation" identifier="AddAnnotation" popoverAnchorBarButtonItem="63t-ae-8on" id="y2y-ed-tWo">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
