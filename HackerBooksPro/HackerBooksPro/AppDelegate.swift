@@ -31,6 +31,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Load JSON if needed
         importJSONDataIfNeeded(coreDataStack)
         
+        // Calculate the RECENT tag in the model
+        populateRecentTag()
+        
+        // Setup of initial views
         let splitViewController = self.window!.rootViewController as! UISplitViewController
         let leftNavController = splitViewController.viewControllers.first as! UINavigationController
         let masterViewController = leftNavController.topViewController as! LibraryViewController
@@ -128,9 +132,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func iCloudKeysChanged(sender: NSNotification) {
         
         // Update local store values
-        print("VALOR CAMBIO")
+        print("func: iCloudKeysChanged: VALOR CAMBIO")
+        // FALTA
         
     }
 
 }
 
+extension AppDelegate {
+    
+    func populateRecentTag() {
+        
+        // Busco si hay Tag Recents y los borro
+        let tagString = "recent"
+        Tag.eraseTag(tagString, context: coreDataStack.context)
+        
+        // Calculo si el book necesita el Tag Recent
+        
+        // se lo anado al libro
+        
+        // Grabo el modelo
+        
+    }
+
+}

@@ -43,7 +43,7 @@ class BookViewController: UITableViewController {
     
     var currentPage: Int? {
         didSet {
-            print("Obtuve la ultima pagina leida: \(currentPage)")
+            //print("Obtuve la ultima pagina leida: \(currentPage)")
             self.model?.pdf.lastPageOpen = currentPage
             self.model!.isChanged = true
             
@@ -77,7 +77,7 @@ class BookViewController: UITableViewController {
     
     @IBAction func switchChange(sender: AnyObject) {
         
-        favoriteSwitch.on ? print("Switch is ON") : print("Switch is OFF")
+        //favoriteSwitch.on ? print("Switch is ON") : print("Switch is OFF")
         
         model!.isFavorite = NSNumber(bool: favoriteSwitch.on)
         
@@ -110,10 +110,10 @@ class BookViewController: UITableViewController {
         _ = self.downloadSession
         
         if let book = loadBookFromiCloud() {
-            print("encontre modelo en iCloud: \(book.title)")
+            //print("encontre modelo en iCloud: \(book.title)")
             model = book
         } else if let book = loadBookFromUserDefaults() {
-            print("encontre modelo en NSUserDefaults: \(book.title)")
+            //print("encontre modelo en NSUserDefaults: \(book.title)")
             model = book
         } else {
             
@@ -124,7 +124,7 @@ class BookViewController: UITableViewController {
             
             do {
                 let results = try coreDataStack!.context.executeFetchRequest(fetchRequest) as! [Book]
-                print("No encontre nada, muestro el libro: \(results.first!.title)")
+                //print("No encontre nada, muestro el libro: \(results.first!.title)")
                 model = results.first
                 
             } catch let error as NSError {
@@ -343,8 +343,11 @@ extension BookViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ShowPDF" {
             
+            if let book = model {
+                book.pdfIsOpen = true
+            }
+            
             let controller = segue.destinationViewController as! PDFReaderViewController
-
             controller.pdf = PDFDocument(bookPdf: model!.pdf)
             controller.coreDataStack = coreDataStack
             controller.book = model

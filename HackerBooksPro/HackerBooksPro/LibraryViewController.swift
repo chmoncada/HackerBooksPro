@@ -141,8 +141,10 @@ extension LibraryViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let sectionInfo = fetchedResultsController.sections![section]
         
-        if sectionInfo.name == "__favorite" {
+        if sectionInfo.name == "___favorite" {
             return "FAVORITE"
+        } else if sectionInfo.name == "__recent" {
+            return "RECENT"
         } else if sectionInfo.name == "_finished" {
             return "FINISHED"
         } else {
@@ -282,7 +284,7 @@ extension LibraryViewController: NSFetchedResultsControllerDelegate {
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject,
                     atIndexPath indexPath: NSIndexPath?,
                                 forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        print("Se detecto cambios")
+        //print("Se detecto cambios")
         switch type {
         case .Insert:
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)

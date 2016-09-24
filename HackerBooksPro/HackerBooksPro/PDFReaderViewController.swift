@@ -66,7 +66,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
                 let page = each.linkedPage!.integerValue
                 annotationPages.insert(page)
             }
-            print("las paginas que tienen anotaciones son: \(annotationPages)")
+            //print("las paginas que tienen anotaciones son: \(annotationPages)")
         } catch let error as NSError {
             print("\(error.localizedDescription)")
             
@@ -75,7 +75,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     }
     
     func annotationSetChanged() {
-        print("detecte el cambio de las anotaciones, debo refrescar el set")
+        //print("detecte el cambio de las anotaciones, debo refrescar el set")
         getAnnotationPages()
     }
     
@@ -111,7 +111,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         
         
         if shouldReload {
-            print("se recarga pdf")
+            //print("se recarga pdf")
             self.navigationItem.rightBarButtonItem?.enabled = true
             webview.loadData(pdf!.data!, MIMEType: "application/pdf", textEncodingName: "", baseURL: NSURL())
             
@@ -137,7 +137,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             controller.pdf = pdf
             controller.parentVC = self
             if let currentPage = self.currentPage {
-                print("Estamos en la pagina: \(currentPage)")
+                //print("Estamos en la pagina: \(currentPage)")
                 controller.currentPage = currentPage
             }
             
@@ -146,7 +146,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             shouldShowPage = currentPage
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AnnotationViewController
             if let currentPage = self.currentPage {
-                print("Estamos en la pagina: \(currentPage)")
+                //print("Estamos en la pagina: \(currentPage)")
                 controller.currentPage = currentPage
             }
             controller.coreDataStack = coreDataStack
@@ -174,7 +174,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     // MARK: - Web Methods
     
     func webViewDidFinishLoad(webView: UIWebView) {
-        print("termino de cargar LA VISTA")
+        //print("termino de cargar LA VISTA")
         self.changePage()
     }
     
@@ -199,7 +199,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     func changePage() {
         if let page = self.shouldShowPage {
             self.shouldShowPage = nil // Prevent for changing page again
-            print("nos movemos a la pagina \(page)")
+            //print("nos movemos a la pagina \(page)")
             self.goToPage(page)
         }
     }
@@ -211,17 +211,17 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         let paddingSize: CGFloat = 10
         
         let allHeight = self.webview.scrollView.contentSize.height
-        print("allHeight: \(allHeight)")
+        //print("allHeight: \(allHeight)")
         let allPadding = paddingSize * CGFloat(nbPages+1)
         let pageHeight = (allHeight-allPadding)/CGFloat(nbPages)
-        print("pageHeight: \(pageHeight)")
+        //print("pageHeight: \(pageHeight)")
         
         if page <= nbPages && page >= 0 {
             var offsetPoint = CGPointMake(0, (paddingSize+pageHeight)*CGFloat(page-1))
             if let navBarOffset = self.navigationController?.navigationBar.frame.size.height {
                 offsetPoint.y -= navBarOffset + paddingSize // Preventing having page under Navigation Controller
             }
-            print("offsetPoint: \(offsetPoint)")
+            //print("offsetPoint: \(offsetPoint)")
             self.webview.scrollView.setContentOffset(offsetPoint, animated: false)
         }
     }
@@ -251,7 +251,7 @@ extension PDFReaderViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
         if currentPage! != oldPage && currentPage! > 0 {
-            print("pagina nueva: \(currentPage!), debo lanzar notificacion")
+            //print("pagina nueva: \(currentPage!), debo lanzar notificacion")
             book?.pdf.lastPageOpen = currentPage!
             book?.pageIsChanged = true
             oldPage = currentPage!

@@ -13,10 +13,10 @@ public class BookImage: _BookImage {
 
         self.coredataStack = coredataStack
         if self.imageData != nil {
-            print("HAY DATA, en el futuro se cargara del modelo de CoreData")
+            //print("HAY DATA, en el futuro se cargara del modelo de CoreData")
             return self.imageData
         } else {
-            print("Se descargara a futuro de \(self.imageURL)")
+            //print("Se descargara a futuro de \(self.imageURL)")
             if let url = NSURL(string: self.imageURL) {
                 self.downloadTask = self.loadImageWithURL(url)
             }
@@ -36,7 +36,7 @@ extension BookImage {
                     dispatch_async(dispatch_get_main_queue()) {
                         if let strongSelf = self {
                             strongSelf.returnData = returnData
-                            print("ya descargado, se procedera a grabar en el modelo")
+                            //print("ya descargado, se procedera a grabar en el modelo")
                             strongSelf.imageData = returnData
                         }
                     }

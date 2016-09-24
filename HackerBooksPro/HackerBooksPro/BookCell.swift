@@ -82,13 +82,13 @@ class BookCell: UITableViewCell {
         self.BookCover.image = UIImage(named: "emptyBook")
         
         guard (_book!.image.imageData != nil) else {
-            print("NO hay imagen guardada en el modelo")
+            //print("NO hay imagen guardada en el modelo")
             self.BookCover.image = UIImage(named: "emptyBook")
             if let url = NSURL(string: _book!.image.imageURL) {
                 loadImage(remoteURL: url){ (data: NSData?) in
                     
                     if let dataExist = data {
-                        print("se usa imagen descargada")
+                        //print("se usa imagen descargada")
                         //let image = UIImage(data: dataExist)
                         let resizeImage = UIImage(data: dataExist)!.resizedImageWithContentMode(.ScaleAspectFill, bounds: CGSize(width: 112, height: 144), interpolationQuality: .Default)
                         self.BookCover.image = resizeImage
@@ -96,7 +96,7 @@ class BookCell: UITableViewCell {
                         // Send notification that the image finish loading
                         self._book!.imageIsLoaded = true
                     } else {
-                        print("No se pudo descargar imagen, se usara la imagen por defecto")
+                        //print("No se pudo descargar imagen, se usara la imagen por defecto")
                         self.BookCover.image = UIImage(named: "emptyBook")
                     }
                 }

@@ -30,6 +30,7 @@
     <entity name="BookPDF" representedClassName="BookPDF" syncable="YES">
         <attribute name="isFinished" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lastPageOpen" attributeType="Integer 16" minValueString="0" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="lastTimeOpened" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="pdfData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="pdfURL" attributeType="String" syncable="YES"/>
         <relationship name="annotations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Annotation" inverseName="bookPdf" inverseEntity="Annotation" syncable="YES"/>
@@ -64,7 +65,7 @@
         <element name="Author" positionX="423" positionY="-180" width="128" height="75"/>
         <element name="Book" positionX="162" positionY="-108" width="128" height="133"/>
         <element name="BookImage" positionX="169" positionY="83" width="128" height="88"/>
-        <element name="BookPDF" positionX="-74" positionY="-232" width="128" height="133"/>
+        <element name="BookPDF" positionX="-74" positionY="-232" width="128" height="148"/>
         <element name="BookTag" positionX="421" positionY="-63" width="128" height="90"/>
         <element name="Location" positionX="331" positionY="-432" width="128" height="88"/>
         <element name="Photo" positionX="351" positionY="-307" width="128" height="73"/>

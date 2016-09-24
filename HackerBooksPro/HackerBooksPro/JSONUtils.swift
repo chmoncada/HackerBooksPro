@@ -57,7 +57,7 @@ func importJSONDataIfNeeded(coreDataStack:CoreDataStack) {
                 print("Error fetching: \(error.localizedDescription)")
             }
         } else {
-            print("Se usara modelo existente")
+            //print("Se usara modelo existente")
         }
 
         

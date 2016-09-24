@@ -23,7 +23,7 @@ public class Book: _Book {
     
     var isChanged: Bool? {
         willSet {
-            print("MODELO \(self.title) CAMBIO!!!")
+            //print("MODELO \(self.title) CAMBIO!!!")
             let notif = NSNotification(name: modelDidChange, object: self)
             NSNotificationCenter.defaultCenter().postNotification(notif)
             
@@ -32,16 +32,36 @@ public class Book: _Book {
     
     var favIsChanged: Bool? {
         willSet {
-            print("Status de Favorito del libro \(self.title) CAMBIO!!!")
+            //print("Status de Favorito del libro \(self.title) CAMBIO!!!")
             let notif = NSNotification(name: favStatusDidChange, object: self)
             NSNotificationCenter.defaultCenter().postNotification(notif)
             
         }
     }
     
+    var pdfIsOpen: Bool? {
+        didSet {
+            //print("Abri el PDF de \(self.title) para leer")
+            self.pdf.lastTimeOpened = NSDate()
+            
+            // Create and add "Recent tag"
+            let newTag = Tag.uniqueTag("recent", context: self.managedObjectContext!)
+            let bookTag = BookTag(managedObjectContext: self.managedObjectContext!)
+            bookTag!.name = "\(self.title) - Recent"
+            bookTag!.tag = newTag!
+            bookTag!.book = self
+            
+            // Send notification
+//            let notif = NSNotification(name: pdfWasFinished, object: self)
+//            NSNotificationCenter.defaultCenter().postNotification(notif)
+            
+            
+        }
+    }
+    
     var pageIsChanged: Bool? {
         willSet {
-            print("cambiamos la pagina, ahora es \(self.pdf.lastPageOpen!.integerValue) !!!")
+            //print("cambiamos la pagina, ahora es \(self.pdf.lastPageOpen!.integerValue) !!!")
             let notif = NSNotification(name: newPageOpened, object: self)
             NSNotificationCenter.defaultCenter().postNotification(notif)
             
@@ -50,7 +70,7 @@ public class Book: _Book {
     
     var imageIsLoaded: Bool? {
         willSet {
-            print("IMAGEN de \(self.title) SE DESCARGO!!!")
+            //print("IMAGEN de \(self.title) SE DESCARGO!!!")
             let notif = NSNotification(name: imageDidDownload, object: self)
             NSNotificationCenter.defaultCenter().postNotification(notif)
         }
@@ -58,7 +78,7 @@ public class Book: _Book {
     
     var annotationsChanged: Bool? {
         willSet {
-            print("Las anotaciones de \(self.title) cambiaron!!!")
+            //print("Las anotaciones de \(self.title) cambiaron!!!")
             let notif = NSNotification(name: annotationsDidChange, object: self)
             NSNotificationCenter.defaultCenter().postNotification(notif)
         }
@@ -81,7 +101,7 @@ public class Book: _Book {
                 NSNotificationCenter.defaultCenter().postNotification(notif)
                 
             } else {
-                print("ya no estoy leido hasta el final")
+                //print("ya no estoy leido hasta el final")
                 //Quito el tag
                 BookTag.removeTag("\(self.title) - Finished", fromBook: self, inContext: self.managedObjectContext!)
             }

@@ -50,10 +50,11 @@ public class Tag: _Tag {
 //        }
         
         if tag == "favorite" {
-           result?.proxyForSorting = "__" + "favorite"
+            result?.proxyForSorting = "___" + "favorite"
+        } else if tag == "recent"{
+            result?.proxyForSorting = "__" + "recent"
         } else if tag == "finished"{
             result?.proxyForSorting = "_" + "finished"
-
         } else {
             result?.proxyForSorting = tag
         }
@@ -62,5 +63,14 @@ public class Tag: _Tag {
         
     }
     
+    class func eraseTag(tag: String, context:NSManagedObjectContext) {
+        
+        if let tagToErase = Tag.findTag(tag, context: context) {
+            //print("Encontre Tag, procedere a borrarlo")
+            context.deleteObject(tagToErase)
+        } else {
+            print("El Tag no existe")
+        }
+    }
     
 }
