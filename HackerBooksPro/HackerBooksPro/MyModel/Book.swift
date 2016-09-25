@@ -44,16 +44,20 @@ public class Book: _Book {
             //print("Abri el PDF de \(self.title) para leer")
             self.pdf.lastTimeOpened = NSDate()
             
-            // Create and add "Recent tag"
-            let newTag = Tag.uniqueTag("recent", context: self.managedObjectContext!)
-            let bookTag = BookTag(managedObjectContext: self.managedObjectContext!)
-            bookTag!.name = "\(self.title) - Recent"
-            bookTag!.tag = newTag!
-            bookTag!.book = self
-            
+            // si el tag reciente ya lo tiene
+            if !self.containsTag("recent") {
+                
+                // Create and add "Recent tag"
+                let newTag = Tag.uniqueTag("recent", context: self.managedObjectContext!)
+                
+                let bookTag = BookTag(managedObjectContext: self.managedObjectContext!)
+                bookTag!.name = "\(self.title) - Recent"
+                bookTag!.tag = newTag!
+                bookTag!.book = self
+            }
             // Send notification
-//            let notif = NSNotification(name: pdfWasFinished, object: self)
-//            NSNotificationCenter.defaultCenter().postNotification(notif)
+            //            let notif = NSNotification(name: pdfWasFinished, object: self)
+            //            NSNotificationCenter.defaultCenter().postNotification(notif)
             
             
         }
@@ -141,5 +145,20 @@ public class Book: _Book {
         return nil
     }
     
+    func containsTag(tag: String) -> Bool {
+        
+        if let array = self.bookTags.allObjects as? BookTagArray {
+            // go through the array except the tags __FAVORITO
+            for each in array {
+                if each.tag.tag == tag {
+                    return true
+                }
+                //arrayOfTags.append(each.tag.tag.capitalizedString)
+            }
+        }
+        
+        return false
+        
+    }
     
 }

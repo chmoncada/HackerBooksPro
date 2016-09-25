@@ -107,13 +107,13 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     
     override func viewWillAppear(animated: Bool) {
         // Opening pdf file
-        webview.loadData(pdf!.data!, MIMEType: "application/pdf", textEncodingName: "", baseURL: NSURL())
+        webview.loadData(pdf!.data!, MIMEType: "application/pdf", textEncodingName: "", baseURL: NSURL(string: "www.google.com")!)
         
         
         if shouldReload {
             //print("se recarga pdf")
             self.navigationItem.rightBarButtonItem?.enabled = true
-            webview.loadData(pdf!.data!, MIMEType: "application/pdf", textEncodingName: "", baseURL: NSURL())
+            webview.loadData(pdf!.data!, MIMEType: "application/pdf", textEncodingName: "", baseURL: NSURL(string: "www.google.com")!)
             
             webview.scrollView.scrollEnabled = true
             shouldReload = false

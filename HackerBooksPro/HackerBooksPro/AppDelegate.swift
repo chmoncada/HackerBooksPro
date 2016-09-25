@@ -16,10 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var coreDataStack = CoreDataStack()
     var backgroundSessionCompletionHandler: (() -> Void)?
     
-    let tintColor = UIColor.blackColor()
-    let backButtonColor = UIColor(red: 1.0, green: 0.737, blue: 0.173, alpha: 1.00)
-
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         // iCloud Setup
@@ -31,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Load JSON if needed
         importJSONDataIfNeeded(coreDataStack)
         
-        // Calculate the RECENT tag in the model
+        // put "recent" tags in the model each time the app start
         populateRecentTag()
         
         // Setup of initial views
@@ -61,15 +57,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        print("Entre en background....grabo en iCloud")
+       
+        // Save in iCLoud
         NSUbiquitousKeyValueStore.defaultStore().synchronize()
        
-        
     }
 
     func application(application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: () -> Void) {
+        // to run the closure of the backgorund download task
         backgroundSessionCompletionHandler = completionHandler
     }
     
@@ -87,30 +82,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
 
-    //MARK: - Color Customization
-    
-    private func customizeAppearance() {
-        
-        // Status Bar Appearance
-        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
-        // Navigation Bar Appearance
-        UINavigationBar.appearance().titleTextAttributes=[NSForegroundColorAttributeName:UIColor.whiteColor()]
-        UINavigationBar.appearance().barTintColor = tintColor
-        UINavigationBar.appearance().translucent = false
-        // ToolBar Appearance
-        UIToolbar.appearance().tintColor = backButtonColor
-        UIToolbar.appearance().barTintColor = tintColor
-        // Back Button Appearance
-        UINavigationBar.appearance().tintColor = backButtonColor
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName:backButtonColor]
-        // UITableViewHeader appearance
-        UITableViewHeaderFooterView.appearance().tintColor = tintColor
-        // UITabBar appearance
-        UITabBar.appearance().tintColor = backButtonColor
-        UITabBar.appearance().barTintColor = tintColor
-    
-    }
+}
 
+// MARK: - iCloud
+extension AppDelegate {
+    
     func iCloudSetup() {
         // iCloud Settings
         let urlForCloud = NSFileManager.defaultManager().URLForUbiquityContainerIdentifier(nil)
@@ -120,7 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             
             let store = NSUbiquitousKeyValueStore.defaultStore()
-            
+            // Set an observer if the iCloud value changes in another device
             NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.iCloudKeysChanged(_:)), name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification, object: store)
             
             store.synchronize()
@@ -136,23 +112,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // FALTA
         
     }
-
 }
 
+// MARK: - Utils
 extension AppDelegate {
     
     func populateRecentTag() {
         
-        // Busco si hay Tag Recents y los borro
+        // As first step, "reset" all the "recent" tags, erase them from the model
         let tagString = "recent"
         Tag.eraseTag(tagString, context: coreDataStack.context)
         
-        // Calculo si el book necesita el Tag Recent
+        // check if each book should have the "recent" tag if it was open in the last 7 days
+        let today = NSDate()
+        let fetchRequest = NSFetchRequest(entityName: Book.entityName())
         
-        // se lo anado al libro
-        
-        // Grabo el modelo
-        
+        do {
+            let results = try coreDataStack.context.executeFetchRequest(fetchRequest) as! [Book]
+
+            for book in results {
+                if let date = book.pdf.lastTimeOpened {
+                    // Check if the book was open in the last 7days
+                    if daysBetweenDates(date, endDate: today) < 7 {
+                        // Add "recent" tag
+                        let newTag = Tag.uniqueTag("recent", context: coreDataStack.context)
+                        let bookTag = BookTag(managedObjectContext: coreDataStack.context)
+                        bookTag!.name = "\(book.title) - Recent"
+                        bookTag!.tag = newTag!
+                        bookTag!.book = book
+                    }
+                }
+            }
+            // Save context
+            coreDataStack.saveContext()
+        } catch let error as NSError {
+            print("Error: \(error.localizedDescription)")
+            return
+        }
     }
 
 }

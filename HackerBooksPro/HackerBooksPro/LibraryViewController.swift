@@ -144,7 +144,7 @@ extension LibraryViewController: UITableViewDataSource {
         if sectionInfo.name == "___favorite" {
             return "FAVORITE"
         } else if sectionInfo.name == "__recent" {
-            return "RECENT"
+            return "RECENT (7 days)"
         } else if sectionInfo.name == "_finished" {
             return "FINISHED"
         } else {
@@ -323,7 +323,7 @@ extension LibraryViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         
-        print("The search text is: '\(searchBar.text!)'")
+        //print("The search text is: '\(searchBar.text!)'")
         let searchString = searchBar.text!
         
         let predicate = NSPredicate(format: "%K CONTAINS[cd] %@ OR %K CONTAINS[cd] %@ OR %K CONTAINS[cd] %@", "title", searchString, "bookTags.tag.tag", searchString, "authors.name", searchString) 
