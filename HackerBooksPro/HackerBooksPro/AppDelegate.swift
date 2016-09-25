@@ -48,6 +48,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         detailViewController.navigationItem.leftItemsSupplementBackButton = true
         detailViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem()
         
+        coreDataStack.autoSave(5.0)
+        
         return true
     }
 

@@ -69,7 +69,8 @@ public class Tag: _Tag {
             //print("Encontre Tag, procedere a borrarlo")
             context.deleteObject(tagToErase)
         } else {
-            print("El Tag no existe")
+            //print("El Tag no existe")
+            return
         }
     }
     

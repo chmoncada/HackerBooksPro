@@ -47,7 +47,7 @@ class BookViewController: UITableViewController {
             self.model?.pdf.lastPageOpen = currentPage
             self.model!.isChanged = true
             
-            self.coreDataStack?.saveContext()
+            //self.coreDataStack?.saveContext()
         }
     }
     
@@ -63,7 +63,7 @@ class BookViewController: UITableViewController {
     
     @IBAction func startDownload() {
 
-        print("Descargando...")
+        //print("Descargando...")
         if let url = NSURL(string: model!.pdf.pdfURL) {
             progressBar.hidden = false
             progressLabel.hidden = false
@@ -98,7 +98,7 @@ class BookViewController: UITableViewController {
         }
         model!.favIsChanged = true
         
-        coreDataStack!.saveContext()
+        //coreDataStack!.saveContext()
         
     }
     
@@ -287,7 +287,7 @@ extension BookViewController: NSURLSessionDownloadDelegate {
             dispatch_async(dispatch_get_main_queue(), {
                 self.model!.isChanged = true
                 self.refreshUI()
-                self.coreDataStack?.saveContext()
+                //self.coreDataStack?.saveContext()
             })
         default: // all other cases
             dispatch_async(dispatch_get_main_queue(), {

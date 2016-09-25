@@ -117,7 +117,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         book?.pdf.addAnnotationsObject(annotation)
         book?.annotationsChanged = true
         
-        coreDataStack?.saveContext()
+        //coreDataStack?.saveContext()
         
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -208,7 +208,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     }
 
     deinit {
-        print("*** deinit \(self)")
+        //print("*** deinit \(self)")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -346,7 +346,7 @@ extension AnnotationViewController {
     }
     
     func didTimeOut() {
-        print("*** Time out")
+        //print("*** Time out")
         if location == nil {
             stopLocationManager()
             lastLocationError = NSError(domain: "MyLocationsErrorDomain", code: 1, userInfo: nil)
@@ -356,7 +356,7 @@ extension AnnotationViewController {
     }
     
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        print("didFailWithError \(error)")
+        //print("didFailWithError \(error)")
         
         if error.code == CLError.LocationUnknown.rawValue {
             return
@@ -370,7 +370,7 @@ extension AnnotationViewController {
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let newLocation = locations.last!
-        print("didUpdateLocations \(newLocation)")
+        //print("didUpdateLocations \(newLocation)")
         
         // Check if the time was too long
         if newLocation.timestamp.timeIntervalSinceNow < -5 {
@@ -393,7 +393,7 @@ extension AnnotationViewController {
             updateLabels()
             
             if newLocation.horizontalAccuracy <= locationManager.desiredAccuracy {
-                print("*** We're done!")
+                //print("*** We're done!")
                 stopLocationManager()
             }
         } else if distance < 1.0 {
@@ -401,7 +401,7 @@ extension AnnotationViewController {
             let timeInterval = newLocation.timestamp.timeIntervalSinceDate(location!.timestamp)
             
             if timeInterval > 10 {
-                print("*** Force Done!")
+                //print("*** Force Done!")
                 stopLocationManager()
                 updateLabels()
             }
@@ -428,23 +428,12 @@ extension AnnotationViewController: UIImagePickerControllerDelegate, UINavigatio
         let takePhotoAction = UIAlertAction(title: "Take Photo", style: .Default, handler: { _ in self.takePhotoWithCamera() })
         let chooseFromLibrary = UIAlertAction(title: "Choose From Library", style: .Default, handler: { _ in self.choosePhotoFromLibrary() })
         
-        
         alertController.addAction(cancelAction)
         alertController.addAction(takePhotoAction)
         alertController.addAction(chooseFromLibrary)
         
-        //alertController.modalInPopover = true
-//        UIPopoverPresentationController *popPresenter = [alertController popoverPresentationController];
-//        popPresenter.sourceView = sender.view;
-//        popPresenter.sourceRect = sender.view.bounds;
-        
         alertController.popoverPresentationController?.sourceView = view
-        
-        // FALTA ARREGLAR ESTO PARA EL IPAD
         alertController.popoverPresentationController?.sourceRect = view.frame
-        
-        
-        
         
         presentViewController(alertController, animated: true, completion: nil)
     }
@@ -475,7 +464,7 @@ extension AnnotationViewController: UIImagePickerControllerDelegate, UINavigatio
             
             dispatch_async(dispatch_get_main_queue()) {
                 if let image = self.image {
-                    print("Tengo imagen")
+                    //print("Tengo imagen")
                     self.showImage(image)
                 }
                 

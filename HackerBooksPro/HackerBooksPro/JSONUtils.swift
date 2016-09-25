@@ -50,7 +50,7 @@ func importJSONDataIfNeeded(coreDataStack:CoreDataStack) {
                     coreDataStack.context.deleteObject(team)
                 }
                 
-                coreDataStack.saveContext()
+                //coreDataStack.saveContext()
                 populateCoreDataModel(coreDataStack)
                 
             } catch let error as NSError {
@@ -143,7 +143,7 @@ func populateCoreDataModel(coredataStack: CoreDataStack) {
 
         }
         // Save the context
-        coredataStack.saveContext()
+        //coredataStack.saveContext()
         print("Se termino de poblar el modelo de Core Data")
         
     } catch let error as NSError {

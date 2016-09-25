@@ -5,7 +5,7 @@
 //  Created by Charles Moncada on 12/08/16.
 //  Copyright © 2016 Charles Moncada Pizarro. All rights reserved.
 //
-//  Boilerplate code from book "Core Data by Tutorial" - Aaron Douglas and others
+//  Boilerplate code with some adaptations from book "Core Data by Tutorial" - Aaron Douglas and others
 
 import CoreData
 
@@ -15,8 +15,7 @@ class CoreDataStack {
     
     lazy var context: NSManagedObjectContext = {
         
-        var managedObjectContext = NSManagedObjectContext(
-            concurrencyType: .MainQueueConcurrencyType)
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
         
         managedObjectContext.persistentStoreCoordinator = self.psc
         managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
@@ -59,15 +58,34 @@ class CoreDataStack {
         return urls[urls.count-1]
     }()
     
-    func saveContext () {
+    func saveContext() {
         if context.hasChanges {
             do {
                 try context.save()
-                print("se grabo el CONTEXTO")
+                //print("Hay cambios en el modelo, se grabo el CONTEXTO")
             } catch let error as NSError {
                 print("Error: \(error.localizedDescription)")
                 abort()
             }
         }
     }
+    
+    func autoSave(delayInSeconds: NSTimeInterval) {
+        if delayInSeconds > 0 {
+            //print("Autosaving")
+            saveContext()
+
+            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInSeconds * Double(NSEC_PER_SEC)))
+            
+            dispatch_after(delay, dispatch_get_main_queue()){
+                self.autoSave(delayInSeconds)
+            }
+            
+//            let delayInNanoSeconds = UInt64(delayInSeconds) * NSEC_PER_SEC
+//            let time = Double(Int64(delayInNanoSeconds)) / Double(NSEC_PER_SEC) + Double(DISPATCH_TIME_NOW)
+            
+            
+        }
+    }
+    
 }

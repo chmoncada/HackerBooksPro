@@ -15,7 +15,7 @@ public class BookTag: _BookTag {
             let result = try context.executeFetchRequest(fetchRequest) as! BookTagArray
             switch result.count {
             case 0:
-                print("No tiene tag Favorite")
+                //print("No tiene tag Favorite")
                 return
             default:
                 let object = result.first!
@@ -42,7 +42,7 @@ public class BookTag: _BookTag {
             let result = try context.executeFetchRequest(fetchRequest) as! BookTagArray
             switch result.count {
             case 0:
-                print("No tiene tag Favorite")
+                //print("No tiene tag Favorite")
                 return
             default:
                 let object = result.first!
