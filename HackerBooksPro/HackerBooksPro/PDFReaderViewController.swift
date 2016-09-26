@@ -79,6 +79,10 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         getAnnotationPages()
     }
     
+    func dismissView() {
+        self.navigationController?.popToRootViewControllerAnimated(true)
+    }
+    
 
     // MARK: - Lifecycle
     
@@ -95,6 +99,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(annotationSetChanged), name: annotationsDidChange, object: book!)
+        nc.addObserver(self, selector: #selector(dismissView), name: selectAnotherBook, object: nil)
         
         getAnnotationPages()
         self.configureView()

@@ -33,6 +33,7 @@ class PDFOverviewViewController: UICollectionViewController {
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(PDFOverviewViewController.closeView))
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Go to", style: .Plain, target: self, action: #selector(PDFOverviewViewController.choosePage))
+        
     }
     
     override func viewWillAppear(animated: Bool) {

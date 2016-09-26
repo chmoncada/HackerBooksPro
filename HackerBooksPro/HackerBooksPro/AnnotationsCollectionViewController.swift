@@ -55,7 +55,12 @@ class AnnotationsCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(dismissView), name: selectAnotherBook, object: nil)
         
+    }
+    
+    func dismissView() {
+        self.navigationController?.popToRootViewControllerAnimated(true)
     }
 
     // MARK: UICollectionViewDataSource

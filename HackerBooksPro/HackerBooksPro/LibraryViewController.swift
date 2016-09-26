@@ -24,6 +24,8 @@ enum tableType {
     case SearchResults
 }
 
+let selectAnotherBook = "The user select another book"
+
 class LibraryViewController: UIViewController {
 
     // MARK: - Properties
@@ -170,6 +172,8 @@ extension LibraryViewController: UITableViewDelegate {
         }
         
         self.delegate?.bookSelected(selectedBook)
+        let notif = NSNotification(name: selectAnotherBook, object: nil)
+        NSNotificationCenter.defaultCenter().postNotification(notif)
         
         if let detailViewController = self.delegate as? BookViewController {
             splitViewController?.showDetailViewController(detailViewController.navigationController!, sender: nil)
