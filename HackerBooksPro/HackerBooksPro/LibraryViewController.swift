@@ -29,11 +29,8 @@ class LibraryViewController: UIViewController {
     // MARK: - Properties
     
     var coreDataStack: CoreDataStack!
-    
     weak var delegate: BookSelectionDelegate?
-    
     var fetchedResultsController: NSFetchedResultsController!
-    
     var tableToShow: tableType?
     
     // MARK: - IBOutlets
@@ -69,7 +66,7 @@ class LibraryViewController: UIViewController {
         tableView.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
         searchBar.barTintColor = UIColor.blackColor()
         searchBar.searchBarStyle = .Default
-        //Seteo la tabla inicial
+        // Setup of initial tableType
         segmentedControl.selectedSegmentIndex = 0
         tableToShow = tableType.Title
         
@@ -82,17 +79,6 @@ class LibraryViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-
-    deinit {
-        print("*** deinit \(self)")
-        //NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-    
-    // MARK: - Utils
-    
-    func favChange(notification: NSNotification) {
-        self.tableView.reloadData()
     }
 
 }
@@ -154,9 +140,9 @@ extension LibraryViewController: UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        
         let title = UILabel()
         title.textColor = UIColor(red: 1.0, green: 0.737, blue: 0.173, alpha: 1.00)
-        
         let header = view as! UITableViewHeaderFooterView
         header.textLabel?.textColor = title.textColor
         
@@ -191,7 +177,6 @@ extension LibraryViewController: UITableViewDelegate {
         
     }
     
-    
 }
 
 // MARK: - NSFetchedResultsController methods
@@ -211,6 +196,10 @@ extension LibraryViewController {
             fetchRequest.sortDescriptors = [sortDescriptor]
             fetchRequest.fetchBatchSize = 20
             
+            // Reset searchBar text
+            searchBar.text = ""
+            searchBar.resignFirstResponder()
+            
             fReq = NSFetchedResultsController(fetchRequest: fetchRequest,
                                               managedObjectContext: coreDataStack.context,
                                               sectionNameKeyPath: nil,
@@ -222,6 +211,10 @@ extension LibraryViewController {
             let sortDescriptor2 = NSSortDescriptor(key: "book.title", ascending: true)
             fetchRequest.sortDescriptors = [sortDescriptor1,sortDescriptor2]
             fetchRequest.fetchBatchSize = 20
+            
+            // Reset searchBar text
+            searchBar.text = ""
+            searchBar.resignFirstResponder()
             
             fReq = NSFetchedResultsController(fetchRequest: fetchRequest,
                                               managedObjectContext: coreDataStack.context,

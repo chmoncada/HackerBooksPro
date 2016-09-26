@@ -27,16 +27,12 @@ class BookViewController: UITableViewController {
     // MARK: - Properties
     
     let UserDefaults = NSUserDefaults.standardUserDefaults()
-    
     var coreDataStack: CoreDataStack?
 
     var model: Book? {
         didSet {
             
-            // Save book in NSUserDefaults
             saveBookInUserDefaults(model!)
-            
-            // Save book in iCloud
             saveBookIniCloud(model!)
         }
     }
@@ -46,8 +42,7 @@ class BookViewController: UITableViewController {
             //print("Obtuve la ultima pagina leida: \(currentPage)")
             self.model?.pdf.lastPageOpen = currentPage
             self.model!.isChanged = true
-            
-            //self.coreDataStack?.saveContext()
+
         }
     }
     
@@ -77,14 +72,11 @@ class BookViewController: UITableViewController {
     
     @IBAction func switchChange(sender: AnyObject) {
         
-        //favoriteSwitch.on ? print("Switch is ON") : print("Switch is OFF")
-        
         model!.isFavorite = NSNumber(bool: favoriteSwitch.on)
         
         if favoriteSwitch.on {
-            //cambio la propiedad del modelo isFavorite
-            
-            //añado "tag" favorito al modelo 
+
+            //  Add "favorite" Tag to the book
             let newTag = Tag.uniqueTag("favorite", context: coreDataStack!.context)
             let bookTag = BookTag(managedObjectContext: coreDataStack!.context)
             bookTag!.name = "\(model!.title) - Favorite"
@@ -97,8 +89,6 @@ class BookViewController: UITableViewController {
         
         }
         model!.favIsChanged = true
-        
-        //coreDataStack!.saveContext()
         
     }
     
@@ -117,7 +107,7 @@ class BookViewController: UITableViewController {
             model = book
         } else {
             
-            // Cargo el primer libro por ahora
+            // As first time, we show the first book
             let fetchRequest = NSFetchRequest(entityName: Book.entityName())
             let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
             fetchRequest.sortDescriptors = [sortDescriptor]
@@ -159,6 +149,18 @@ class BookViewController: UITableViewController {
             coverImage.image = img
         } else {
             coverImage.image = UIImage(named: "emptyBook")
+            // load bookcover
+            if let url = NSURL(string: model!.image.imageURL) {
+                loadImage(remoteURL: url){ (data: NSData?) in
+                    if let dataExist = data {
+                        let resizeImage = UIImage(data: dataExist)!.resizedImageWithContentMode(.ScaleAspectFill, bounds: CGSize(width: 112, height: 144), interpolationQuality: .Default)
+                        self.coverImage.image = resizeImage
+                    } else {
+                        self.coverImage.image = UIImage(named: "emptyBook")
+                    }
+                }
+            }
+            
         }
         
         tagsLabel.text = model!.tagsList()
@@ -293,7 +295,7 @@ extension BookViewController: NSURLSessionDownloadDelegate {
             dispatch_async(dispatch_get_main_queue(), {
                 self.progressBar.hidden = true
                 self.progressLabel.hidden = true
-                let alert = UIAlertController(title: "No PDF found", message: "Try to select another book from the list.  Sorry for the inconviniences", preferredStyle: .Alert)
+                let alert = UIAlertController(title: "No PDF found", message: "Try to select another book from the list.  Sorry for the inconveniences", preferredStyle: .Alert)
                 let okAction = UIAlertAction(title: "OK", style: .Cancel , handler: nil)
                 alert.addAction(okAction)
                 self.presentViewController(alert, animated: true, completion: nil)

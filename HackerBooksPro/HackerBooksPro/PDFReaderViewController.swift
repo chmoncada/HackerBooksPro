@@ -101,6 +101,8 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     }
     
     deinit {
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
         self.webview.scrollView.delegate = nil
         self.webview = nil
     }
