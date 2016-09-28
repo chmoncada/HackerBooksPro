@@ -26,7 +26,7 @@ class BookViewController: UITableViewController {
     
     // MARK: - Properties
     
-    let UserDefaults = NSUserDefaults.standardUserDefaults()
+    let UserDefaults = Foundation.UserDefaults.standard
     var coreDataStack: CoreDataStack?
 
     var model: Book? {
@@ -40,7 +40,7 @@ class BookViewController: UITableViewController {
     var currentPage: Int? {
         didSet {
             //print("Obtuve la ultima pagina leida: \(currentPage)")
-            self.model?.pdf.lastPageOpen = currentPage
+            self.model?.pdf.lastPageOpen = currentPage as NSNumber?
             self.model!.isChanged = true
 
         }
@@ -48,10 +48,10 @@ class BookViewController: UITableViewController {
     
     var download: Download?
     
-    lazy var downloadSession: NSURLSession = {
+    lazy var downloadSession: Foundation.URLSession = {
       
-        let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("backgroundSessionConfiguration")
-        let session = NSURLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+        let configuration = URLSessionConfiguration.background(withIdentifier: "backgroundSessionConfiguration")
+        let session = Foundation.URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
         
         return session
     }()
@@ -59,22 +59,22 @@ class BookViewController: UITableViewController {
     @IBAction func startDownload() {
 
         //print("Descargando...")
-        if let url = NSURL(string: model!.pdf.pdfURL) {
-            progressBar.hidden = false
-            progressLabel.hidden = false
+        if let url = URL(string: model!.pdf.pdfURL) {
+            progressBar.isHidden = false
+            progressLabel.isHidden = false
             
             download = Download(url: model!.pdf.pdfURL)
-            download!.downloadTask = downloadSession.downloadTaskWithURL(url)
+            download!.downloadTask = downloadSession.downloadTask(with: url)
             download!.downloadTask!.resume()
         }
         
     }
     
-    @IBAction func switchChange(sender: AnyObject) {
+    @IBAction func switchChange(_ sender: AnyObject) {
         
-        model!.isFavorite = NSNumber(bool: favoriteSwitch.on)
+        model!.isFavorite = NSNumber(value: favoriteSwitch.isOn as Bool)
         
-        if favoriteSwitch.on {
+        if favoriteSwitch.isOn {
 
             //  Add "favorite" Tag to the book
             let newTag = Tag.uniqueTag("favorite", context: coreDataStack!.context)
@@ -108,12 +108,12 @@ class BookViewController: UITableViewController {
         } else {
             
             // As first time, we show the first book
-            let fetchRequest = NSFetchRequest(entityName: Book.entityName())
+            let fetchRequest = NSFetchRequest<Book>(entityName: Book.entityName())
             let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
             fetchRequest.sortDescriptors = [sortDescriptor]
             
             do {
-                let results = try coreDataStack!.context.executeFetchRequest(fetchRequest) as! [Book]
+                let results = try coreDataStack!.context.fetch(fetchRequest)
                 //print("No encontre nada, muestro el libro: \(results.first!.title)")
                 model = results.first
                 
@@ -122,12 +122,12 @@ class BookViewController: UITableViewController {
             }
         }
         
-        let nc = NSNotificationCenter.defaultCenter()
-        nc.addObserver(self, selector: #selector(imageLoaded), name: imageDidDownload, object: model!)
+        let nc = NotificationCenter.default
+        nc.addObserver(self, selector: #selector(imageLoaded), name: NSNotification.Name(rawValue: imageDidDownload), object: model!)
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         refreshUI()
@@ -137,23 +137,23 @@ class BookViewController: UITableViewController {
     // MARK: - Utils
     
     func imageLoaded() {
-        coverImage.image = UIImage(data: (model?.image.imageData)!)
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        coverImage.image = UIImage(data: (model?.image.imageData)! as Data)
+        NotificationCenter.default.removeObserver(self)
     }
     
     func refreshUI() {
         
         titleLabel.text = model!.title
         authorsLabel.text = model!.authorsList()
-        if let data = model?.image.imageData, let img = UIImage(data: data) {
+        if let data = model?.image.imageData, let img = UIImage(data: data as Data) {
             coverImage.image = img
         } else {
             coverImage.image = UIImage(named: "emptyBook")
             // load bookcover
-            if let url = NSURL(string: model!.image.imageURL) {
-                loadImage(remoteURL: url){ (data: NSData?) in
+            if let url = URL(string: model!.image.imageURL) {
+                loadImage(remoteURL: url){ (data: Data?) in
                     if let dataExist = data {
-                        let resizeImage = UIImage(data: dataExist)!.resizedImageWithContentMode(.ScaleAspectFill, bounds: CGSize(width: 112, height: 144), interpolationQuality: .Default)
+                        let resizeImage = UIImage(data: dataExist)!.resizedImageWithContentMode(.scaleAspectFill, bounds: CGSize(width: 112, height: 144), interpolationQuality: .default)
                         self.coverImage.image = resizeImage
                     } else {
                         self.coverImage.image = UIImage(named: "emptyBook")
@@ -171,11 +171,11 @@ class BookViewController: UITableViewController {
             messagelabel.text = "First download the book before read"
         }
         
-        downloadButton.hidden = model!.pdfDownloaded!
+        downloadButton.isHidden = model!.pdfDownloaded!
         
         // Hide Progress text and set to initial values
-        progressBar.hidden = true
-        progressLabel.hidden = true
+        progressBar.isHidden = true
+        progressLabel.isHidden = true
         progressLabel.text = ""
         progressBar.progress = 0
         
@@ -189,54 +189,54 @@ class BookViewController: UITableViewController {
 
 extension BookViewController {
     
-    func saveBookInUserDefaults(book: Book) {
+    func saveBookInUserDefaults(_ book: Book) {
         
         // Obtain the NSData
         if let data = archiveURIRepresentation(book) {
             // save in userdefaults
-            UserDefaults.setObject(data, forKey: "lastbookopen")
+            UserDefaults.set(data, forKey: "lastbookopen")
         }
     }
     
     func loadBookFromUserDefaults() -> Book? {
-        if let uriDefault = UserDefaults.objectForKey("lastbookopen") as? NSData {
+        if let uriDefault = UserDefaults.object(forKey: "lastbookopen") as? Data {
             return objectWithArchivedURIRepresentation(uriDefault, context: coreDataStack!.context)
         }
         
         return nil
     }
     
-    func saveBookIniCloud(book: Book) {
+    func saveBookIniCloud(_ book: Book) {
         
         // Set the iCloud store
-        let store = NSUbiquitousKeyValueStore.defaultStore()
+        let store = NSUbiquitousKeyValueStore.default()
         // Obtain the NSData
         if let data = archiveURIRepresentation(book) {
-            store.setObject(data, forKey: "lastbookopen")
+            store.set(data, forKey: "lastbookopen")
 
         }
 
     }
     
     func loadBookFromiCloud() -> Book? {
-        let store = NSUbiquitousKeyValueStore.defaultStore()
-        if let uriDefault = store.objectForKey("lastbookopen") as? NSData {
+        let store = NSUbiquitousKeyValueStore.default()
+        if let uriDefault = store.object(forKey: "lastbookopen") as? Data {
             return objectWithArchivedURIRepresentation(uriDefault, context: coreDataStack!.context)
         }
         
         return nil
     }
     
-    func archiveURIRepresentation(book: Book) -> NSData? {
-        let uri = book.objectID.URIRepresentation()
-        return NSKeyedArchiver.archivedDataWithRootObject(uri)
+    func archiveURIRepresentation(_ book: Book) -> Data? {
+        let uri = book.objectID.uriRepresentation()
+        return NSKeyedArchiver.archivedData(withRootObject: uri)
         
     }
     
-    func objectWithArchivedURIRepresentation(archivedURI: NSData, context: NSManagedObjectContext) -> Book? {
+    func objectWithArchivedURIRepresentation(_ archivedURI: Data, context: NSManagedObjectContext) -> Book? {
         
-        if let uri: NSURL = NSKeyedUnarchiver.unarchiveObjectWithData(archivedURI) as? NSURL, let nid = context.persistentStoreCoordinator?.managedObjectIDForURIRepresentation(uri) {
-            let book = context.objectWithID(nid) as! Book
+        if let uri: URL = NSKeyedUnarchiver.unarchiveObject(with: archivedURI) as? URL, let nid = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: uri) {
+            let book = context.object(with: nid) as! Book
             return book
         }
         
@@ -249,8 +249,8 @@ extension BookViewController {
 
 extension BookViewController {
     
-    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        if indexPath.section == 1 && model!.pdfDownloaded! {
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if (indexPath as NSIndexPath).section == 1 && model!.pdfDownloaded! {
             //print("me apretaste?")
             return indexPath
         } else {
@@ -258,11 +258,11 @@ extension BookViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.1
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 || section == 1 {
             return 5
         } else {
@@ -274,53 +274,53 @@ extension BookViewController {
 
 //MARK: - NSURLSessionDownloadDelegate
 
-extension BookViewController: NSURLSessionDownloadDelegate {
+extension BookViewController: URLSessionDownloadDelegate {
     
-    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         
-        let data = NSData(contentsOfURL: location)
+        let data = try? Data(contentsOf: location)
         
         // Check if the data is a PDF, we check the first byte for MIME type
-        var c = [UInt32](count: 1, repeatedValue: 0)
-        data!.getBytes(&c, length: 1)
+        var c = [UInt32](repeating: 0, count: 1)
+        (data! as NSData).getBytes(&c, length: 1)
         switch (c[0]) {
         case 0x25: //MIME type for PDF
             model!.pdf.pdfData = data
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.model!.isChanged = true
                 self.refreshUI()
                 //self.coreDataStack?.saveContext()
             })
         default: // all other cases
-            dispatch_async(dispatch_get_main_queue(), {
-                self.progressBar.hidden = true
-                self.progressLabel.hidden = true
-                let alert = UIAlertController(title: "No PDF found", message: "Try to select another book from the list.  Sorry for the inconveniences", preferredStyle: .Alert)
-                let okAction = UIAlertAction(title: "OK", style: .Cancel , handler: nil)
+            DispatchQueue.main.async(execute: {
+                self.progressBar.isHidden = true
+                self.progressLabel.isHidden = true
+                let alert = UIAlertController(title: "No PDF found", message: "Try to select another book from the list.  Sorry for the inconveniences", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .cancel , handler: nil)
                 alert.addAction(okAction)
-                self.presentViewController(alert, animated: true, completion: nil)
+                self.present(alert, animated: true, completion: nil)
             })
         }
     }
     
-    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         
         // Calculate the progress
         download?.progress = Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)
         // Put total size of file in MB
-        let totalSize = NSByteCountFormatter.stringFromByteCount(totalBytesExpectedToWrite, countStyle: NSByteCountFormatterCountStyle.Binary)
+        let totalSize = ByteCountFormatter.string(fromByteCount: totalBytesExpectedToWrite, countStyle: ByteCountFormatter.CountStyle.binary)
         
-        dispatch_async(dispatch_get_main_queue(), {
+        DispatchQueue.main.async(execute: {
             self.progressBar.progress = (self.download?.progress)!
             self.progressLabel.text = String(format: "%.1f%% of %@",  self.download!.progress * 100, totalSize)
         })
     }
     
-    func URLSessionDidFinishEventsForBackgroundURLSession(session: NSURLSession) {
-        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             if let completionHandler = appDelegate.backgroundSessionCompletionHandler {
                 appDelegate.backgroundSessionCompletionHandler = nil
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     completionHandler()
                 })
             }
@@ -332,7 +332,7 @@ extension BookViewController: NSURLSessionDownloadDelegate {
 // MARK: - BookSelectionDelegate
 
 extension BookViewController: BookSelectionDelegate {
-    func bookSelected(newBook: Book) {
+    func bookSelected(_ newBook: Book) {
         //print("se activa el delegado!!")
         model = newBook
         refreshUI()
@@ -342,21 +342,21 @@ extension BookViewController: BookSelectionDelegate {
 // MARK: - Segue
 
 extension BookViewController {
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowPDF" {
             
             if let book = model {
                 book.pdfIsOpen = true
             }
             
-            let controller = segue.destinationViewController as! PDFReaderViewController
+            let controller = segue.destination as! PDFReaderViewController
             controller.pdf = PDFDocument(bookPdf: model!.pdf)
             controller.coreDataStack = coreDataStack
             controller.book = model
-            if model?.pdf.lastPageOpen?.integerValue == 0 {
+            if model?.pdf.lastPageOpen?.intValue == 0 {
                 controller.shouldShowPage = 1 // To avoid the page 0 in first time loading
             } else {
-                controller.shouldShowPage = model?.pdf.lastPageOpen?.integerValue
+                controller.shouldShowPage = model?.pdf.lastPageOpen?.intValue
             }
             
             controller.navigationItem.leftItemsSupplementBackButton = true

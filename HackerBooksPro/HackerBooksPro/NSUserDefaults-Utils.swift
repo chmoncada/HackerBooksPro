@@ -8,19 +8,19 @@
 
 import Foundation
 
-let def = NSUserDefaults.standardUserDefaults()
+let def = UserDefaults.standard
 
-func saveBookInUserDefaults(book: Book) {
+func saveBookInUserDefaults(_ book: Book) {
     
     // Obtain the NSData
     if let data = archiveURIRepresentation(book) {
         // save in userdefaults
-        def.setObject(data, forKey: "lastbookopen")
+        def.set(data, forKey: "lastbookopen")
     }
 }
 
-func archiveURIRepresentation(book: Book) -> NSData? {
-    let uri = book.objectID.URIRepresentation()
-    return NSKeyedArchiver.archivedDataWithRootObject(uri)
+func archiveURIRepresentation(_ book: Book) -> Data? {
+    let uri = book.objectID.uriRepresentation()
+    return NSKeyedArchiver.archivedData(withRootObject: uri)
     
 }

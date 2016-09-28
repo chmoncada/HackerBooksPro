@@ -17,79 +17,79 @@ public enum BookPDFRelationships: String {
     case book = "book"
 }
 
-public class _BookPDF: NSManagedObject {
+open class _BookPDF: NSManagedObject {
 
     // MARK: - Class methods
 
-    public class func entityName () -> String {
+    open class func entityName () -> String {
         return "BookPDF"
     }
 
-    public class func entity(managedObjectContext: NSManagedObjectContext) -> NSEntityDescription? {
-        return NSEntityDescription.entityForName(self.entityName(), inManagedObjectContext: managedObjectContext)
+    open class func entity(_ managedObjectContext: NSManagedObjectContext) -> NSEntityDescription? {
+        return NSEntityDescription.entity(forEntityName: self.entityName(), in: managedObjectContext)
     }
 
     // MARK: - Life cycle methods
 
-    public override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
-        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    public override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertInto: context)
     }
 
     public convenience init?(managedObjectContext: NSManagedObjectContext) {
         guard let entity = _BookPDF.entity(managedObjectContext) else { return nil }
-        self.init(entity: entity, insertIntoManagedObjectContext: managedObjectContext)
+        self.init(entity: entity, insertInto: managedObjectContext)
     }
 
     // MARK: - Properties
 
-    @NSManaged public
+    @NSManaged open
     var isFinished: NSNumber?
 
-    @NSManaged public
+    @NSManaged open
     var lastPageOpen: NSNumber?
 
-    @NSManaged public
-    var lastTimeOpened: NSDate?
+    @NSManaged open
+    var lastTimeOpened: Date?
 
-    @NSManaged public
-    var pdfData: NSData?
+    @NSManaged open
+    var pdfData: Data?
 
-    @NSManaged public
+    @NSManaged open
     var pdfURL: String
 
     // MARK: - Relationships
 
-    @NSManaged public
+    @NSManaged open
     var annotations: NSSet
 
-    @NSManaged public
+    @NSManaged open
     var book: Book
 
 }
 
 extension _BookPDF {
 
-    func addAnnotations(objects: NSSet) {
+    func addAnnotations(_ objects: NSSet) {
         let mutable = self.annotations.mutableCopy() as! NSMutableSet
-        mutable.unionSet(objects as Set<NSObject>)
+        mutable.union(objects as Set<NSObject>)
         self.annotations = mutable.copy() as! NSSet
     }
 
-    func removeAnnotations(objects: NSSet) {
+    func removeAnnotations(_ objects: NSSet) {
         let mutable = self.annotations.mutableCopy() as! NSMutableSet
-        mutable.minusSet(objects as Set<NSObject>)
+        mutable.minus(objects as Set<NSObject>)
         self.annotations = mutable.copy() as! NSSet
     }
 
-    func addAnnotationsObject(value: Annotation) {
+    func addAnnotationsObject(_ value: Annotation) {
         let mutable = self.annotations.mutableCopy() as! NSMutableSet
-        mutable.addObject(value)
+        mutable.add(value)
         self.annotations = mutable.copy() as! NSSet
     }
 
-    func removeAnnotationsObject(value: Annotation) {
+    func removeAnnotationsObject(_ value: Annotation) {
         let mutable = self.annotations.mutableCopy() as! NSMutableSet
-        mutable.removeObject(value)
+        mutable.remove(value)
         self.annotations = mutable.copy() as! NSSet
     }
 

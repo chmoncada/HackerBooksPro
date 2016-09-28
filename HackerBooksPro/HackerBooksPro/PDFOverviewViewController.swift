@@ -13,7 +13,7 @@ class PDFOverviewViewController: UICollectionViewController {
     var currentPage: Int?
     
     var widthForPage: CGFloat {
-        return UIScreen.mainScreen().bounds.width/4
+        return UIScreen.main.bounds.width/4
     }
     
     weak var parentVC: PDFReaderViewController?
@@ -31,29 +31,29 @@ class PDFOverviewViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(PDFOverviewViewController.closeView))
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Go to", style: .Plain, target: self, action: #selector(PDFOverviewViewController.choosePage))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(PDFOverviewViewController.closeView))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Go to", style: .plain, target: self, action: #selector(PDFOverviewViewController.choosePage))
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let page = self.currentPage {
-            guard let pdf = self.pdf where pdf.isPageInDocument(page) else { return }
-            let indexPath = NSIndexPath(forRow: page-1, inSection: 0)
-            self.collectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: false)
+            guard let pdf = self.pdf , pdf.isPageInDocument(page) else { return }
+            let indexPath = IndexPath(row: page-1, section: 0)
+            self.collectionView?.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.centeredVertically, animated: false)
         }
     }
     
     func closeView() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func choosePage() {
         guard let pdf = self.pdf else { return }
-        let alertController = UIAlertController(title: "Go to page", message: "Choose a page number between 1 and \(pdf.numberOfPages)", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Go to page", message: "Choose a page number between 1 and \(pdf.numberOfPages)", preferredStyle: .alert)
         
-        let sendAction = UIAlertAction(title: "Go", style: .Default, handler: { (action) in
+        let sendAction = UIAlertAction(title: "Go", style: .default, handler: { (action) in
             guard let pageTextFied = alertController.textFields?[0] else { return }
             guard let pageAsked = Int(pageTextFied.text!) else { return }
             guard pdf.isPageInDocument(pageAsked) else { return }
@@ -61,21 +61,21 @@ class PDFOverviewViewController: UICollectionViewController {
             self.goToPageInParentView(pageAsked)
         })
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        alertController.addTextFieldWithConfigurationHandler({ (textField) in
+        alertController.addTextField(configurationHandler: { (textField) in
             textField.placeholder = "Page number"
-            textField.keyboardType = UIKeyboardType.NumberPad
+            textField.keyboardType = UIKeyboardType.numberPad
         })
         
         alertController.addAction(cancelAction)
         alertController.addAction(sendAction)
         
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
     }
     
-    func goToPageInParentView(page: Int) {
-        guard let pdf = self.pdf where pdf.isPageInDocument(page) else { return }
+    func goToPageInParentView(_ page: Int) {
+        guard let pdf = self.pdf , pdf.isPageInDocument(page) else { return }
         guard let parentVC = self.parentVC else {
             print("no encontre al parentVC")
             return
@@ -88,29 +88,29 @@ class PDFOverviewViewController: UICollectionViewController {
     
     // MARK: - CollectionView
     
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let pdf = self.pdf else { return 0 }
         return pdf.numberOfPages
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        guard let pageSize = pdf?.rectFromPDFWithPage(indexPath.row+1)?.size else { return CGSize.zero }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+        guard let pageSize = pdf?.rectFromPDFWithPage((indexPath as NSIndexPath).row+1)?.size else { return CGSize.zero }
         
         let scale = widthForPage/pageSize.width
         let height = pageSize.height*scale
         return CGSize(width: widthForPage, height: height);
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("imageCell", forIndexPath: indexPath) as! ImageCell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as! ImageCell
         cell.indexPath = indexPath
         
-        let pageNumber = indexPath.row + 1
-        cell.backgroundColor = UIColor.whiteColor()
+        let pageNumber = (indexPath as NSIndexPath).row + 1
+        cell.backgroundColor = UIColor.white
         cell.pageLabel.text = "\(pageNumber)"
         cell.imageView.image = nil
         
@@ -125,9 +125,9 @@ class PDFOverviewViewController: UICollectionViewController {
         }
         
         // Keeping expensive process to be in main queue for a smooth scrolling experience
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+        DispatchQueue.global(qos: .default).async {
         guard let image = self.pdf?.imageFromPDFWithPage(pageNumber) else { return } // If nil, useless to go further
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 // Changing the image only if the cell is on screen
                 if cell.indexPath == indexPath {
                     
@@ -136,7 +136,7 @@ class PDFOverviewViewController: UICollectionViewController {
                     let scale = self.widthForPage/pageSize!.width
                     let height = pageSize!.height*scale
                     
-                    cell.imageView.image = image.resizedImageWithContentMode(.ScaleAspectFit, bounds: CGSizeMake(self.widthForPage, height), interpolationQuality: .High)
+                    cell.imageView.image = image.resizedImageWithContentMode(.scaleAspectFit, bounds: CGSize(width: self.widthForPage, height: height), interpolationQuality: .high)
                     
                 }
             }
@@ -145,11 +145,11 @@ class PDFOverviewViewController: UICollectionViewController {
         return cell
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        self.goToPageInParentView(indexPath.row+1)
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.goToPageInParentView((indexPath as NSIndexPath).row+1)
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
     }
 }
@@ -162,6 +162,6 @@ extension UIColor {
 
 extension CGColor {
     static func selectedBlue() -> CGColor {
-        return UIColor.selectedBlue().CGColor
+        return UIColor.selectedBlue().cgColor
     }
 }

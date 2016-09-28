@@ -30,7 +30,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     var coordinate: CLLocationCoordinate2D?
     var updatingLocation = false
     var lastLocationError: NSError?
-    var timer: NSTimer?
+    var timer: Timer?
     
     // MARK: - Other properties
     var coreDataStack : CoreDataStack?
@@ -42,12 +42,12 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     var observer: AnyObject!
     
     // dateFormatter
-    var creationDate = NSDate()
+    var creationDate = Date()
     
-    private let dateFormatter: NSDateFormatter = {
-        let formatter = NSDateFormatter()
-        formatter.dateStyle = .MediumStyle
-        formatter.timeStyle = .ShortStyle
+    fileprivate let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
         return formatter
     }()
     
@@ -56,8 +56,8 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
             if let annotation = annotationToEdit {
                 // Put the value of annotation to the variables so the labels and photo appears!
                 descriptionText = annotation.text
-                creationDate = annotation.creationDate
-                currentPage = annotation.linkedPage?.integerValue
+                creationDate = annotation.creationDate as Date
+                currentPage = annotation.linkedPage?.intValue
                 if let latitude = annotation.location?.latitude, let longitude = annotation.location?.longitude {
                     coordinate = CLLocationCoordinate2DMake(latitude.doubleValue, longitude.doubleValue)
                 }
@@ -82,17 +82,17 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         } else {
             // Creo una instancia de Annotation
             let annotationEntity = Annotation.entity(coreDataStack!.context)
-            annotation = Annotation(entity: annotationEntity!, insertIntoManagedObjectContext: coreDataStack!.context)
+            annotation = Annotation(entity: annotationEntity!, insertInto: coreDataStack!.context)
             
             let locationEntity = Location.entity(coreDataStack!.context)
-            locationObject = Location(entity: locationEntity!, insertIntoManagedObjectContext: coreDataStack!.context)
+            locationObject = Location(entity: locationEntity!, insertInto: coreDataStack!.context)
 
             let photoEntity = Photo.entity(coreDataStack!.context)
-            photoObject = Photo(entity: photoEntity!, insertIntoManagedObjectContext: coreDataStack!.context)
+            photoObject = Photo(entity: photoEntity!, insertInto: coreDataStack!.context)
             
             // If it is a new note, the coordinates are new and we need to save it
-            locationObject.latitude = location?.coordinate.latitude
-            locationObject.longitude = location?.coordinate.longitude
+            locationObject.latitude = location?.coordinate.latitude as NSNumber?
+            locationObject.longitude = location?.coordinate.longitude as NSNumber?
             
             // we need to add these values that only changes in editing mode
             annotation.creationDate = creationDate
@@ -108,7 +108,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         annotation.photo = photoObject
 
         annotation.modificationDate = creationDate
-        annotation.linkedPage = currentPage
+        annotation.linkedPage = currentPage as NSNumber?
         annotation.text = descriptionTextView.text
         annotation.title = "\(formatDate(creationDate))"
         
@@ -119,11 +119,11 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         
         //coreDataStack?.saveContext()
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancel() {
-       dismissViewControllerAnimated(true, completion: nil)
+       dismiss(animated: true, completion: nil)
     }
     
     @IBAction func getLocation() {
@@ -131,13 +131,13 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         let authStatus = CLLocationManager.authorizationStatus()
         
         // if the stauts is not determined, ask permission
-        if authStatus == .NotDetermined {
+        if authStatus == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
             return
         }
         
         // Show a Alert if the authorization status is Denied or restricted
-        if authStatus == .Denied || authStatus == .Restricted {
+        if authStatus == .denied || authStatus == .restricted {
             showLocationServicesDeniedAlert()
             return
         }
@@ -147,34 +147,34 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     }
     
     
-    @IBAction func shareAnnotation(sender: UIBarButtonItem) {
+    @IBAction func shareAnnotation(_ sender: UIBarButtonItem) {
         
-        let alert = UIAlertController(title: "Sharing note...", message: nil, preferredStyle: .Alert)
-        let twitterAction = UIAlertAction(title: "Share in Twitter", style: .Default) { _ in
+        let alert = UIAlertController(title: "Sharing note...", message: nil, preferredStyle: .alert)
+        let twitterAction = UIAlertAction(title: "Share in Twitter", style: .default) { _ in
             let vc = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
-            vc.setInitialText("\(self.descriptionTextView.text)")
+            vc?.setInitialText("\(self.descriptionTextView.text)")
             if let photoToShare = self.imageView.image {
-                vc.addImage(photoToShare)
+                vc?.add(photoToShare)
             }
             
-            self.presentViewController(vc, animated: true, completion: nil)
+            self.present(vc!, animated: true, completion: nil)
         }
         alert.addAction(twitterAction)
         
-        let facebookAction = UIAlertAction(title: "Share in Facebok", style: .Default) { _ in
+        let facebookAction = UIAlertAction(title: "Share in Facebok", style: .default) { _ in
             let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-            vc.setInitialText("\(self.descriptionTextView.text)")
+            vc?.setInitialText("\(self.descriptionTextView.text)")
             if let photoToShare = self.imageView.image {
-                vc.addImage(photoToShare)
+                vc?.add(photoToShare)
             }
-            self.presentViewController(vc, animated: true, completion: nil)
+            self.present(vc!, animated: true, completion: nil)
         }
         alert.addAction(facebookAction)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
         
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
         
     }
     
@@ -185,8 +185,8 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
 
         if let annotation = annotationToEdit {
             title = "Edit Annotation"
-            locationButton.enabled = false
-            if let data = annotation.photo?.photoData, let image = UIImage(data: data) {
+            locationButton.isEnabled = false
+            if let data = annotation.photo?.photoData, let image = UIImage(data: data as Data) {
                 showImage(image)
             }
         
@@ -209,7 +209,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
 
     deinit {
         //print("*** deinit \(self)")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
 }
@@ -221,7 +221,7 @@ extension AnnotationViewController {
         
         pageNumberLabel.text = "\(currentPage!)"
         creationDateLabel.text = formatDate(creationDate)
-        modificationDateLabel.text = formatDate(NSDate())
+        modificationDateLabel.text = formatDate(Date())
         
         if let _ = annotationToEdit {
             descriptionTextView.text = descriptionText
@@ -240,22 +240,22 @@ extension AnnotationViewController {
         }
     }
     
-    func formatDate(date: NSDate) -> String {
-        return dateFormatter.stringFromDate(date)
+    func formatDate(_ date: Date) -> String {
+        return dateFormatter.string(from: date)
     }
     
-    func showImage(image: UIImage) {
+    func showImage(_ image: UIImage) {
         imageView.image = image
-        imageView.hidden = false
+        imageView.isHidden = false
         imageView.frame = CGRect(x: 10, y: 10, width: 260, height: 260)
-        addPhotoLabel.hidden = true
+        addPhotoLabel.isHidden = true
     }
     
-    func hideKeyboard(gestureRecognizer: UIGestureRecognizer) {
-        let point = gestureRecognizer.locationInView(tableView)
-        let indexPath = tableView.indexPathForRowAtPoint(point)
+    func hideKeyboard(_ gestureRecognizer: UIGestureRecognizer) {
+        let point = gestureRecognizer.location(in: tableView)
+        let indexPath = tableView.indexPathForRow(at: point)
         
-        if indexPath != nil && indexPath!.section == 00 && indexPath!.row == 0 {
+        if indexPath != nil && (indexPath! as NSIndexPath).section == 00 && (indexPath! as NSIndexPath).row == 0 {
             return
         }
         
@@ -264,10 +264,10 @@ extension AnnotationViewController {
     
     func listenForBackgroundNotification() {
         
-        observer = NSNotificationCenter.defaultCenter().addObserverForName(UIApplicationDidEnterBackgroundNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] _ in
+        observer = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidEnterBackground, object: nil, queue: OperationQueue.main) { [weak self] _ in
             if let strongSelf = self {
                 if strongSelf.presentedViewController != nil {
-                    strongSelf.dismissViewControllerAnimated(false, completion: nil)
+                    strongSelf.dismiss(animated: false, completion: nil)
                 }
                 strongSelf.descriptionTextView.resignFirstResponder()
             }
@@ -280,31 +280,31 @@ extension AnnotationViewController {
 
 extension AnnotationViewController {
     
-    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        if (indexPath.section == 0 && indexPath.row == 0) || indexPath.section == 1 {
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if ((indexPath as NSIndexPath).section == 0 && (indexPath as NSIndexPath).row == 0) || (indexPath as NSIndexPath).section == 1 {
             return indexPath
         } else {
             return nil
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 0 && indexPath.row == 0 {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).section == 0 && (indexPath as NSIndexPath).row == 0 {
             descriptionTextView.becomeFirstResponder()
-        } else if indexPath.section == 1 && indexPath.row == 0 {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        } else if (indexPath as NSIndexPath).section == 1 && (indexPath as NSIndexPath).row == 0 {
+            tableView.deselectRow(at: indexPath, animated: true)
             pickPhoto()
         }
         
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        switch (indexPath.section, indexPath.row) {
+        switch ((indexPath as NSIndexPath).section, (indexPath as NSIndexPath).row) {
         case (0,0):
             return 88
         case (1,_):
-            return imageView.hidden ? 44 : 280
+            return imageView.isHidden ? 44 : 280
         default:
             return 44
         }
@@ -322,7 +322,7 @@ extension AnnotationViewController {
             locationManager.startUpdatingLocation()
             updatingLocation = true
             
-            timer = NSTimer.scheduledTimerWithTimeInterval(60, target: self, selector: #selector(AnnotationViewController.didTimeOut), userInfo: nil, repeats: false)
+            timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(AnnotationViewController.didTimeOut), userInfo: nil, repeats: false)
             
         }
     }
@@ -340,10 +340,10 @@ extension AnnotationViewController {
     
     // Show a alert if the Location Services is disabled in the phone
     func showLocationServicesDeniedAlert() {
-        let alert = UIAlertController(title: "Location Services Disabled ", message: "Please enable location services for this app in Settings.", preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        let alert = UIAlertController(title: "Location Services Disabled ", message: "Please enable location services for this app in Settings.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(okAction)
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
     
     func didTimeOut() {
@@ -356,20 +356,21 @@ extension AnnotationViewController {
         }
     }
     
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         //print("didFailWithError \(error)")
         
-        if error.code == CLError.LocationUnknown.rawValue {
+        let code = (error as NSError).code
+        if code == CLError.Code.locationUnknown.rawValue {
             return
         }
         
-        lastLocationError = error
+        lastLocationError = error as NSError?
         
         stopLocationManager()
         updateLabels()
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let newLocation = locations.last!
         //print("didUpdateLocations \(newLocation)")
         
@@ -384,7 +385,7 @@ extension AnnotationViewController {
         
         var distance = CLLocationDistance(DBL_MAX)
         if let location = location {
-            distance = newLocation.distanceFromLocation(location)
+            distance = newLocation.distance(from: location)
         }
         
         if location == nil || location!.horizontalAccuracy > newLocation.horizontalAccuracy {
@@ -399,7 +400,7 @@ extension AnnotationViewController {
             }
         } else if distance < 1.0 {
             
-            let timeInterval = newLocation.timestamp.timeIntervalSinceDate(location!.timestamp)
+            let timeInterval = newLocation.timestamp.timeIntervalSince(location!.timestamp)
             
             if timeInterval > 10 {
                 //print("*** Force Done!")
@@ -416,7 +417,7 @@ extension AnnotationViewController {
 extension AnnotationViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func pickPhoto() {
-        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
             showPhotoMenu()
         } else {
             choosePhotoFromLibrary()
@@ -424,10 +425,10 @@ extension AnnotationViewController: UIImagePickerControllerDelegate, UINavigatio
     }
     
     func showPhotoMenu() {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-        let takePhotoAction = UIAlertAction(title: "Take Photo", style: .Default, handler: { _ in self.takePhotoWithCamera() })
-        let chooseFromLibrary = UIAlertAction(title: "Choose From Library", style: .Default, handler: { _ in self.choosePhotoFromLibrary() })
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let takePhotoAction = UIAlertAction(title: "Take Photo", style: .default, handler: { _ in self.takePhotoWithCamera() })
+        let chooseFromLibrary = UIAlertAction(title: "Choose From Library", style: .default, handler: { _ in self.choosePhotoFromLibrary() })
         
         alertController.addAction(cancelAction)
         alertController.addAction(takePhotoAction)
@@ -436,34 +437,34 @@ extension AnnotationViewController: UIImagePickerControllerDelegate, UINavigatio
         alertController.popoverPresentationController?.sourceView = view
         alertController.popoverPresentationController?.sourceRect = view.frame
         
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
     func takePhotoWithCamera() {
         let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .Camera
+        imagePicker.sourceType = .camera
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
-        presentViewController(imagePicker, animated: true, completion: nil)
+        present(imagePicker, animated: true, completion: nil)
     }
     
     func choosePhotoFromLibrary() {
         let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .PhotoLibrary
+        imagePicker.sourceType = .photoLibrary
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
-        presentViewController(imagePicker, animated: true, completion: nil)
+        present(imagePicker, animated: true, completion: nil)
     }
     
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         let rawImage = info[UIImagePickerControllerEditedImage] as? UIImage
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0)) {
-            self.image = rawImage?.resizedImageWithContentMode(.ScaleAspectFit, bounds: CGSize(width: 260, height: 260), interpolationQuality: .Medium)
+        DispatchQueue.global(qos: .default).async {
+            self.image = rawImage?.resizedImageWithContentMode(.scaleAspectFit, bounds: CGSize(width: 260, height: 260), interpolationQuality: .medium)
             
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 if let image = self.image {
                     //print("Tengo imagen")
                     self.showImage(image)
@@ -473,12 +474,12 @@ extension AnnotationViewController: UIImagePickerControllerDelegate, UINavigatio
             }
         }
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
     }
     
 }

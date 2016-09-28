@@ -18,55 +18,55 @@ public enum AnnotationRelationships: String {
     case photo = "photo"
 }
 
-public class _Annotation: NSManagedObject {
+open class _Annotation: NSManagedObject {
 
     // MARK: - Class methods
 
-    public class func entityName () -> String {
+    open class func entityName () -> String {
         return "Annotation"
     }
 
-    public class func entity(managedObjectContext: NSManagedObjectContext) -> NSEntityDescription? {
-        return NSEntityDescription.entityForName(self.entityName(), inManagedObjectContext: managedObjectContext)
+    open class func entity(_ managedObjectContext: NSManagedObjectContext) -> NSEntityDescription? {
+        return NSEntityDescription.entity(forEntityName: self.entityName(), in: managedObjectContext)
     }
 
     // MARK: - Life cycle methods
 
-    public override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
-        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    public override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertInto: context)
     }
 
     public convenience init?(managedObjectContext: NSManagedObjectContext) {
         guard let entity = _Annotation.entity(managedObjectContext) else { return nil }
-        self.init(entity: entity, insertIntoManagedObjectContext: managedObjectContext)
+        self.init(entity: entity, insertInto: managedObjectContext)
     }
 
     // MARK: - Properties
 
-    @NSManaged public
-    var creationDate: NSDate
+    @NSManaged open
+    var creationDate: Date
 
-    @NSManaged public
+    @NSManaged open
     var linkedPage: NSNumber?
 
-    @NSManaged public
-    var modificationDate: NSDate
+    @NSManaged open
+    var modificationDate: Date
 
-    @NSManaged public
+    @NSManaged open
     var text: String
 
-    @NSManaged public
+    @NSManaged open
     var title: String
 
     // MARK: - Relationships
 
-    @NSManaged public
+    @NSManaged open
     var bookPdf: BookPDF
 
-    @NSManaged public
+    @NSManaged open
     var location: Location?
 
-    @NSManaged public
+    @NSManaged open
     var photo: Photo?
 
 }

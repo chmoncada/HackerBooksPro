@@ -14,5 +14,5 @@ class ImageCell: UICollectionViewCell {
     @IBOutlet weak var pageLabel: UILabel!
     
     // Allow to track if the cell is still visible of if it's been reused for async tasks
-    var indexPath: NSIndexPath!
+    var indexPath: IndexPath!
 }

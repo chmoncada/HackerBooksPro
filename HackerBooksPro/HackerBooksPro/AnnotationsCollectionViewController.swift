@@ -15,7 +15,7 @@ class AnnotationsCollectionViewController: UICollectionViewController {
 
     // Calculate widht of eachNote so we can show always 4 notes in a row
     var widthForNote: CGFloat {
-        return UIScreen.mainScreen().bounds.width/5
+        return UIScreen.main.bounds.width/5
     }
     
     var prueba: String?
@@ -23,11 +23,9 @@ class AnnotationsCollectionViewController: UICollectionViewController {
     var book: Book?
     var pdf: PDFDocument?
     
-    var fetchRequest: NSFetchRequest {
+    var fetchRequest: NSFetchRequest<Annotation> {
         
-        let request = NSFetchRequest()
-        let entity = Annotation.entity()
-        request.entity = entity
+        let request = NSFetchRequest<Annotation>(entityName: Annotation.entityName())
         
         let predicate = NSPredicate(format: "bookPdf.book == %@", book!)
         request.predicate = predicate
@@ -40,10 +38,10 @@ class AnnotationsCollectionViewController: UICollectionViewController {
     
     var annotations: [Annotation]? {
         
-        var foundNotes = [Annotation]()
+        //var foundNotes = [Annotation]()
         
         do {
-            foundNotes = try coreDataStack?.context.executeFetchRequest(fetchRequest) as! [Annotation]
+            let foundNotes = try coreDataStack?.context.fetch(fetchRequest)
             return foundNotes
         } catch let error as NSError {
             print("\(error.localizedDescription)")
@@ -55,45 +53,45 @@ class AnnotationsCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(dismissView), name: selectAnotherBook, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissView), name: NSNotification.Name(rawValue: selectAnotherBook), object: nil)
         
     }
     
     func dismissView() {
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        //self.navigationController?.popToRootViewController(animated: true)
     }
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         return annotations!.count
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("NoteCell", forIndexPath: indexPath) as! NoteCell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NoteCell", for: indexPath) as! NoteCell
     
-        let pageNumber = annotations![indexPath.row].linkedPage?.integerValue
+        let pageNumber = annotations![(indexPath as NSIndexPath).row].linkedPage?.intValue
         
         // Configure the cell
         cell.textLabel.text = "Page \(pageNumber!)"
-        let formatter = NSDateFormatter()
-        formatter.dateStyle = .MediumStyle
-        formatter.timeStyle = .ShortStyle
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
         
-        cell.titleLabel.text = "\(formatter.stringFromDate(annotations![indexPath.row].creationDate))"
+        cell.titleLabel.text = "\(formatter.string(from: annotations![(indexPath as NSIndexPath).row].creationDate as Date))"
         
         // We put it async
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+        DispatchQueue.global(qos: .default).async {
             // If nil, useless to go further
             guard let image = self.pdf?.imageFromPDFWithPage(pageNumber!) else { return }
-            dispatch_async(dispatch_get_main_queue()) {
-                    cell.imageView.image = image.resizedImageWithContentMode(.ScaleAspectFit, bounds: CGSizeMake(121, 156), interpolationQuality: .High)
+            DispatchQueue.main.async {
+                    cell.imageView.image = image.resizedImageWithContentMode(.scaleAspectFit, bounds: CGSize(width: 121, height: 156), interpolationQuality: .high)
             }
         }
         
@@ -135,14 +133,14 @@ class AnnotationsCollectionViewController: UICollectionViewController {
 
 extension AnnotationsCollectionViewController {
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "EditAnnotation" {
             
-            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AnnotationViewController
+            let controller = (segue.destination as! UINavigationController).topViewController as! AnnotationViewController
 
-            if let indexPath = collectionView?.indexPathForCell(sender as! UICollectionViewCell) {
-                let annotation = annotations![indexPath.row]
+            if let indexPath = collectionView?.indexPath(for: sender as! UICollectionViewCell) {
+                let annotation = annotations![(indexPath as NSIndexPath).row]
                 controller.annotationToEdit = annotation
             }
             

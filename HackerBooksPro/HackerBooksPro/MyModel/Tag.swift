@@ -2,20 +2,20 @@ import Foundation
 import CoreData
 
 @objc(Tag)
-public class Tag: _Tag {
+open class Tag: _Tag {
     
     
     // MARK: - Class Methods
     
     // funcion para buscar si en el modelo ya existe un Tag con el mismo nombre
-    class func findTag(tag: String, context: NSManagedObjectContext) -> Tag? {
+    class func findTag(_ tag: String, context: NSManagedObjectContext) -> Tag? {
         
-        let fetchRequest = NSFetchRequest(entityName: self.entityName())
+        let fetchRequest = NSFetchRequest<Tag>(entityName: self.entityName())
         
         fetchRequest.predicate = NSPredicate(format: "tag == %@", tag)
         
         do {
-            let result = try context.executeFetchRequest(fetchRequest) as! [Tag]
+            let result = try context.fetch(fetchRequest) 
             
             switch result.count {
             case 0:
@@ -33,7 +33,7 @@ public class Tag: _Tag {
     }
     
     // funcion para anadir un objecto Tag con el parametro tag no repetido
-    class func uniqueTag(tag: String, context: NSManagedObjectContext) -> Tag?{
+    class func uniqueTag(_ tag: String, context: NSManagedObjectContext) -> Tag?{
         
         var result = Tag.findTag(tag, context: context)
         if result == nil {
@@ -63,11 +63,11 @@ public class Tag: _Tag {
         
     }
     
-    class func eraseTag(tag: String, context:NSManagedObjectContext) {
+    class func eraseTag(_ tag: String, context:NSManagedObjectContext) {
         
         if let tagToErase = Tag.findTag(tag, context: context) {
             //print("Encontre Tag, procedere a borrarlo")
-            context.deleteObject(tagToErase)
+            context.delete(tagToErase)
         } else {
             //print("El Tag no existe")
             return

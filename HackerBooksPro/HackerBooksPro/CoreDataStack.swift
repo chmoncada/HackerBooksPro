@@ -15,7 +15,7 @@ class CoreDataStack {
     
     lazy var context: NSManagedObjectContext = {
         
-        var managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         
         managedObjectContext.persistentStoreCoordinator = self.psc
         managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
@@ -23,19 +23,19 @@ class CoreDataStack {
         return managedObjectContext
     }()
     
-    private lazy var psc: NSPersistentStoreCoordinator = {
+    fileprivate lazy var psc: NSPersistentStoreCoordinator = {
         
         let coordinator = NSPersistentStoreCoordinator(
             managedObjectModel: self.managedObjectModel)
         
-        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent(self.modelName)
+        let url = self.applicationDocumentsDirectory.appendingPathComponent(self.modelName)
         
         do {
             let options =
                 [NSMigratePersistentStoresAutomaticallyOption : true]
             
-            try coordinator.addPersistentStoreWithType(
-                NSSQLiteStoreType, configuration: nil, URL: url,
+            try coordinator.addPersistentStore(
+                ofType: NSSQLiteStoreType, configurationName: nil, at: url,
                 options: options)
         } catch  {
             print("Error adding persistent store.")
@@ -44,17 +44,17 @@ class CoreDataStack {
         return coordinator
     }()
     
-    private lazy var managedObjectModel: NSManagedObjectModel = {
+    fileprivate lazy var managedObjectModel: NSManagedObjectModel = {
         
-        let modelURL = NSBundle.mainBundle()
-            .URLForResource(self.modelName,
+        let modelURL = Bundle.main
+            .url(forResource: self.modelName,
                             withExtension: "momd")!
-        return NSManagedObjectModel(contentsOfURL: modelURL)!
+        return NSManagedObjectModel(contentsOf: modelURL)!
     }()
     
-    private lazy var applicationDocumentsDirectory: NSURL = {
-        let urls = NSFileManager.defaultManager().URLsForDirectory(
-            .DocumentDirectory, inDomains: .UserDomainMask)
+    fileprivate lazy var applicationDocumentsDirectory: URL = {
+        let urls = FileManager.default.urls(
+            for: .documentDirectory, in: .userDomainMask)
         return urls[urls.count-1]
     }()
     
@@ -70,14 +70,14 @@ class CoreDataStack {
         }
     }
     
-    func autoSave(delayInSeconds: NSTimeInterval) {
+    func autoSave(_ delayInSeconds: TimeInterval) {
         if delayInSeconds > 0 {
             //print("Autosaving")
             saveContext()
 
-            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInSeconds * Double(NSEC_PER_SEC)))
+            let delay = DispatchTime.now() + Double(Int64(delayInSeconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
             
-            dispatch_after(delay, dispatch_get_main_queue()){
+            DispatchQueue.main.asyncAfter(deadline: delay){
                 self.autoSave(delayInSeconds)
             }
             

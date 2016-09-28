@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 @objc(BookPDF)
-public class BookPDF: _BookPDF {
+open class BookPDF: _BookPDF {
 	
     var document: PDFDocument? {
         

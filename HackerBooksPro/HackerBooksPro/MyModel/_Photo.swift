@@ -12,64 +12,64 @@ public enum PhotoRelationships: String {
     case annotation = "annotation"
 }
 
-public class _Photo: NSManagedObject {
+open class _Photo: NSManagedObject {
 
     // MARK: - Class methods
 
-    public class func entityName () -> String {
+    open class func entityName () -> String {
         return "Photo"
     }
 
-    public class func entity(managedObjectContext: NSManagedObjectContext) -> NSEntityDescription? {
-        return NSEntityDescription.entityForName(self.entityName(), inManagedObjectContext: managedObjectContext)
+    open class func entity(_ managedObjectContext: NSManagedObjectContext) -> NSEntityDescription? {
+        return NSEntityDescription.entity(forEntityName: self.entityName(), in: managedObjectContext)
     }
 
     // MARK: - Life cycle methods
 
-    public override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
-        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    public override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertInto: context)
     }
 
     public convenience init?(managedObjectContext: NSManagedObjectContext) {
         guard let entity = _Photo.entity(managedObjectContext) else { return nil }
-        self.init(entity: entity, insertIntoManagedObjectContext: managedObjectContext)
+        self.init(entity: entity, insertInto: managedObjectContext)
     }
 
     // MARK: - Properties
 
-    @NSManaged public
-    var photoData: NSData?
+    @NSManaged open
+    var photoData: Data?
 
     // MARK: - Relationships
 
-    @NSManaged public
+    @NSManaged open
     var annotation: NSSet
 
 }
 
 extension _Photo {
 
-    func addAnnotation(objects: NSSet) {
+    func addAnnotation(_ objects: NSSet) {
         let mutable = self.annotation.mutableCopy() as! NSMutableSet
-        mutable.unionSet(objects as Set<NSObject>)
+        mutable.union(objects as Set<NSObject>)
         self.annotation = mutable.copy() as! NSSet
     }
 
-    func removeAnnotation(objects: NSSet) {
+    func removeAnnotation(_ objects: NSSet) {
         let mutable = self.annotation.mutableCopy() as! NSMutableSet
-        mutable.minusSet(objects as Set<NSObject>)
+        mutable.minus(objects as Set<NSObject>)
         self.annotation = mutable.copy() as! NSSet
     }
 
-    func addAnnotationObject(value: Annotation) {
+    func addAnnotationObject(_ value: Annotation) {
         let mutable = self.annotation.mutableCopy() as! NSMutableSet
-        mutable.addObject(value)
+        mutable.add(value)
         self.annotation = mutable.copy() as! NSSet
     }
 
-    func removeAnnotationObject(value: Annotation) {
+    func removeAnnotationObject(_ value: Annotation) {
         let mutable = self.annotation.mutableCopy() as! NSMutableSet
-        mutable.removeObject(value)
+        mutable.remove(value)
         self.annotation = mutable.copy() as! NSSet
     }
 

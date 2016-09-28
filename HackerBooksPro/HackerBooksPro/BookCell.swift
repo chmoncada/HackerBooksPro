@@ -19,26 +19,26 @@ class BookCell: UITableViewCell {
     @IBOutlet weak var FavImage: UIImageView!
     
     var _book: Book?
-    let _nc = NSNotificationCenter.defaultCenter()
+    let _nc = NotificationCenter.default
     var _bookObserver : NSObjectProtocol?
     
-    var downloadTask: NSURLSessionDownloadTask?
+    var downloadTask: URLSessionDownloadTask?
     
     // MARK: - Observing methods
     
-    func startObserving(book: Book){
+    func startObserving(_ book: Book){
         _book = book
         // Add observers
-        _nc.addObserverForName(favStatusDidChange, object: _book, queue: nil) { (n: NSNotification) in
+        _nc.addObserver(forName: NSNotification.Name(rawValue: favStatusDidChange), object: _book, queue: nil) { (n: Notification) in
             self.syncWithBook()
         }
-        _nc.addObserverForName(pdfWasFinished, object: _book, queue: nil) { (n: NSNotification) in
+        _nc.addObserver(forName: NSNotification.Name(rawValue: pdfWasFinished), object: _book, queue: nil) { (n: Notification) in
             self.syncWithBook()
         }
-        _nc.addObserverForName(modelDidChange, object: _book, queue: nil) { (n: NSNotification) in
+        _nc.addObserver(forName: NSNotification.Name(rawValue: modelDidChange), object: _book, queue: nil) { (n: Notification) in
             self.syncWithBook()
         }
-        _nc.addObserverForName(newPageOpened, object: _book, queue: nil) { (n: NSNotification) in
+        _nc.addObserver(forName: NSNotification.Name(rawValue: newPageOpened), object: _book, queue: nil) { (n: Notification) in
             self.syncWithBook()
         }
         
@@ -84,13 +84,13 @@ class BookCell: UITableViewCell {
         guard (_book!.image.imageData != nil) else {
             //print("NO hay imagen guardada en el modelo")
             self.BookCover.image = UIImage(named: "emptyBook")
-            if let url = NSURL(string: _book!.image.imageURL) {
-                loadImage(remoteURL: url){ (data: NSData?) in
+            if let url = URL(string: _book!.image.imageURL) {
+                loadImage(remoteURL: url){ (data: Data?) in
                     
                     if let dataExist = data {
                         //print("se usa imagen descargada")
                         //let image = UIImage(data: dataExist)
-                        let resizeImage = UIImage(data: dataExist)!.resizedImageWithContentMode(.ScaleAspectFill, bounds: CGSize(width: 112, height: 144), interpolationQuality: .Default)
+                        let resizeImage = UIImage(data: dataExist)!.resizedImageWithContentMode(.scaleAspectFill, bounds: CGSize(width: 112, height: 144), interpolationQuality: .default)
                         self.BookCover.image = resizeImage
                         self._book!.image.imageData = UIImageJPEGRepresentation(resizeImage, 0.9)
                         // Send notification that the image finish loading
@@ -105,7 +105,7 @@ class BookCell: UITableViewCell {
         }
         
         // Se usa los datos de Core Data
-        self.BookCover.image = UIImage(data:_book!.image.imageData!)
+        self.BookCover.image = UIImage(data:_book!.image.imageData! as Data)
         
     }
     

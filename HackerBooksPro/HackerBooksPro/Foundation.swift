@@ -10,15 +10,15 @@ import Foundation
 import UIKit
 
 // to declare a URL with a String
-extension NSBundle{
+extension Bundle{
     
-    func URLForResource(name: String?) -> NSURL? {
+    func URLForResource(_ name: String?) -> URL? {
         
-        let components = name?.componentsSeparatedByString(".")
+        let components = name?.components(separatedBy: ".")
         let fileTitle =  components?.first
         let fileExtension = components?.last
         
-        return URLForResource(fileTitle, withExtension: fileExtension)
+        return url(forResource: fileTitle, withExtension: fileExtension)
         
     }
 }

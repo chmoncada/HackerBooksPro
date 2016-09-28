@@ -9,25 +9,25 @@
 import Foundation
 import UIKit
 
-let tintColor = UIColor.blackColor()
+let tintColor = UIColor.black
 let backButtonColor = UIColor(red: 1.0, green: 0.737, blue: 0.173, alpha: 1.00)
 
 // MARK: - Load Utils
-func loadImage(remoteURL url: NSURL, completion: (data: NSData?) -> ())  {
+func loadImage(remoteURL url: URL, completion: @escaping (_ data: Data?) -> ())  {
     
-    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-    let downloadTask: NSURLSessionDataTask = NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: {(data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+    UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    let downloadTask: URLSessionDataTask = URLSession.shared.dataTask(with: url, completionHandler: {(data: Data?, response: URLResponse?, error: Error?) -> Void in
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
         if (error != nil) {
-            dispatch_async(dispatch_get_main_queue(), {() in
-                completion(data:  nil)
+            DispatchQueue.main.async(execute: {() in
+                completion(nil)
             })
             return
         }
         if let data = data {
             //imageView = UIImage(data: data)
-            dispatch_async(dispatch_get_main_queue(), {() in
-                completion(data:  data)
+            DispatchQueue.main.async(execute: {() in
+                completion(data)
             })
             return
         }
@@ -40,12 +40,12 @@ func loadImage(remoteURL url: NSURL, completion: (data: NSData?) -> ())  {
 
 // MARK: - Date Utils
 
-func daysBetweenDates(startDate: NSDate, endDate: NSDate) -> Int {
+func daysBetweenDates(_ startDate: Date, endDate: Date) -> Int {
     
-    let calendar = NSCalendar.currentCalendar()
-    let components = calendar.components([.Day], fromDate: startDate, toDate: endDate, options: [])
+    let calendar = Calendar.current
+    let components = (calendar as NSCalendar).components([.day], from: startDate, to: endDate, options: [])
     
-    return components.day
+    return components.day!
 
 }
 
@@ -54,11 +54,11 @@ func daysBetweenDates(startDate: NSDate, endDate: NSDate) -> Int {
 func customizeAppearance() {
     
     // Status Bar Appearance
-    UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+    UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
     // Navigation Bar Appearance
-    UINavigationBar.appearance().titleTextAttributes=[NSForegroundColorAttributeName:UIColor.whiteColor()]
+    UINavigationBar.appearance().titleTextAttributes=[NSForegroundColorAttributeName:UIColor.white]
     UINavigationBar.appearance().barTintColor = tintColor
-    UINavigationBar.appearance().translucent = false
+    UINavigationBar.appearance().isTranslucent = false
     // ToolBar Appearance
     UIToolbar.appearance().tintColor = backButtonColor
     UIToolbar.appearance().barTintColor = tintColor

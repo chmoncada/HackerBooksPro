@@ -9,14 +9,14 @@
 import UIKit
 
 extension UIImageView {
-    func loadImageWithURL(url: NSURL) -> NSURLSessionDownloadTask {
-        let session = NSURLSession.sharedSession()
-        let downloadTask = session.downloadTaskWithURL(
-            url, completionHandler: { [weak self] url, response, error in
+    func loadImageWithURL(_ url: URL) -> URLSessionDownloadTask {
+        let session = URLSession.shared
+        let downloadTask = session.downloadTask(
+            with: url, completionHandler: { [weak self] url, response, error in
                 if error == nil, let url = url,
                     
-                    data = NSData(contentsOfURL: url), image = UIImage(data: data) {
-                    dispatch_async(dispatch_get_main_queue()) {
+                    let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
                         if let strongSelf = self {
                             strongSelf.image = image }
                     }

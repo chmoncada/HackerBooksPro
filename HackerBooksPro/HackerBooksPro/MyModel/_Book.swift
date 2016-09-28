@@ -16,76 +16,76 @@ public enum BookRelationships: String {
     case pdf = "pdf"
 }
 
-public class _Book: NSManagedObject {
+open class _Book: NSManagedObject {
 
     // MARK: - Class methods
 
-    public class func entityName () -> String {
+    open class func entityName () -> String {
         return "Book"
     }
 
-    public class func entity(managedObjectContext: NSManagedObjectContext) -> NSEntityDescription? {
-        return NSEntityDescription.entityForName(self.entityName(), inManagedObjectContext: managedObjectContext)
+    open class func entity(_ managedObjectContext: NSManagedObjectContext) -> NSEntityDescription? {
+        return NSEntityDescription.entity(forEntityName: self.entityName(), in: managedObjectContext)
     }
 
     // MARK: - Life cycle methods
 
-    public override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
-        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    public override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertInto: context)
     }
 
     public convenience init?(managedObjectContext: NSManagedObjectContext) {
         guard let entity = _Book.entity(managedObjectContext) else { return nil }
-        self.init(entity: entity, insertIntoManagedObjectContext: managedObjectContext)
+        self.init(entity: entity, insertInto: managedObjectContext)
     }
 
     // MARK: - Properties
 
-    @NSManaged public
+    @NSManaged open
     var isFavorite: NSNumber?
 
-    @NSManaged public
+    @NSManaged open
     var title: String
 
     // MARK: - Relationships
 
-    @NSManaged public
+    @NSManaged open
     var authors: NSOrderedSet
 
-    @NSManaged public
+    @NSManaged open
     var bookTags: NSSet
 
-    @NSManaged public
+    @NSManaged open
     var image: BookImage
 
-    @NSManaged public
+    @NSManaged open
     var pdf: BookPDF
 
 }
 
 extension _Book {
 
-    func addAuthors(objects: NSOrderedSet) {
+    func addAuthors(_ objects: NSOrderedSet) {
         let mutable = self.authors.mutableCopy() as! NSMutableOrderedSet
-        mutable.unionOrderedSet(objects)
+        mutable.union(objects)
         self.authors = mutable.copy() as! NSOrderedSet
     }
 
-    func removeAuthors(objects: NSOrderedSet) {
+    func removeAuthors(_ objects: NSOrderedSet) {
         let mutable = self.authors.mutableCopy() as! NSMutableOrderedSet
-        mutable.minusOrderedSet(objects)
+        mutable.minus(objects)
         self.authors = mutable.copy() as! NSOrderedSet
     }
 
-    func addAuthorsObject(value: Author) {
+    func addAuthorsObject(_ value: Author) {
         let mutable = self.authors.mutableCopy() as! NSMutableOrderedSet
-        mutable.addObject(value)
+        mutable.add(value)
         self.authors = mutable.copy() as! NSOrderedSet
     }
 
-    func removeAuthorsObject(value: Author) {
+    func removeAuthorsObject(_ value: Author) {
         let mutable = self.authors.mutableCopy() as! NSMutableOrderedSet
-        mutable.removeObject(value)
+        mutable.remove(value)
         self.authors = mutable.copy() as! NSOrderedSet
     }
 
@@ -93,27 +93,27 @@ extension _Book {
 
 extension _Book {
 
-    func addBookTags(objects: NSSet) {
+    func addBookTags(_ objects: NSSet) {
         let mutable = self.bookTags.mutableCopy() as! NSMutableSet
-        mutable.unionSet(objects as Set<NSObject>)
+        mutable.union(objects as Set<NSObject>)
         self.bookTags = mutable.copy() as! NSSet
     }
 
-    func removeBookTags(objects: NSSet) {
+    func removeBookTags(_ objects: NSSet) {
         let mutable = self.bookTags.mutableCopy() as! NSMutableSet
-        mutable.minusSet(objects as Set<NSObject>)
+        mutable.minus(objects as Set<NSObject>)
         self.bookTags = mutable.copy() as! NSSet
     }
 
-    func addBookTagsObject(value: BookTag) {
+    func addBookTagsObject(_ value: BookTag) {
         let mutable = self.bookTags.mutableCopy() as! NSMutableSet
-        mutable.addObject(value)
+        mutable.add(value)
         self.bookTags = mutable.copy() as! NSSet
     }
 
-    func removeBookTagsObject(value: BookTag) {
+    func removeBookTagsObject(_ value: BookTag) {
         let mutable = self.bookTags.mutableCopy() as! NSMutableSet
-        mutable.removeObject(value)
+        mutable.remove(value)
         self.bookTags = mutable.copy() as! NSSet
     }
 

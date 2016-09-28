@@ -13,16 +13,16 @@ import CoreData
 class MapViewController: UIViewController {
     
     var locations: [MapLocation]? {
-        var foundLocations = [Location]()
+        //var foundLocations = [Location]()
         
         do {
             var foundMapLocations = [MapLocation]()
-            foundLocations = try coreDataStack?.context.executeFetchRequest(fetchRequest) as! [Location]
+            let foundLocations = try coreDataStack?.context.fetch(fetchRequest)
             // To avoid the Locations without coordinates, i created a model "MapLocation" and only put Locations with coordinates
-            for each in foundLocations {
+            for each in foundLocations! {
                 if let latitude = each.latitude, let longitude = each.longitude {
                     let coordinate = CLLocationCoordinate2DMake(latitude.doubleValue, longitude.doubleValue)
-                    let mapLocation = MapLocation(title: each.annotation.title, coordinate: coordinate, subtitle: "\(each.annotation.linkedPage!.integerValue)")
+                    let mapLocation = MapLocation(title: each.annotation.title, coordinate: coordinate, subtitle: "\(each.annotation.linkedPage!.intValue)")
                     foundMapLocations.append(mapLocation)
                 }
             }
@@ -37,11 +37,9 @@ class MapViewController: UIViewController {
     var coreDataStack: CoreDataStack?
     var book: Book?
     
-    var fetchRequest: NSFetchRequest {
+    var fetchRequest: NSFetchRequest<Location> {
         
-        let request = NSFetchRequest()
-        let entity = Location.entity()
-        request.entity = entity
+        let request = NSFetchRequest<Location>(entityName: Location.entityName())
         
         let predicate = NSPredicate(format: "annotation.bookPdf.book == %@", book!)
         request.predicate = predicate
@@ -72,7 +70,7 @@ class MapViewController: UIViewController {
         
     }
     
-    func regionForAnnotations(annotations: [MKAnnotation]) -> MKCoordinateRegion {
+    func regionForAnnotations(_ annotations: [MKAnnotation]) -> MKCoordinateRegion {
         
         var region: MKCoordinateRegion
         

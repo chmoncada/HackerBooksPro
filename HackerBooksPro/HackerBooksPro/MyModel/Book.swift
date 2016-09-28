@@ -9,7 +9,7 @@ let newPageOpened = "Change page in reader"
 
 @objc(Book)
 
-public class Book: _Book {
+open class Book: _Book {
     
     var pdfDownloaded: Bool? {
         if self.pdf.pdfData != nil {
@@ -24,8 +24,8 @@ public class Book: _Book {
     var isChanged: Bool? {
         willSet {
             //print("MODELO \(self.title) CAMBIO!!!")
-            let notif = NSNotification(name: modelDidChange, object: self)
-            NSNotificationCenter.defaultCenter().postNotification(notif)
+            let notif = Notification(name: Notification.Name(rawValue: modelDidChange), object: self)
+            NotificationCenter.default.post(notif)
             
         }
     }
@@ -33,8 +33,8 @@ public class Book: _Book {
     var favIsChanged: Bool? {
         willSet {
             //print("Status de Favorito del libro \(self.title) CAMBIO!!!")
-            let notif = NSNotification(name: favStatusDidChange, object: self)
-            NSNotificationCenter.defaultCenter().postNotification(notif)
+            let notif = Notification(name: Notification.Name(rawValue: favStatusDidChange), object: self)
+            NotificationCenter.default.post(notif)
             
         }
     }
@@ -42,7 +42,7 @@ public class Book: _Book {
     var pdfIsOpen: Bool? {
         didSet {
             //print("Abri el PDF de \(self.title) para leer")
-            self.pdf.lastTimeOpened = NSDate()
+            self.pdf.lastTimeOpened = Date()
             
             // si el tag reciente ya lo tiene
             if !self.containsTag("recent") {
@@ -66,8 +66,8 @@ public class Book: _Book {
     var pageIsChanged: Bool? {
         willSet {
             //print("cambiamos la pagina, ahora es \(self.pdf.lastPageOpen!.integerValue) !!!")
-            let notif = NSNotification(name: newPageOpened, object: self)
-            NSNotificationCenter.defaultCenter().postNotification(notif)
+            let notif = Notification(name: Notification.Name(rawValue: newPageOpened), object: self)
+            NotificationCenter.default.post(notif)
             
         }
     }
@@ -75,16 +75,16 @@ public class Book: _Book {
     var imageIsLoaded: Bool? {
         willSet {
             //print("IMAGEN de \(self.title) SE DESCARGO!!!")
-            let notif = NSNotification(name: imageDidDownload, object: self)
-            NSNotificationCenter.defaultCenter().postNotification(notif)
+            let notif = Notification(name: Notification.Name(rawValue: imageDidDownload), object: self)
+            NotificationCenter.default.post(notif)
         }
     }
     
     var annotationsChanged: Bool? {
         willSet {
             //print("Las anotaciones de \(self.title) cambiaron!!!")
-            let notif = NSNotification(name: annotationsDidChange, object: self)
-            NSNotificationCenter.defaultCenter().postNotification(notif)
+            let notif = Notification(name: Notification.Name(rawValue: annotationsDidChange), object: self)
+            NotificationCenter.default.post(notif)
         }
     }
     
@@ -101,8 +101,8 @@ public class Book: _Book {
                 bookTag!.book = self
                 
                 // Send notification
-                let notif = NSNotification(name: pdfWasFinished, object: self)
-                NSNotificationCenter.defaultCenter().postNotification(notif)
+                let notif = Notification(name: Notification.Name(rawValue: pdfWasFinished), object: self)
+                NotificationCenter.default.post(notif)
                 
             } else {
                 //print("ya no estoy leido hasta el final")
@@ -118,11 +118,11 @@ public class Book: _Book {
         
         var text = ""
         
-        for each in self.authors where each !== self.authors.lastObject{
-            text += "\(each.name!), "
+        for each in self.authors {
+            text += "\((each as! Author).name), "
         }
         
-        text += self.authors.lastObject!.name
+        //text += (self.authors.lastObject! as AnyObject).name
         
         return text
     }
@@ -134,10 +134,10 @@ public class Book: _Book {
         if let array = self.bookTags.allObjects as? BookTagArray {
             // go through the array except the tags __FAVORITO
             for each in array where (!(each.tag.tag == "favorite") && !(each.tag.tag == "finished")) {
-                arrayOfTags.append(each.tag.tag.capitalizedString)
+                arrayOfTags.append(each.tag.tag.capitalized)
             }
-            arrayOfTags.sortInPlace()
-            let list = arrayOfTags.joinWithSeparator(", ")
+            arrayOfTags.sort()
+            let list = arrayOfTags.joined(separator: ", ")
             
             return list
         }
@@ -145,7 +145,7 @@ public class Book: _Book {
         return nil
     }
     
-    func containsTag(tag: String) -> Bool {
+    func containsTag(_ tag: String) -> Bool {
         
         if let array = self.bookTags.allObjects as? BookTagArray {
             // go through the array except the tags __FAVORITO

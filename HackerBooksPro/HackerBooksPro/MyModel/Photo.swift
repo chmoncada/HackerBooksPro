@@ -1,6 +1,6 @@
 import Foundation
 
 @objc(Photo)
-public class Photo: _Photo {
+open class Photo: _Photo {
 	// Custom logic goes here.
 }

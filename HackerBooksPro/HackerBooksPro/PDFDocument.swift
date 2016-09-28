@@ -11,15 +11,15 @@ import UIKit
 
 class PDFDocument {
     let name: String
-    var url: NSURL? = nil
-    var data: NSData?
+    var url: URL? = nil
+    var data: Data?
     var document: CGPDFDocument? = nil
     
-    init(name: String, url: NSURL) throws {
+    init(name: String, url: URL) throws {
         self.name = name
         self.url = url
-        guard let doc = CGPDFDocumentCreateWithURL(url) else {
-            throw PDFDocumentError.BadDocumentType
+        guard let doc = CGPDFDocument(url as CFURL) else {
+            throw PDFDocumentError.badDocumentType
         }
         self.document = doc
     }
@@ -28,47 +28,47 @@ class PDFDocument {
         
         self.name = bookPdf.book.title
         
-        self.data = bookPdf.pdfData!
+        self.data = bookPdf.pdfData! as Data
         let pdfDataRef = data
-        let provider = CGDataProviderCreateWithCFData(pdfDataRef!)
-        let doc = CGPDFDocumentCreateWithProvider(provider!)
+        let provider = CGDataProvider(data: pdfDataRef! as CFData)
+        let doc = CGPDFDocument(provider!)
         
         self.document = doc
     }
     
     var numberOfPages: Int {
-        return CGPDFDocumentGetNumberOfPages(self.document!)
+        return self.document!.numberOfPages
     }
     
-    func isPageInDocument(page: Int) -> Bool {
+    func isPageInDocument(_ page: Int) -> Bool {
         return page > 0 && page <= self.numberOfPages
     }
     
     // Thumbnail handling
-    func PDFPage(page: Int) -> CGPDFPage? {
+    func PDFPage(_ page: Int) -> CGPDFPage? {
         guard let document = self.document else { print("no document"); return nil }
-        return CGPDFDocumentGetPage(document, page)
+        return document.page(at: page)
     }
     
-    func rectFromPDFWithPage(page: Int) -> CGRect? {
+    func rectFromPDFWithPage(_ page: Int) -> CGRect? {
         guard let docPage = self.PDFPage(page) else { return nil }
-        return CGPDFPageGetBoxRect(docPage, .MediaBox)
+        return docPage.getBoxRect(.mediaBox)
     }
     
-    func imageFromPDFWithPage(page: Int) -> UIImage? {
+    func imageFromPDFWithPage(_ page: Int) -> UIImage? {
         guard let docPage = self.PDFPage(page) else { return nil }
         let pageRect = self.rectFromPDFWithPage(page)!
         
         UIGraphicsBeginImageContext(pageRect.size)
-        let context:CGContextRef = UIGraphicsGetCurrentContext()!
-        CGContextSetRGBFillColor(context, 1.0,1.0,1.0,1.0)
-        CGContextFillRect(context,pageRect)
-        CGContextSaveGState(context)
-        CGContextTranslateCTM(context, 0.0, pageRect.size.height)
-        CGContextScaleCTM(context, 1.0, -1.0)
-        CGContextConcatCTM(context, CGPDFPageGetDrawingTransform(docPage, .MediaBox, pageRect, 0, true))
-        CGContextDrawPDFPage(context, docPage)
-        CGContextRestoreGState(context)
+        let context:CGContext = UIGraphicsGetCurrentContext()!
+        context.setFillColor(red: 1.0,green: 1.0,blue: 1.0,alpha: 1.0)
+        context.fill(pageRect)
+        context.saveGState()
+        context.translateBy(x: 0.0, y: pageRect.size.height)
+        context.scaleBy(x: 1.0, y: -1.0)
+        context.concatenate(docPage.getDrawingTransform(.mediaBox, rect: pageRect, rotate: 0, preserveAspectRatio: true))
+        context.drawPDFPage(docPage)
+        context.restoreGState()
         
         let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()!;
         UIGraphicsEndImageContext();

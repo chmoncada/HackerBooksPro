@@ -2,22 +2,22 @@ import Foundation
 import UIKit
 
 @objc(BookImage)
-public class BookImage: _BookImage {
+open class BookImage: _BookImage {
 	// Custom logic goes here.
     
-    var downloadTask: NSURLSessionDownloadTask?
+    var downloadTask: URLSessionDownloadTask?
     var coredataStack: CoreDataStack!
-    var returnData: NSData?
+    var returnData: Data?
     
-    func getImage(coredataStack: CoreDataStack) -> NSData? {
+    func getImage(_ coredataStack: CoreDataStack) -> Data? {
 
         self.coredataStack = coredataStack
         if self.imageData != nil {
             //print("HAY DATA, en el futuro se cargara del modelo de CoreData")
-            return self.imageData
+            return self.imageData as Data?
         } else {
             //print("Se descargara a futuro de \(self.imageURL)")
-            if let url = NSURL(string: self.imageURL) {
+            if let url = URL(string: self.imageURL) {
                 self.downloadTask = self.loadImageWithURL(url)
             }
         }
@@ -26,14 +26,14 @@ public class BookImage: _BookImage {
 }
 
 extension BookImage {
-    func loadImageWithURL(url: NSURL) -> NSURLSessionDownloadTask {
-        let session = NSURLSession.sharedSession()
-        let downloadTask = session.downloadTaskWithURL(
-            url, completionHandler: { [weak self] url, response, error in
+    func loadImageWithURL(_ url: URL) -> URLSessionDownloadTask {
+        let session = URLSession.shared
+        let downloadTask = session.downloadTask(
+            with: url, completionHandler: { [weak self] url, response, error in
                 if error == nil, let url = url,
                     
-                    returnData = NSData(contentsOfURL: url) {
-                    dispatch_async(dispatch_get_main_queue()) {
+                    let returnData = try? Data(contentsOf: url) {
+                    DispatchQueue.main.async {
                         if let strongSelf = self {
                             strongSelf.returnData = returnData
                             //print("ya descargado, se procedera a grabar en el modelo")

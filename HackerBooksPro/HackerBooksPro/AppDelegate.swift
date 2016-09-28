@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var coreDataStack = CoreDataStack()
     var backgroundSessionCompletionHandler: (() -> Void)?
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         // iCloud Setup
         iCloudSetup()
@@ -46,39 +46,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // tweak to ipad portrait mode
         detailViewController.navigationItem.leftItemsSupplementBackButton = true
-        detailViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem()
+        detailViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
         
         coreDataStack.autoSave(5.0)
         
         return true
     }
 
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
        
         // Save in iCLoud
-        NSUbiquitousKeyValueStore.defaultStore().synchronize()
+        NSUbiquitousKeyValueStore.default().synchronize()
        
     }
 
-    func application(application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: () -> Void) {
+    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
         // to run the closure of the backgorund download task
         backgroundSessionCompletionHandler = completionHandler
     }
     
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         
@@ -91,15 +91,15 @@ extension AppDelegate {
     
     func iCloudSetup() {
         // iCloud Settings
-        let urlForCloud = NSFileManager.defaultManager().URLForUbiquityContainerIdentifier(nil)
+        let urlForCloud = FileManager.default.url(forUbiquityContainerIdentifier: nil)
         
         if urlForCloud == nil {
             print("No iCloud")
         } else {
             
-            let store = NSUbiquitousKeyValueStore.defaultStore()
+            let store = NSUbiquitousKeyValueStore.default()
             // Set an observer if the iCloud value changes in another device
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.iCloudKeysChanged(_:)), name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification, object: store)
+            NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.iCloudKeysChanged(_:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: store)
             
             store.synchronize()
             
@@ -107,7 +107,7 @@ extension AppDelegate {
         
     }
     
-    func iCloudKeysChanged(sender: NSNotification) {
+    func iCloudKeysChanged(_ sender: Notification) {
         
         // Update local store values
         print("func: iCloudKeysChanged: VALOR CAMBIO")
@@ -126,11 +126,11 @@ extension AppDelegate {
         Tag.eraseTag(tagString, context: coreDataStack.context)
         
         // check if each book should have the "recent" tag if it was open in the last 7 days
-        let today = NSDate()
-        let fetchRequest = NSFetchRequest(entityName: Book.entityName())
+        let today = Date()
+        let fetchRequest = NSFetchRequest<Book>(entityName: Book.entityName())
         
         do {
-            let results = try coreDataStack.context.executeFetchRequest(fetchRequest) as! [Book]
+            let results = try coreDataStack.context.fetch(fetchRequest) 
 
             for book in results {
                 if let date = book.pdf.lastTimeOpened {

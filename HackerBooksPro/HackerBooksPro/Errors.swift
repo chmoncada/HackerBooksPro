@@ -9,15 +9,15 @@
 import Foundation
 
 //MARK: JSON Errors
-enum HackerBooksError : ErrorType{
-    case WrongURLFormatForJSONResource
-    case ResourcePointedByURLNotReachable
+enum HackerBooksError : Error{
+    case wrongURLFormatForJSONResource
+    case resourcePointedByURLNotReachable
     case jsonParsingError
-    case WrongJSONFormat
+    case wrongJSONFormat
     case nilJSONObject
 }
 
-enum PDFDocumentError: ErrorType {
-    case UrlNotValid
-    case BadDocumentType
+enum PDFDocumentError: Error {
+    case urlNotValid
+    case badDocumentType
 }
