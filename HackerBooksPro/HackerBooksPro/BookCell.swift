@@ -85,7 +85,7 @@ class BookCell: UITableViewCell {
             //print("NO hay imagen guardada en el modelo")
             self.BookCover.image = UIImage(named: "emptyBook")
             if let url = URL(string: _book!.image.imageURL) {
-                loadImage(remoteURL: url){ (data: Data?) in
+                loadDataAtURL(url){ (data: Data?) in
                     
                     if let dataExist = data {
                         //print("se usa imagen descargada")

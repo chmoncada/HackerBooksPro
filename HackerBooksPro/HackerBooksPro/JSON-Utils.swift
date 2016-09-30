@@ -1,5 +1,5 @@
 //
-//  JSONUtils.swift
+//  JSON-Utils.swift
 //  HackerBooksPro
 //
 //  Created by Charles Moncada on 12/08/16.
@@ -26,51 +26,58 @@ enum JSONKeys: String {
 }
 
 // MARK: JSON Utils
-func importJSONDataIfNeeded(_ coreDataStack:CoreDataStack) {
+
+/**
+
+ Check if the CoreData Model has data, otherwise load JSON data to the CoreData model
+
+ - parameters:
+    - coreDataStack: Instance of CoreDataStack of file
+ 
+ */
+func importJSONDataIfNeededUsingStack(_ coreDataStack:CoreDataStack) {
     
     // First we checked if exists any Book object in Core Data
     let fetchRequest = NSFetchRequest<Book>(entityName: Book.entityName())
     
-    //var error: NSError? = nil
-
     do {
         let results =  try coreDataStack.context.count(for: fetchRequest)
         
         if (results == 0) {
             
-            print("Cargando modelo del JSON...")
             do {
                 // Fist we erase any remaining object just in case
                 let results =
                     try coreDataStack.context.fetch(fetchRequest)
                 
-                // Fist we erase any remaining object just in case
                 for object in results {
                     let team = object as Book
                     coreDataStack.context.delete(team)
                 }
-                
-                //coreDataStack.saveContext()
-                populateCoreDataModel(coreDataStack)
+                // Parse the JSON data to the model
+                populateCoreDataModelUsingStack(coreDataStack)
                 
             } catch let error as NSError {
                 print("Error fetching: \(error.localizedDescription)")
             }
-        } else {
-            //print("Se usara modelo existente")
         }
-
-        
     } catch let error as NSError? {
         print("Error: \(error?.localizedDescription)")
     }
     
-    //let results = coreDataStack.context.countForFetchRequest(fetchRequest)
-    
 }
 
-//JSON Remote loading
-func populateCoreDataModel(_ coredataStack: CoreDataStack) {
+//JSON Parsing
+
+/**
+ 
+ **Parse** JSON data to the model
+ 
+ - parameters:
+    - coredataStack: Instance of CoreDataStack of file
+ 
+*/
+func populateCoreDataModelUsingStack(_ coredataStack: CoreDataStack) {
     
     // Create Model Entities
     let authorEntity = Author.entity(coredataStack.context)
@@ -131,20 +138,13 @@ func populateCoreDataModel(_ coredataStack: CoreDataStack) {
                 let bookTag = BookTag(entity: bookTagEntity!, insertInto: coredataStack.context)
                 let tagName = each as! String
                 bookTag.name = "\(book.title) - \(tagName)"
-                //let tag = Tag(entity: tagEntity!, insertIntoManagedObjectContext: coredataStack.context)
                 book.addBookTagsObject(bookTag)
-                //tag.tag = (each as! String)
                 
                 let tag = Tag.uniqueTag(tagName, context: coredataStack.context)
-                
                 tag!.addBookTagsObject(bookTag)
                 
             }
-
         }
-        // Save the context
-        //coredataStack.saveContext()
-        print("Se termino de poblar el modelo de Core Data")
         
     } catch let error as NSError {
         print("Error populating Core Data model: \(error.localizedDescription)")
@@ -152,9 +152,14 @@ func populateCoreDataModel(_ coredataStack: CoreDataStack) {
     
 }
 
-
+/**
+ 
+ **Returns** a `JSONArray` ([JSONDictionary]) from a remote URL
+ 
+ */
 func loadJSONFromRemoteFile() throws -> JSONArray{
     
+    // URL String of the remote JSON File
     let inputURL = "https://t.co/K9ziV0z3SJ"
     
     if let url = URL(string: inputURL),

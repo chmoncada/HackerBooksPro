@@ -7,24 +7,14 @@
 //
 
 import Foundation
-import UIKit
 
-// to declare a URL with a String
-extension Bundle{
-    
-    func URLForResource(_ name: String?) -> URL? {
-        
-        let components = name?.components(separatedBy: ".")
-        let fileTitle =  components?.first
-        let fileExtension = components?.last
-        
-        return url(forResource: fileTitle, withExtension: fileExtension)
-        
-    }
-}
-
-// To clean duplicates in array
 extension Array where Element:Equatable {
+    
+    /**
+     
+     Remove duplicates Strings from an Array.  Returns and Array without duplicates.
+ 
+    */
     func removeDuplicates() -> [Element] {
         var result = [Element]()
         

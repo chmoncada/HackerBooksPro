@@ -7,20 +7,38 @@
 //
 
 import Foundation
+import CoreData
 
-let def = UserDefaults.standard
-
+/**
+ 
+ **Save** last open `Book` in UserDefaults
+ 
+ - parameters:
+    - book: Book to save
+ 
+ */
 func saveBookInUserDefaults(_ book: Book) {
     
     // Obtain the NSData
-    if let data = archiveURIRepresentation(book) {
+    if let data = archiveURIRepresentationOfBook(book) {
         // save in userdefaults
-        def.set(data, forKey: "lastbookopen")
+        UserDefaults.standard.set(data, forKey: "lastbookopen")
     }
+    
 }
 
-func archiveURIRepresentation(_ book: Book) -> Data? {
-    let uri = book.objectID.uriRepresentation()
-    return NSKeyedArchiver.archivedData(withRootObject: uri)
+/**
+ 
+ **Obtain** last open `Book` from UserDefaults
+ 
+ - parameters:
+    - context: `NSManagedObjectContext` to use to obtain the last open `Book`
+ 
+ */
+func loadBookFromUserDefaultsInContext(_ context: NSManagedObjectContext) -> Book? {
+    if let uriDefault = UserDefaults.standard.object(forKey: "lastbookopen") as? Data {
+        return objectWithArchivedURIRepresentation(uriDefault, inContext: context)
+    }
     
+    return nil
 }

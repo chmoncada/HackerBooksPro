@@ -17,7 +17,7 @@
 		A112A3001D5E929700C29B40 /* emptyStar.png in Resources */ = {isa = PBXBuildFile; fileRef = A112A2FD1D5E929700C29B40 /* emptyStar.png */; };
 		A112A3011D5E929700C29B40 /* filledStar.png in Resources */ = {isa = PBXBuildFile; fileRef = A112A2FE1D5E929700C29B40 /* filledStar.png */; };
 		A112A3041D5E92FA00C29B40 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A3031D5E92FA00C29B40 /* CoreDataStack.swift */; };
-		A112A3061D5EB4B600C29B40 /* JSONUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A3051D5EB4B600C29B40 /* JSONUtils.swift */; };
+		A112A3061D5EB4B600C29B40 /* JSON-Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A3051D5EB4B600C29B40 /* JSON-Utils.swift */; };
 		A112A3111D5EB59400C29B40 /* _BookImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A3071D5EB59400C29B40 /* _BookImage.swift */; };
 		A112A3121D5EB59400C29B40 /* _BookPDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A3081D5EB59400C29B40 /* _BookPDF.swift */; };
 		A112A3131D5EB59400C29B40 /* _Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A3091D5EB59400C29B40 /* _Tag.swift */; };
@@ -29,12 +29,11 @@
 		A112A3191D5EB59400C29B40 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A30F1D5EB59400C29B40 /* Author.swift */; };
 		A112A31A1D5EB59400C29B40 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A3101D5EB59400C29B40 /* Book.swift */; };
 		A112A31C1D5EBD6D00C29B40 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A31B1D5EBD6D00C29B40 /* Errors.swift */; };
-		A112A31E1D5EBF1A00C29B40 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A31D1D5EBF1A00C29B40 /* Utils.swift */; };
-		A12A9D891D8074EB002912E5 /* NSUserDefaults-Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12A9D881D8074EB002912E5 /* NSUserDefaults-Utils.swift */; };
-		A12A9D8B1D8075BE002912E5 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12A9D8A1D8075BE002912E5 /* Constants.swift */; };
+		A112A31E1D5EBF1A00C29B40 /* Load-Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A31D1D5EBF1A00C29B40 /* Load-Utils.swift */; };
 		A12DEC061D75EE8B008CBBEE /* BookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12DEC051D75EE8B008CBBEE /* BookViewController.swift */; };
+		A14AE0061D9E163E007F2156 /* URIRepresentation-Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14AE0051D9E163E007F2156 /* URIRepresentation-Utils.swift */; };
+		A14AE0081D9E1709007F2156 /* Appearance-Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14AE0071D9E1709007F2156 /* Appearance-Utils.swift */; };
 		A14F05731D6D381400D9132D /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14F05721D6D381400D9132D /* BookCell.swift */; };
-		A14F05751D6D45D400D9132D /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14F05741D6D45D400D9132D /* UIImageView.swift */; };
 		A15723E21D8F56BD00F44647 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A15723E11D8F56BD00F44647 /* MapKit.framework */; };
 		A15DE4C01D8639ED008C7888 /* UIImage+Alpha.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BD1D8639ED008C7888 /* UIImage+Alpha.swift */; };
 		A15DE4C11D8639ED008C7888 /* UIImage+ReSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15DE4BE1D8639ED008C7888 /* UIImage+ReSize.swift */; };
@@ -42,6 +41,8 @@
 		A17F085C1D84D149001F4A68 /* AnnotationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17F085B1D84D149001F4A68 /* AnnotationViewController.swift */; };
 		A18ABD5B1D8E1CAD00C9AE6E /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18ABD5A1D8E1CAD00C9AE6E /* MapViewController.swift */; };
 		A18ABD5D1D8E3AF100C9AE6E /* MapLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18ABD5C1D8E3AF100C9AE6E /* MapLocation.swift */; };
+		A18D4E361D9E1A5D00F6022C /* NSUserDefaults-Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D4E351D9E1A5D00F6022C /* NSUserDefaults-Utils.swift */; };
+		A18D4E381D9E1BDD00F6022C /* Date-Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D4E371D9E1BDD00F6022C /* Date-Utils.swift */; };
 		A1B9C0441D7649210027A376 /* DownloadPDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B9C0431D7649210027A376 /* DownloadPDF.swift */; };
 		A1D15CAD1D74E13300C2F39B /* _BookTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D15CAB1D74E13300C2F39B /* _BookTag.swift */; };
 		A1D15CAE1D74E13300C2F39B /* BookTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D15CAC1D74E13300C2F39B /* BookTag.swift */; };
@@ -73,7 +74,7 @@
 		A112A2FD1D5E929700C29B40 /* emptyStar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emptyStar.png; sourceTree = "<group>"; };
 		A112A2FE1D5E929700C29B40 /* filledStar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = filledStar.png; sourceTree = "<group>"; };
 		A112A3031D5E92FA00C29B40 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
-		A112A3051D5EB4B600C29B40 /* JSONUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONUtils.swift; sourceTree = "<group>"; };
+		A112A3051D5EB4B600C29B40 /* JSON-Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JSON-Utils.swift"; sourceTree = "<group>"; };
 		A112A3071D5EB59400C29B40 /* _BookImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _BookImage.swift; path = MyModel/_BookImage.swift; sourceTree = "<group>"; };
 		A112A3081D5EB59400C29B40 /* _BookPDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _BookPDF.swift; path = MyModel/_BookPDF.swift; sourceTree = "<group>"; };
 		A112A3091D5EB59400C29B40 /* _Tag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _Tag.swift; path = MyModel/_Tag.swift; sourceTree = "<group>"; };
@@ -85,13 +86,12 @@
 		A112A30F1D5EB59400C29B40 /* Author.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Author.swift; path = MyModel/Author.swift; sourceTree = "<group>"; };
 		A112A3101D5EB59400C29B40 /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Book.swift; path = MyModel/Book.swift; sourceTree = "<group>"; };
 		A112A31B1D5EBD6D00C29B40 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
-		A112A31D1D5EBF1A00C29B40 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		A112A31D1D5EBF1A00C29B40 /* Load-Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Load-Utils.swift"; sourceTree = "<group>"; };
 		A1157ADE1D810909006A61CF /* HackerBooksPro.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = HackerBooksPro.entitlements; sourceTree = "<group>"; };
-		A12A9D881D8074EB002912E5 /* NSUserDefaults-Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUserDefaults-Utils.swift"; sourceTree = "<group>"; };
-		A12A9D8A1D8075BE002912E5 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A12DEC051D75EE8B008CBBEE /* BookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookViewController.swift; sourceTree = "<group>"; };
+		A14AE0051D9E163E007F2156 /* URIRepresentation-Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URIRepresentation-Utils.swift"; sourceTree = "<group>"; };
+		A14AE0071D9E1709007F2156 /* Appearance-Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Appearance-Utils.swift"; sourceTree = "<group>"; };
 		A14F05721D6D381400D9132D /* BookCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookCell.swift; sourceTree = "<group>"; };
-		A14F05741D6D45D400D9132D /* UIImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		A15723E11D8F56BD00F44647 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A15DE4BD1D8639ED008C7888 /* UIImage+Alpha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Alpha.swift"; sourceTree = "<group>"; };
 		A15DE4BE1D8639ED008C7888 /* UIImage+ReSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+ReSize.swift"; sourceTree = "<group>"; };
@@ -99,6 +99,8 @@
 		A17F085B1D84D149001F4A68 /* AnnotationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationViewController.swift; sourceTree = "<group>"; };
 		A18ABD5A1D8E1CAD00C9AE6E /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A18ABD5C1D8E3AF100C9AE6E /* MapLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapLocation.swift; sourceTree = "<group>"; };
+		A18D4E351D9E1A5D00F6022C /* NSUserDefaults-Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUserDefaults-Utils.swift"; sourceTree = "<group>"; };
+		A18D4E371D9E1BDD00F6022C /* Date-Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date-Utils.swift"; sourceTree = "<group>"; };
 		A1B9C0431D7649210027A376 /* DownloadPDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadPDF.swift; sourceTree = "<group>"; };
 		A1D15CAB1D74E13300C2F39B /* _BookTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _BookTag.swift; path = MyModel/_BookTag.swift; sourceTree = "<group>"; };
 		A1D15CAC1D74E13300C2F39B /* BookTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookTag.swift; path = MyModel/BookTag.swift; sourceTree = "<group>"; };
@@ -204,6 +206,8 @@
 				A1D602B41D8326CC0007E736 /* Photo.swift */,
 				A1F12BD51D77A251006BE392 /* PDFDocument.swift */,
 				A18ABD5C1D8E3AF100C9AE6E /* MapLocation.swift */,
+				A1B9C0431D7649210027A376 /* DownloadPDF.swift */,
+				A112A31B1D5EBD6D00C29B40 /* Errors.swift */,
 				A112A2E61D5E91BC00C29B40 /* HackerBooksPro.xcdatamodeld */,
 			);
 			name = Models;
@@ -217,11 +221,11 @@
 				A1F12BD31D77A226006BE392 /* PDFReaderViewController.swift */,
 				A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */,
 				A17F085B1D84D149001F4A68 /* AnnotationViewController.swift */,
+				A1E502D61D8DA39300644693 /* AnnotationsCollectionViewController.swift */,
+				A18ABD5A1D8E1CAD00C9AE6E /* MapViewController.swift */,
 				A1F12BDF1D77AD19006BE392 /* ImageCell.swift */,
 				A14F05721D6D381400D9132D /* BookCell.swift */,
 				A1E502D81D8DA61300644693 /* NoteCell.swift */,
-				A1E502D61D8DA39300644693 /* AnnotationsCollectionViewController.swift */,
-				A18ABD5A1D8E1CAD00C9AE6E /* MapViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -240,7 +244,6 @@
 			isa = PBXGroup;
 			children = (
 				A112A2FA1D5E928900C29B40 /* Foundation.swift */,
-				A14F05741D6D45D400D9132D /* UIImageView.swift */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -251,12 +254,12 @@
 				A15DE4BD1D8639ED008C7888 /* UIImage+Alpha.swift */,
 				A15DE4BE1D8639ED008C7888 /* UIImage+ReSize.swift */,
 				A15DE4BF1D8639ED008C7888 /* UIImage+RoundCorner.swift */,
-				A112A31B1D5EBD6D00C29B40 /* Errors.swift */,
-				A112A3051D5EB4B600C29B40 /* JSONUtils.swift */,
-				A112A31D1D5EBF1A00C29B40 /* Utils.swift */,
-				A1B9C0431D7649210027A376 /* DownloadPDF.swift */,
-				A12A9D881D8074EB002912E5 /* NSUserDefaults-Utils.swift */,
-				A12A9D8A1D8075BE002912E5 /* Constants.swift */,
+				A14AE0071D9E1709007F2156 /* Appearance-Utils.swift */,
+				A112A3051D5EB4B600C29B40 /* JSON-Utils.swift */,
+				A18D4E351D9E1A5D00F6022C /* NSUserDefaults-Utils.swift */,
+				A14AE0051D9E163E007F2156 /* URIRepresentation-Utils.swift */,
+				A18D4E371D9E1BDD00F6022C /* Date-Utils.swift */,
+				A112A31D1D5EBF1A00C29B40 /* Load-Utils.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -364,11 +367,10 @@
 				A12DEC061D75EE8B008CBBEE /* BookViewController.swift in Sources */,
 				A1D602B51D8326CC0007E736 /* _Annotation.swift in Sources */,
 				A1F12BD41D77A226006BE392 /* PDFReaderViewController.swift in Sources */,
+				A18D4E381D9E1BDD00F6022C /* Date-Utils.swift in Sources */,
 				A1F12BD61D77A251006BE392 /* PDFDocument.swift in Sources */,
-				A112A3061D5EB4B600C29B40 /* JSONUtils.swift in Sources */,
-				A12A9D8B1D8075BE002912E5 /* Constants.swift in Sources */,
+				A112A3061D5EB4B600C29B40 /* JSON-Utils.swift in Sources */,
 				A15DE4C11D8639ED008C7888 /* UIImage+ReSize.swift in Sources */,
-				A12A9D891D8074EB002912E5 /* NSUserDefaults-Utils.swift in Sources */,
 				A14F05731D6D381400D9132D /* BookCell.swift in Sources */,
 				A1F12BD81D77A2DF006BE392 /* PDFOverviewViewController.swift in Sources */,
 				A17F085C1D84D149001F4A68 /* AnnotationViewController.swift in Sources */,
@@ -377,22 +379,24 @@
 				A112A3121D5EB59400C29B40 /* _BookPDF.swift in Sources */,
 				A1D602B61D8326CC0007E736 /* _Location.swift in Sources */,
 				A112A3181D5EB59400C29B40 /* _Book.swift in Sources */,
+				A14AE0081D9E1709007F2156 /* Appearance-Utils.swift in Sources */,
 				A1F12BE01D77AD19006BE392 /* ImageCell.swift in Sources */,
 				A18ABD5B1D8E1CAD00C9AE6E /* MapViewController.swift in Sources */,
 				A112A3191D5EB59400C29B40 /* Author.swift in Sources */,
-				A112A31E1D5EBF1A00C29B40 /* Utils.swift in Sources */,
+				A112A31E1D5EBF1A00C29B40 /* Load-Utils.swift in Sources */,
 				A1D602B91D8326CC0007E736 /* Location.swift in Sources */,
 				A112A3151D5EB59400C29B40 /* BookPDF.swift in Sources */,
 				A112A3171D5EB59400C29B40 /* _Author.swift in Sources */,
 				A112A31C1D5EBD6D00C29B40 /* Errors.swift in Sources */,
 				A1D15CAD1D74E13300C2F39B /* _BookTag.swift in Sources */,
+				A14AE0061D9E163E007F2156 /* URIRepresentation-Utils.swift in Sources */,
 				A1D602B81D8326CC0007E736 /* Annotation.swift in Sources */,
 				A1E502D91D8DA61300644693 /* NoteCell.swift in Sources */,
-				A14F05751D6D45D400D9132D /* UIImageView.swift in Sources */,
 				A112A2FB1D5E928900C29B40 /* Foundation.swift in Sources */,
 				A15DE4C21D8639ED008C7888 /* UIImage+RoundCorner.swift in Sources */,
 				A1D15CAE1D74E13300C2F39B /* BookTag.swift in Sources */,
 				A18ABD5D1D8E3AF100C9AE6E /* MapLocation.swift in Sources */,
+				A18D4E361D9E1A5D00F6022C /* NSUserDefaults-Utils.swift in Sources */,
 				A1D602B71D8326CC0007E736 /* _Photo.swift in Sources */,
 				A112A3131D5EB59400C29B40 /* _Tag.swift in Sources */,
 				A1B9C0441D7649210027A376 /* DownloadPDF.swift in Sources */,

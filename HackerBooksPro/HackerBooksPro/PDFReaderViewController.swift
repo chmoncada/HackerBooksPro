@@ -81,7 +81,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     }
     
     func dismissView() {
-        //self.navigationController?.popToRootViewController(animated: true)
+        let _ = self.navigationController?.popToRootViewController(animated: true)
     }
     
 

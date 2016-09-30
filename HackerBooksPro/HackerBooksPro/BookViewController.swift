@@ -99,10 +99,12 @@ class BookViewController: UITableViewController {
         
         _ = self.downloadSession
         
+        iCloudSetup()
+        
         if let book = loadBookFromiCloud() {
             //print("encontre modelo en iCloud: \(book.title)")
             model = book
-        } else if let book = loadBookFromUserDefaults() {
+        } else if let book = loadBookFromUserDefaultsInContext(coreDataStack!.context) {
             //print("encontre modelo en NSUserDefaults: \(book.title)")
             model = book
         } else {
@@ -151,7 +153,7 @@ class BookViewController: UITableViewController {
             coverImage.image = UIImage(named: "emptyBook")
             // load bookcover
             if let url = URL(string: model!.image.imageURL) {
-                loadImage(remoteURL: url){ (data: Data?) in
+                loadDataAtURL(url){ (data: Data?) in
                     if let dataExist = data {
                         let resizeImage = UIImage(data: dataExist)!.resizedImageWithContentMode(.scaleAspectFill, bounds: CGSize(width: 112, height: 144), interpolationQuality: .default)
                         self.coverImage.image = resizeImage
@@ -160,7 +162,6 @@ class BookViewController: UITableViewController {
                     }
                 }
             }
-            
         }
         
         tagsLabel.text = model!.tagsList()
@@ -185,25 +186,29 @@ class BookViewController: UITableViewController {
     
 }
 
-// MARK: - NSUserDefaults methods & iCloud
+// MARK: - iCloud utils
 
 extension BookViewController {
     
-    func saveBookInUserDefaults(_ book: Book) {
+    func iCloudSetup() {
         
-        // Obtain the NSData
-        if let data = archiveURIRepresentation(book) {
-            // save in userdefaults
-            UserDefaults.set(data, forKey: "lastbookopen")
+        if FileManager.default.url(forUbiquityContainerIdentifier: nil) != nil {
+            
+            let store = NSUbiquitousKeyValueStore.default()
+            // Set an observer if the iCloud value changes in another device
+            NotificationCenter.default.addObserver(self, selector: #selector(iCloudKeysChanged(_:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: store)
+            store.synchronize()
         }
+        
     }
     
-    func loadBookFromUserDefaults() -> Book? {
-        if let uriDefault = UserDefaults.object(forKey: "lastbookopen") as? Data {
-            return objectWithArchivedURIRepresentation(uriDefault, context: coreDataStack!.context)
-        }
+    func iCloudKeysChanged(_ sender: Notification) {
         
-        return nil
+        // Get iCloud value
+        let bookIniCloud = loadBookFromiCloud()
+        // Save it in NSUserDefaults
+        if let book = bookIniCloud { saveBookIniCloud(book) }
+        
     }
     
     func saveBookIniCloud(_ book: Book) {
@@ -211,9 +216,8 @@ extension BookViewController {
         // Set the iCloud store
         let store = NSUbiquitousKeyValueStore.default()
         // Obtain the NSData
-        if let data = archiveURIRepresentation(book) {
+        if let data = archiveURIRepresentationOfBook(book) {
             store.set(data, forKey: "lastbookopen")
-
         }
 
     }
@@ -221,23 +225,7 @@ extension BookViewController {
     func loadBookFromiCloud() -> Book? {
         let store = NSUbiquitousKeyValueStore.default()
         if let uriDefault = store.object(forKey: "lastbookopen") as? Data {
-            return objectWithArchivedURIRepresentation(uriDefault, context: coreDataStack!.context)
-        }
-        
-        return nil
-    }
-    
-    func archiveURIRepresentation(_ book: Book) -> Data? {
-        let uri = book.objectID.uriRepresentation()
-        return NSKeyedArchiver.archivedData(withRootObject: uri)
-        
-    }
-    
-    func objectWithArchivedURIRepresentation(_ archivedURI: Data, context: NSManagedObjectContext) -> Book? {
-        
-        if let uri: URL = NSKeyedUnarchiver.unarchiveObject(with: archivedURI) as? URL, let nid = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: uri) {
-            let book = context.object(with: nid) as! Book
-            return book
+            return objectWithArchivedURIRepresentation(uriDefault, inContext: coreDataStack!.context)
         }
         
         return nil
