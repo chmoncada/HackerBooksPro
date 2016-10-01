@@ -60,43 +60,40 @@ class BookCell: UITableViewCell {
     
     func syncWithBook() {
         
-        // Actualizo labels de titulo y autores
+        // AUpdate labels
         self.BookTitle.text = _book?.title
         self.BookAuthors.text = _book?.authorsList()
         
-        // seteo la estrella de Favorito
+        // Favorite star setting
         if _book!.isFavorite!.boolValue {
             FavImage.image = UIImage(named: "filledStar")
         } else {
             FavImage.image = UIImage(named: "emptyStar")
         }
         
-        // Seteo el page status
+        // Update page status
         if _book!.pdf.pdfData != nil {
             BookPageStatus.text = "Page \(_book!.pdf.lastPageOpen!) of \(_book!.pdf.document!.numberOfPages)"
         } else {
             BookPageStatus.text = "Not available"
         }
         
-        //por ahora
         self.BookCover.image = UIImage(named: "emptyBook")
         
         guard (_book!.image.imageData != nil) else {
-            //print("NO hay imagen guardada en el modelo")
+            
             self.BookCover.image = UIImage(named: "emptyBook")
             if let url = URL(string: _book!.image.imageURL) {
                 loadDataAtURL(url){ (data: Data?) in
                     
                     if let dataExist = data {
-                        //print("se usa imagen descargada")
-                        //let image = UIImage(data: dataExist)
+                        
                         let resizeImage = UIImage(data: dataExist)!.resizedImageWithContentMode(.scaleAspectFill, bounds: CGSize(width: 112, height: 144), interpolationQuality: .default)
                         self.BookCover.image = resizeImage
                         self._book!.image.imageData = UIImageJPEGRepresentation(resizeImage, 0.9)
                         // Send notification that the image finish loading
                         self._book!.imageIsLoaded = true
                     } else {
-                        //print("No se pudo descargar imagen, se usara la imagen por defecto")
                         self.BookCover.image = UIImage(named: "emptyBook")
                     }
                 }
@@ -104,7 +101,7 @@ class BookCell: UITableViewCell {
             return
         }
         
-        // Se usa los datos de Core Data
+        // Use model data
         self.BookCover.image = UIImage(data:_book!.image.imageData! as Data)
         
     }

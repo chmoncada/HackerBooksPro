@@ -68,6 +68,8 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
     var descriptionText = "(Text Goes Here)..."
     
     // MARK: - IBAction
+    
+    /// Save the `Annotation` and dismiss the view
     @IBAction func done() {
         
         let annotation: Annotation
@@ -99,7 +101,6 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
             annotation.location = locationObject
         }
         
-        
         if let photoImage = image {
             photoObject.photoData = UIImageJPEGRepresentation(photoImage, 0.5)
         }
@@ -112,20 +113,18 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         annotation.text = descriptionTextView.text
         annotation.title = "\(formatDate(creationDate))"
         
-        //GRABO LOS VALORES AL MODELO
-
         book?.pdf.addAnnotationsObject(annotation)
         book?.annotationsChanged = true
-        
-        //coreDataStack?.saveContext()
         
         dismiss(animated: true, completion: nil)
     }
     
+    /// Dismiss the view
     @IBAction func cancel() {
        dismiss(animated: true, completion: nil)
     }
     
+    /// Start the location services to upload the labels of location
     @IBAction func getLocation() {
         // Check the status of authorization
         let authStatus = CLLocationManager.authorizationStatus()
@@ -146,7 +145,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         updateLabels()
     }
     
-    
+    /// The share button action to share in Facebook and Twitter
     @IBAction func shareAnnotation(_ sender: UIBarButtonItem) {
         
         let alert = UIAlertController(title: "Sharing note...", message: nil, preferredStyle: .alert)
@@ -201,12 +200,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
         listenForBackgroundNotification()        
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
+    
     deinit {
         //print("*** deinit \(self)")
         NotificationCenter.default.removeObserver(self)
@@ -217,6 +211,7 @@ class AnnotationViewController: UITableViewController, CLLocationManagerDelegate
 // MARK: - Utils
 extension AnnotationViewController {
     
+    /// Update the labels in the view
     func updateLabels() {
         
         pageNumberLabel.text = "\(currentPage!)"
@@ -240,10 +235,26 @@ extension AnnotationViewController {
         }
     }
     
+    /**
+     
+     **Returns** a String from a Date object using a dateformatte
+     
+     - parameters:
+        - date: Date to format
+     
+     */
     func formatDate(_ date: Date) -> String {
         return dateFormatter.string(from: date)
     }
     
+    /**
+     
+     **Show** a UIImage inside cell of Pick Photo
+     
+     - parameters:
+        - image: image to show
+     
+     */
     func showImage(_ image: UIImage) {
         imageView.image = image
         imageView.isHidden = false
@@ -251,6 +262,7 @@ extension AnnotationViewController {
         addPhotoLabel.isHidden = true
     }
     
+    /// Hide the keyboard when the user picks the screen outside the textview cell
     func hideKeyboard(_ gestureRecognizer: UIGestureRecognizer) {
         let point = gestureRecognizer.location(in: tableView)
         let indexPath = tableView.indexPathForRow(at: point)
@@ -347,7 +359,6 @@ extension AnnotationViewController {
     }
     
     func didTimeOut() {
-        //print("*** Time out")
         if location == nil {
             stopLocationManager()
             lastLocationError = NSError(domain: "MyLocationsErrorDomain", code: 1, userInfo: nil)
@@ -357,7 +368,6 @@ extension AnnotationViewController {
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        //print("didFailWithError \(error)")
         
         let code = (error as NSError).code
         if code == CLError.Code.locationUnknown.rawValue {
@@ -372,7 +382,6 @@ extension AnnotationViewController {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let newLocation = locations.last!
-        //print("didUpdateLocations \(newLocation)")
         
         // Check if the time was too long
         if newLocation.timestamp.timeIntervalSinceNow < -5 {
@@ -395,7 +404,6 @@ extension AnnotationViewController {
             updateLabels()
             
             if newLocation.horizontalAccuracy <= locationManager.desiredAccuracy {
-                //print("*** We're done!")
                 stopLocationManager()
             }
         } else if distance < 1.0 {
@@ -403,7 +411,6 @@ extension AnnotationViewController {
             let timeInterval = newLocation.timestamp.timeIntervalSince(location!.timestamp)
             
             if timeInterval > 10 {
-                //print("*** Force Done!")
                 stopLocationManager()
                 updateLabels()
             }
@@ -453,6 +460,12 @@ extension AnnotationViewController: UIImagePickerControllerDelegate, UINavigatio
         imagePicker.sourceType = .photoLibrary
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
+        
+        imagePicker.modalPresentationStyle = .popover
+            
+        imagePicker.popoverPresentationController?.sourceView = view
+        imagePicker.popoverPresentationController?.sourceRect = view.frame
+
         present(imagePicker, animated: true, completion: nil)
     }
     

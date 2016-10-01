@@ -1,5 +1,5 @@
 //
-//  Errors.swift
+//  Enums.swift
 //  HackerBooks
 //
 //  Created by Charles Moncada on 27/06/16.
@@ -17,7 +17,17 @@ enum HackerBooksError : Error{
     case nilJSONObject
 }
 
+//MARK: PDF Errors
 enum PDFDocumentError: Error {
     case urlNotValid
     case badDocumentType
 }
+
+//MARK: - Enum para el tipo de tabla
+enum tableType {
+    case title
+    case tag
+    case searchResults
+}
+
+let selectAnotherBook = "The user select another book"

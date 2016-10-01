@@ -10,7 +10,5 @@ open class BookPDF: _BookPDF {
         
         return pdfDocument
     }
-    
-    
-    
+      
 }

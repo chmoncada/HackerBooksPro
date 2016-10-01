@@ -12,26 +12,21 @@ import CoreData
 class BookViewController: UITableViewController {
     
     // MARK: IBOutlets
-    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorsLabel: UILabel!
     @IBOutlet weak var tagsLabel: UILabel!
     @IBOutlet weak var messagelabel: UILabel!
     @IBOutlet weak var coverImage: UIImageView!
-    
     @IBOutlet weak var favoriteSwitch: UISwitch!
     @IBOutlet weak var downloadButton: UIButton!
     @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var progressLabel: UILabel!
     
     // MARK: - Properties
-    
-    let UserDefaults = Foundation.UserDefaults.standard
     var coreDataStack: CoreDataStack?
 
     var model: Book? {
         didSet {
-            
             saveBookInUserDefaults(model!)
             saveBookIniCloud(model!)
         }
@@ -39,16 +34,14 @@ class BookViewController: UITableViewController {
     
     var currentPage: Int? {
         didSet {
-            //print("Obtuve la ultima pagina leida: \(currentPage)")
             self.model?.pdf.lastPageOpen = currentPage as NSNumber?
             self.model!.isChanged = true
-
         }
     }
     
     var download: Download?
     
-    lazy var downloadSession: Foundation.URLSession = {
+    lazy var downloadSession: URLSession = {
       
         let configuration = URLSessionConfiguration.background(withIdentifier: "backgroundSessionConfiguration")
         let session = Foundation.URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
@@ -56,9 +49,11 @@ class BookViewController: UITableViewController {
         return session
     }()
     
+    // MARK: IBAction
+    
+    /// Start PDF downloading
     @IBAction func startDownload() {
 
-        //print("Descargando...")
         if let url = URL(string: model!.pdf.pdfURL) {
             progressBar.isHidden = false
             progressLabel.isHidden = false
@@ -70,6 +65,7 @@ class BookViewController: UITableViewController {
         
     }
     
+    /// Change "Favorite" status of the `Book` object shown
     @IBAction func switchChange(_ sender: AnyObject) {
         
         model!.isFavorite = NSNumber(value: favoriteSwitch.isOn as Bool)
@@ -84,7 +80,7 @@ class BookViewController: UITableViewController {
             bookTag!.book = model!
             
         } else {
-            
+            // Remove "favorite" Tag
             BookTag.removeFavoriteTag(fromBook: model!, inContext: coreDataStack!.context)
         
         }
@@ -101,11 +97,9 @@ class BookViewController: UITableViewController {
         
         iCloudSetup()
         
-        if let book = loadBookFromiCloud() {
-            //print("encontre modelo en iCloud: \(book.title)")
+        if let book = loadBookFromiCloudOfContext(coreDataStack!.context) {
             model = book
         } else if let book = loadBookFromUserDefaultsInContext(coreDataStack!.context) {
-            //print("encontre modelo en NSUserDefaults: \(book.title)")
             model = book
         } else {
             
@@ -116,7 +110,6 @@ class BookViewController: UITableViewController {
             
             do {
                 let results = try coreDataStack!.context.fetch(fetchRequest)
-                //print("No encontre nada, muestro el libro: \(results.first!.title)")
                 model = results.first
                 
             } catch let error as NSError {
@@ -124,25 +117,25 @@ class BookViewController: UITableViewController {
             }
         }
         
-        let nc = NotificationCenter.default
-        nc.addObserver(self, selector: #selector(imageLoaded), name: NSNotification.Name(rawValue: imageDidDownload), object: model!)
+        NotificationCenter.default.addObserver(self, selector: #selector(imageLoaded), name: NSNotification.Name(rawValue: imageDidDownload), object: model!)
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         refreshUI()
     }
     
     
     // MARK: - Utils
     
+    /// Load the image downloaded in background, works in ipad landscape mode
     func imageLoaded() {
         coverImage.image = UIImage(data: (model?.image.imageData)! as Data)
         NotificationCenter.default.removeObserver(self)
     }
     
+    /// Refresh the view
     func refreshUI() {
         
         titleLabel.text = model!.title
@@ -151,7 +144,7 @@ class BookViewController: UITableViewController {
             coverImage.image = img
         } else {
             coverImage.image = UIImage(named: "emptyBook")
-            // load bookcover
+            // load bookcover in portrait due to the Download task doesnt start in portrait because it is trigger by table cell
             if let url = URL(string: model!.image.imageURL) {
                 loadDataAtURL(url){ (data: Data?) in
                     if let dataExist = data {
@@ -190,6 +183,7 @@ class BookViewController: UITableViewController {
 
 extension BookViewController {
     
+    /// Setup of iCloud and set observer
     func iCloudSetup() {
         
         if FileManager.default.url(forUbiquityContainerIdentifier: nil) != nil {
@@ -202,33 +196,14 @@ extension BookViewController {
         
     }
     
+    /// If value change in iCloud, save it in UserDefaults so the both dictionaries are sync
     func iCloudKeysChanged(_ sender: Notification) {
         
         // Get iCloud value
-        let bookIniCloud = loadBookFromiCloud()
+        let bookIniCloud = loadBookFromiCloudOfContext(coreDataStack!.context)
         // Save it in NSUserDefaults
-        if let book = bookIniCloud { saveBookIniCloud(book) }
+        if let book = bookIniCloud { saveBookInUserDefaults(book) }
         
-    }
-    
-    func saveBookIniCloud(_ book: Book) {
-        
-        // Set the iCloud store
-        let store = NSUbiquitousKeyValueStore.default()
-        // Obtain the NSData
-        if let data = archiveURIRepresentationOfBook(book) {
-            store.set(data, forKey: "lastbookopen")
-        }
-
-    }
-    
-    func loadBookFromiCloud() -> Book? {
-        let store = NSUbiquitousKeyValueStore.default()
-        if let uriDefault = store.object(forKey: "lastbookopen") as? Data {
-            return objectWithArchivedURIRepresentation(uriDefault, inContext: coreDataStack!.context)
-        }
-        
-        return nil
     }
     
 }
@@ -321,7 +296,6 @@ extension BookViewController: URLSessionDownloadDelegate {
 
 extension BookViewController: BookSelectionDelegate {
     func bookSelected(_ newBook: Book) {
-        //print("se activa el delegado!!")
         model = newBook
         refreshUI()
     }

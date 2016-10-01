@@ -28,7 +28,7 @@
 		A112A3181D5EB59400C29B40 /* _Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A30E1D5EB59400C29B40 /* _Book.swift */; };
 		A112A3191D5EB59400C29B40 /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A30F1D5EB59400C29B40 /* Author.swift */; };
 		A112A31A1D5EB59400C29B40 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A3101D5EB59400C29B40 /* Book.swift */; };
-		A112A31C1D5EBD6D00C29B40 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A31B1D5EBD6D00C29B40 /* Errors.swift */; };
+		A112A31C1D5EBD6D00C29B40 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A31B1D5EBD6D00C29B40 /* Enums.swift */; };
 		A112A31E1D5EBF1A00C29B40 /* Load-Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112A31D1D5EBF1A00C29B40 /* Load-Utils.swift */; };
 		A12DEC061D75EE8B008CBBEE /* BookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12DEC051D75EE8B008CBBEE /* BookViewController.swift */; };
 		A14AE0061D9E163E007F2156 /* URIRepresentation-Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14AE0051D9E163E007F2156 /* URIRepresentation-Utils.swift */; };
@@ -59,6 +59,7 @@
 		A1F12BD81D77A2DF006BE392 /* PDFOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */; };
 		A1F12BDC1D77A9CE006BE392 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1F12BDB1D77A9CE006BE392 /* Assets.xcassets */; };
 		A1F12BE01D77AD19006BE392 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F12BDF1D77AD19006BE392 /* ImageCell.swift */; };
+		A1F37DB11D9E9D450014B69B /* iCloud-Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F37DB01D9E9D450014B69B /* iCloud-Utils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,7 +86,7 @@
 		A112A30E1D5EB59400C29B40 /* _Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _Book.swift; path = MyModel/_Book.swift; sourceTree = "<group>"; };
 		A112A30F1D5EB59400C29B40 /* Author.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Author.swift; path = MyModel/Author.swift; sourceTree = "<group>"; };
 		A112A3101D5EB59400C29B40 /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Book.swift; path = MyModel/Book.swift; sourceTree = "<group>"; };
-		A112A31B1D5EBD6D00C29B40 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		A112A31B1D5EBD6D00C29B40 /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		A112A31D1D5EBF1A00C29B40 /* Load-Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Load-Utils.swift"; sourceTree = "<group>"; };
 		A1157ADE1D810909006A61CF /* HackerBooksPro.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = HackerBooksPro.entitlements; sourceTree = "<group>"; };
 		A12DEC051D75EE8B008CBBEE /* BookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookViewController.swift; sourceTree = "<group>"; };
@@ -117,6 +118,7 @@
 		A1F12BD71D77A2DF006BE392 /* PDFOverviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFOverviewViewController.swift; sourceTree = "<group>"; };
 		A1F12BDB1D77A9CE006BE392 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../Assets.xcassets; sourceTree = "<group>"; };
 		A1F12BDF1D77AD19006BE392 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		A1F37DB01D9E9D450014B69B /* iCloud-Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "iCloud-Utils.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,28 +188,12 @@
 		A112A2F61D5E925400C29B40 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A1D602AF1D8326CC0007E736 /* _Annotation.swift */,
-				A1D602B01D8326CC0007E736 /* _Location.swift */,
-				A1D602B11D8326CC0007E736 /* _Photo.swift */,
-				A1D15CAB1D74E13300C2F39B /* _BookTag.swift */,
-				A112A30D1D5EB59400C29B40 /* _Author.swift */,
-				A112A30E1D5EB59400C29B40 /* _Book.swift */,
-				A112A3071D5EB59400C29B40 /* _BookImage.swift */,
-				A112A3081D5EB59400C29B40 /* _BookPDF.swift */,
-				A112A3091D5EB59400C29B40 /* _Tag.swift */,
-				A112A3101D5EB59400C29B40 /* Book.swift */,
-				A112A30A1D5EB59400C29B40 /* BookImage.swift */,
-				A112A30B1D5EB59400C29B40 /* BookPDF.swift */,
-				A1D15CAC1D74E13300C2F39B /* BookTag.swift */,
-				A112A30C1D5EB59400C29B40 /* Tag.swift */,
-				A1D602B21D8326CC0007E736 /* Annotation.swift */,
-				A112A30F1D5EB59400C29B40 /* Author.swift */,
-				A1D602B31D8326CC0007E736 /* Location.swift */,
-				A1D602B41D8326CC0007E736 /* Photo.swift */,
+				A1F37DB31D9EAC8D0014B69B /* coredata entities */,
+				A1F37DB21D9EAC4D0014B69B /* No Edit */,
 				A1F12BD51D77A251006BE392 /* PDFDocument.swift */,
 				A18ABD5C1D8E3AF100C9AE6E /* MapLocation.swift */,
 				A1B9C0431D7649210027A376 /* DownloadPDF.swift */,
-				A112A31B1D5EBD6D00C29B40 /* Errors.swift */,
+				A112A31B1D5EBD6D00C29B40 /* Enums.swift */,
 				A112A2E61D5E91BC00C29B40 /* HackerBooksPro.xcdatamodeld */,
 			);
 			name = Models;
@@ -260,6 +246,7 @@
 				A14AE0051D9E163E007F2156 /* URIRepresentation-Utils.swift */,
 				A18D4E371D9E1BDD00F6022C /* Date-Utils.swift */,
 				A112A31D1D5EBF1A00C29B40 /* Load-Utils.swift */,
+				A1F37DB01D9E9D450014B69B /* iCloud-Utils.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -270,6 +257,38 @@
 				A15723E11D8F56BD00F44647 /* MapKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A1F37DB21D9EAC4D0014B69B /* No Edit */ = {
+			isa = PBXGroup;
+			children = (
+				A1D602AF1D8326CC0007E736 /* _Annotation.swift */,
+				A1D602B01D8326CC0007E736 /* _Location.swift */,
+				A1D602B11D8326CC0007E736 /* _Photo.swift */,
+				A1D15CAB1D74E13300C2F39B /* _BookTag.swift */,
+				A112A30D1D5EB59400C29B40 /* _Author.swift */,
+				A112A30E1D5EB59400C29B40 /* _Book.swift */,
+				A112A3071D5EB59400C29B40 /* _BookImage.swift */,
+				A112A3081D5EB59400C29B40 /* _BookPDF.swift */,
+				A112A3091D5EB59400C29B40 /* _Tag.swift */,
+			);
+			name = "No Edit";
+			sourceTree = "<group>";
+		};
+		A1F37DB31D9EAC8D0014B69B /* coredata entities */ = {
+			isa = PBXGroup;
+			children = (
+				A112A3101D5EB59400C29B40 /* Book.swift */,
+				A112A30A1D5EB59400C29B40 /* BookImage.swift */,
+				A112A30B1D5EB59400C29B40 /* BookPDF.swift */,
+				A1D15CAC1D74E13300C2F39B /* BookTag.swift */,
+				A112A30C1D5EB59400C29B40 /* Tag.swift */,
+				A1D602B21D8326CC0007E736 /* Annotation.swift */,
+				A112A30F1D5EB59400C29B40 /* Author.swift */,
+				A1D602B31D8326CC0007E736 /* Location.swift */,
+				A1D602B41D8326CC0007E736 /* Photo.swift */,
+			);
+			name = "coredata entities";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -387,12 +406,13 @@
 				A1D602B91D8326CC0007E736 /* Location.swift in Sources */,
 				A112A3151D5EB59400C29B40 /* BookPDF.swift in Sources */,
 				A112A3171D5EB59400C29B40 /* _Author.swift in Sources */,
-				A112A31C1D5EBD6D00C29B40 /* Errors.swift in Sources */,
+				A112A31C1D5EBD6D00C29B40 /* Enums.swift in Sources */,
 				A1D15CAD1D74E13300C2F39B /* _BookTag.swift in Sources */,
 				A14AE0061D9E163E007F2156 /* URIRepresentation-Utils.swift in Sources */,
 				A1D602B81D8326CC0007E736 /* Annotation.swift in Sources */,
 				A1E502D91D8DA61300644693 /* NoteCell.swift in Sources */,
 				A112A2FB1D5E928900C29B40 /* Foundation.swift in Sources */,
+				A1F37DB11D9E9D450014B69B /* iCloud-Utils.swift in Sources */,
 				A15DE4C21D8639ED008C7888 /* UIImage+RoundCorner.swift in Sources */,
 				A1D15CAE1D74E13300C2F39B /* BookTag.swift in Sources */,
 				A18ABD5D1D8E3AF100C9AE6E /* MapLocation.swift in Sources */,

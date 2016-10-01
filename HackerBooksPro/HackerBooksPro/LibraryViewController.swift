@@ -9,40 +9,31 @@
 import UIKit
 import CoreData
 
-// Protocol definition to inject the selected book to the delegate
+
 
 //MARK: - Protocol BookSelectionDelegate
 
+// Protocol definition to inject the selected book to the delegate
 protocol BookSelectionDelegate: class {
     func bookSelected(_ newBook: Book)
 }
 
-//MARK: - Enum para el tipo de tabla
-enum tableType {
-    case title
-    case tag
-    case searchResults
-}
-
-let selectAnotherBook = "The user select another book"
-
 class LibraryViewController: UIViewController {
 
     // MARK: - Properties
-    
     var coreDataStack: CoreDataStack!
     weak var delegate: BookSelectionDelegate?
     var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>!
     var tableToShow: tableType?
     
     // MARK: - IBOutlets
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     // MARK: - IBAction
     
+    /// Change the `tableType` from the selection of the segmented control
     @IBAction func tableTypeChanged(_ sender: UISegmentedControl) {
         
         switch segmentedControl.selectedSegmentIndex {
@@ -78,11 +69,6 @@ class LibraryViewController: UIViewController {
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 }
 
 
@@ -104,19 +90,15 @@ extension LibraryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookCell", for: indexPath) as! BookCell
-        
         var book: Book?
         
         switch tableToShow! {
         case tableType.title:
-            //print("soy tipo titulo")
             book = fetchedResultsController.object(at: indexPath) as? Book
         case tableType.tag:
-            //print("soy tipo tag")
             let bookTag = fetchedResultsController.object(at: indexPath) as? BookTag
             book = bookTag!.book
         case tableType.searchResults:
-            //print("soy tipo search")
             book = fetchedResultsController.object(at: indexPath) as? Book
         }
         
@@ -160,7 +142,6 @@ extension LibraryViewController: UITableViewDelegate {
         return 110
     }
     
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         var selectedBook: Book
@@ -178,24 +159,25 @@ extension LibraryViewController: UITableViewDelegate {
         if let detailViewController = self.delegate as? BookViewController {
             splitViewController?.showDetailViewController(detailViewController.navigationController!, sender: nil)
         }
-        
     }
-    
 }
 
 // MARK: - NSFetchedResultsController methods
-
 extension LibraryViewController {
-    
+   
+    /**
+     **Returns** an `NSFetchedResultsController` depends of tableType value.
+     - parameters:
+        - type: tableType value.
+        - predicate: optional predicate.
+     */
     func getFetchedResultsController(_ type: tableType, predicate: NSPredicate = NSPredicate()) -> NSFetchedResultsController<NSFetchRequestResult> {
-        
-        //var fReq: NSFetchedResultsController<NSFetchRequestResult>
         
         switch type {
             
         case tableType.title:
+
             let fetchRequest = NSFetchRequest<Book>(entityName: Book.entityName())
-            
             let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
             fetchRequest.sortDescriptors = [sortDescriptor]
             fetchRequest.fetchBatchSize = 20
@@ -210,8 +192,8 @@ extension LibraryViewController {
                                               cacheName: nil)
             return fReq as! NSFetchedResultsController<NSFetchRequestResult>
         case tableType.tag:
-            let fetchRequest = NSFetchRequest<BookTag>(entityName: BookTag.entityName())
             
+            let fetchRequest = NSFetchRequest<BookTag>(entityName: BookTag.entityName())
             let sortDescriptor1 = NSSortDescriptor(key: "tag.proxyForSorting", ascending: true)
             let sortDescriptor2 = NSSortDescriptor(key: "book.title", ascending: true)
             fetchRequest.sortDescriptors = [sortDescriptor1,sortDescriptor2]
@@ -227,10 +209,9 @@ extension LibraryViewController {
                                               cacheName: nil)
             return fReq as! NSFetchedResultsController<NSFetchRequestResult>
         case tableType.searchResults:
+            
             let fetchRequest = NSFetchRequest<Book>(entityName: Book.entityName())
-            
             fetchRequest.predicate = predicate
-            
             let sortDescriptor = NSSortDescriptor(key: "\(BookAttributes.title)", ascending: true)
             fetchRequest.sortDescriptors = [sortDescriptor]
             fetchRequest.fetchBatchSize = 20
@@ -245,22 +226,24 @@ extension LibraryViewController {
         
     }
     
-    
+    /**
+     Set a **new** `NSFetchedResultsController` for the tableview.
+     - parameters:
+        - newfrc: the new `NSFetchedResultsController`.
+     */
     func setNewFetchedResultsController(_ newfrc: NSFetchedResultsController<NSFetchRequestResult>) {
         
         let oldfrc = fetchedResultsController
-        
         if (newfrc != oldfrc) {
             fetchedResultsController = newfrc
             newfrc.delegate = self
             fetch()
             tableView.reloadData()
-            
         }
         
     }
     
-    
+    /// a convenience method to wrap the error handling of the perforFetch of the NSFetchedResultsController
     func fetch() {
         do {
             try fetchedResultsController.performFetch()
@@ -277,7 +260,6 @@ extension LibraryViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
-    
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any,
@@ -316,17 +298,19 @@ extension LibraryViewController: NSFetchedResultsControllerDelegate {
 
 
 //MARK: - UISearchBarDelegate
-
 extension LibraryViewController: UISearchBarDelegate {
+    
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         
-        //print("The search text is: '\(searchBar.text!)'")
+        // Obtain the text of the search bar
         let searchString = searchBar.text!
         
+        // Make a predicate fot the fetch
         let predicate = NSPredicate(format: "%K CONTAINS[cd] %@ OR %K CONTAINS[cd] %@ OR %K CONTAINS[cd] %@", "title", searchString, "bookTags.tag.tag", searchString, "authors.name", searchString) 
         
+        // Change the type of table and set the new fetchResultsController and show the results in the tableview 
         tableToShow = tableType.searchResults
         let frc = getFetchedResultsController(tableToShow!, predicate: predicate)
         setNewFetchedResultsController(frc)

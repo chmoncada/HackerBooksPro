@@ -12,6 +12,8 @@ import CoreData
 
 class MapViewController: UIViewController {
     
+    let locationManager = CLLocationManager()
+    
     var locations: [MapLocation]? {
         //var foundLocations = [Location]()
         
@@ -50,7 +52,19 @@ class MapViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     
+    // MARK: - IBAction
+    
     @IBAction func showUser() {
+        
+        // Check the status of authorization
+        let authStatus = CLLocationManager.authorizationStatus()
+        
+        // if the stauts is not determined, ask permission
+        if authStatus == .notDetermined {
+            locationManager.requestWhenInUseAuthorization()
+            return
+        }
+        
         let region = MKCoordinateRegionMakeWithDistance(mapView.userLocation.coordinate, 1000, 1000)
         mapView.setRegion(mapView.regionThatFits(region), animated: true)
     }
@@ -109,11 +123,17 @@ class MapViewController: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         updateLocations()
         
         if !locations!.isEmpty {
             showLocations()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
     }
     
 }

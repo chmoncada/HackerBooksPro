@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 
+// We create this class to avoid that we pass Annotations without Location to the MKMapView
 class MapLocation: NSObject, MKAnnotation {
 
     var title: String?

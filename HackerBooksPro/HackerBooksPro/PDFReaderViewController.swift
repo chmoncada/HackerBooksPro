@@ -30,7 +30,6 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             // Update the view.
             self.configureView()
             self.shouldReload = true
-            //self.shouldShowPage = nil
         }
     }
     
@@ -38,6 +37,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 
     // MARK: - Utils
     
+    /// Configure the view
     func configureView() {
         // Update the user interface for the detail item.
         guard let pdf = self.pdf else {
@@ -47,11 +47,10 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         self.navigationItem.title = pdf.name
     }
     
+    /// Check all the `Annotations` for the `Book` in the model
     func getAnnotationPages() {
       
         // First we need to fetch all the annotations that belongs to the book
-        //var foundNotes = [Annotation]()
-        
         let fetchRequest: NSFetchRequest<Annotation> = NSFetchRequest()
         let entity = Annotation.entity()
         fetchRequest.entity = entity
@@ -60,14 +59,12 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         let sortDescriptor = NSSortDescriptor(key: "linkedPage", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        
         do {
             let foundNotes = try coreDataStack?.context.fetch(fetchRequest)
             for each in foundNotes! {
                 let page = each.linkedPage!.intValue
                 annotationPages.insert(page)
             }
-            //print("las paginas que tienen anotaciones son: \(annotationPages)")
         } catch let error as NSError {
             print("\(error.localizedDescription)")
             
@@ -75,15 +72,15 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         
     }
     
+    /// Trigger when we receive a notification that an `Annotation was created in other view`
     func annotationSetChanged() {
-        //print("detecte el cambio de las anotaciones, debo refrescar el set")
         getAnnotationPages()
     }
     
+    /// Trigger when the user picked another cell in the LibraryViewController, goes to book details
     func dismissView() {
         let _ = self.navigationController?.popToRootViewController(animated: true)
     }
-    
 
     // MARK: - Lifecycle
     
@@ -98,9 +95,8 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             self.webview.scrollView.delegate = self
         }
         
-        let nc = NotificationCenter.default
-        nc.addObserver(self, selector: #selector(annotationSetChanged), name: NSNotification.Name(rawValue: annotationsDidChange), object: book!)
-        nc.addObserver(self, selector: #selector(dismissView), name: NSNotification.Name(rawValue: selectAnotherBook), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(annotationSetChanged), name: NSNotification.Name(rawValue: annotationsDidChange), object: book!)
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissView), name: NSNotification.Name(rawValue: selectAnotherBook), object: nil)
         
         getAnnotationPages()
         self.configureView()
@@ -109,6 +105,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     deinit {
         
         NotificationCenter.default.removeObserver(self)
+        // set nil the webview to try to reduce memory consumption
         self.webview.scrollView.delegate = nil
         self.webview = nil
     }
@@ -116,7 +113,6 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         // Opening pdf file
         webview.load(pdf!.data! as Data, mimeType: "application/pdf", textEncodingName: "", baseURL: URL(string: "www.google.com")!)
-        
         
         if shouldReload {
             //print("se recarga pdf")
@@ -126,11 +122,6 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             webview.scrollView.isScrollEnabled = true
             shouldReload = false
         }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Segue
@@ -145,7 +136,6 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             controller.pdf = pdf
             controller.parentVC = self
             if let currentPage = self.currentPage {
-                //print("Estamos en la pagina: \(currentPage)")
                 controller.currentPage = currentPage
             }
             
@@ -154,7 +144,6 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             shouldShowPage = currentPage
             let controller = (segue.destination as! UINavigationController).topViewController as! AnnotationViewController
             if let currentPage = self.currentPage {
-                //print("Estamos en la pagina: \(currentPage)")
                 controller.currentPage = currentPage
             }
             controller.coreDataStack = coreDataStack
@@ -176,13 +165,11 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             notesCollection.pdf = pdf
             
         }
-
     }
     
     // MARK: - Web Methods
     
     func webViewDidFinishLoad(_ webView: UIWebView) {
-        //print("termino de cargar LA VISTA")
         self.changePage()
     }
     
@@ -207,7 +194,6 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     func changePage() {
         if let page = self.shouldShowPage {
             self.shouldShowPage = nil // Prevent for changing page again
-            //print("nos movemos a la pagina \(page)")
             self.goToPage(page)
         }
     }
@@ -219,17 +205,14 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         let paddingSize: CGFloat = 10
         
         let allHeight = self.webview.scrollView.contentSize.height
-        //print("allHeight: \(allHeight)")
         let allPadding = paddingSize * CGFloat(nbPages+1)
         let pageHeight = (allHeight-allPadding)/CGFloat(nbPages)
-        //print("pageHeight: \(pageHeight)")
         
         if page <= nbPages && page >= 0 {
             var offsetPoint = CGPoint(x: 0, y: (paddingSize+pageHeight)*CGFloat(page-1))
             if let navBarOffset = self.navigationController?.navigationBar.frame.size.height {
                 offsetPoint.y -= navBarOffset + paddingSize // Preventing having page under Navigation Controller
             }
-            //print("offsetPoint: \(offsetPoint)")
             self.webview.scrollView.setContentOffset(offsetPoint, animated: false)
         }
     }

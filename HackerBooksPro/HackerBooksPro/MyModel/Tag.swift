@@ -7,7 +7,7 @@ open class Tag: _Tag {
     
     // MARK: - Class Methods
     
-    // funcion para buscar si en el modelo ya existe un Tag con el mismo nombre
+    /// Returns a Tag object with tag String
     class func findTag(_ tag: String, context: NSManagedObjectContext) -> Tag? {
         
         let fetchRequest = NSFetchRequest<Tag>(entityName: self.entityName())
@@ -32,7 +32,7 @@ open class Tag: _Tag {
         }
     }
     
-    // funcion para anadir un objecto Tag con el parametro tag no repetido
+    // Return a unique Tag object
     class func uniqueTag(_ tag: String, context: NSManagedObjectContext) -> Tag?{
         
         var result = Tag.findTag(tag, context: context)
@@ -40,14 +40,6 @@ open class Tag: _Tag {
             result = Tag(managedObjectContext: context)
         }
         result?.tag = tag
-//        switch tag {
-//        case "favorite":
-//            result?.proxyForSorting = "__" + "favorite"
-//        case "finished":
-//            result?.proxyForSorting = "_" + "finished"
-//        default:
-//            result?.proxyForSorting = tag
-//        }
         
         if tag == "favorite" {
             result?.proxyForSorting = "___" + "favorite"
@@ -66,14 +58,10 @@ open class Tag: _Tag {
     class func eraseTag(_ tag: String, context:NSManagedObjectContext) {
         
         if let tagToErase = Tag.findTag(tag, context: context) {
-            //print("Encontre Tag, procedere a borrarlo")
             context.delete(tagToErase)
         } else {
-            //print("El Tag no existe")
             return
         }
     }
-    
-    
     
 }

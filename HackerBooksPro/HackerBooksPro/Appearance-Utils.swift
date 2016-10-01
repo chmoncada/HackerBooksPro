@@ -17,21 +17,21 @@ let textColor = UIColor(red: 1.0, green: 0.737, blue: 0.173, alpha: 1.00) /// Co
 /// To modify the colors of the app change the 'tintColor' and 'BackButtonColor' constants
 func customizeAppearance() {
     
-    /// Status Bar Appearance
+    // Status Bar Appearance
     UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
-    /// Navigation Bar Appearance
+    // Navigation Bar Appearance
     UINavigationBar.appearance().titleTextAttributes=[NSForegroundColorAttributeName:UIColor.white]
     UINavigationBar.appearance().barTintColor = tintColor
     UINavigationBar.appearance().isTranslucent = false
-    /// ToolBar Appearance
+    // ToolBar Appearance
     UIToolbar.appearance().tintColor = textColor
     UIToolbar.appearance().barTintColor = tintColor
-    /// Back Button Appearance
+    // Back Button Appearance
     UINavigationBar.appearance().tintColor = textColor
     UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName:textColor]
-    /// UITableViewHeader appearance
+    // UITableViewHeader appearance
     UITableViewHeaderFooterView.appearance().tintColor = tintColor
-    /// UITabBar appearance
+    // UITabBar appearance
     UITabBar.appearance().tintColor = textColor
     UITabBar.appearance().barTintColor = tintColor
     

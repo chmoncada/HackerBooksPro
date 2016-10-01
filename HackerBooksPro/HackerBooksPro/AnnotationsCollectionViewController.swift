@@ -38,8 +38,6 @@ class AnnotationsCollectionViewController: UICollectionViewController {
     
     var annotations: [Annotation]? {
         
-        //var foundNotes = [Annotation]()
-        
         do {
             let foundNotes = try coreDataStack?.context.fetch(fetchRequest)
             return foundNotes
@@ -49,19 +47,8 @@ class AnnotationsCollectionViewController: UICollectionViewController {
         }
         
     }
-
-    override func viewDidLoad() {
-        
-        super.viewDidLoad()
-        //NotificationCenter.default.addObserver(self, selector: #selector(dismissView), name: NSNotification.Name(rawValue: selectAnotherBook), object: nil)
-        
-    }
     
-//    func dismissView() {
-//        //self.navigationController?.popToRootViewController(animated: true)
-//    }
-
-    // MARK: UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -98,39 +85,9 @@ class AnnotationsCollectionViewController: UICollectionViewController {
         return cell
     }
 
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-
 }
 
+// MARK: - Segue
 extension AnnotationsCollectionViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

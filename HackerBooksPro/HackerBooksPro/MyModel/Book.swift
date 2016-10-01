@@ -23,7 +23,6 @@ open class Book: _Book {
     
     var isChanged: Bool? {
         willSet {
-            //print("MODELO \(self.title) CAMBIO!!!")
             let notif = Notification(name: Notification.Name(rawValue: modelDidChange), object: self)
             NotificationCenter.default.post(notif)
             
@@ -32,7 +31,6 @@ open class Book: _Book {
     
     var favIsChanged: Bool? {
         willSet {
-            //print("Status de Favorito del libro \(self.title) CAMBIO!!!")
             let notif = Notification(name: Notification.Name(rawValue: favStatusDidChange), object: self)
             NotificationCenter.default.post(notif)
             
@@ -41,10 +39,9 @@ open class Book: _Book {
     
     var pdfIsOpen: Bool? {
         didSet {
-            //print("Abri el PDF de \(self.title) para leer")
             self.pdf.lastTimeOpened = Date()
             
-            // si el tag reciente ya lo tiene
+            // if tag "recent" is not in the book
             if !self.containsTag("recent") {
                 
                 // Create and add "Recent tag"
@@ -55,17 +52,12 @@ open class Book: _Book {
                 bookTag!.tag = newTag!
                 bookTag!.book = self
             }
-            // Send notification
-            //            let notif = NSNotification(name: pdfWasFinished, object: self)
-            //            NSNotificationCenter.defaultCenter().postNotification(notif)
-            
-            
         }
     }
     
     var pageIsChanged: Bool? {
         willSet {
-            //print("cambiamos la pagina, ahora es \(self.pdf.lastPageOpen!.integerValue) !!!")
+
             let notif = Notification(name: Notification.Name(rawValue: newPageOpened), object: self)
             NotificationCenter.default.post(notif)
             
@@ -74,7 +66,6 @@ open class Book: _Book {
     
     var imageIsLoaded: Bool? {
         willSet {
-            //print("IMAGEN de \(self.title) SE DESCARGO!!!")
             let notif = Notification(name: Notification.Name(rawValue: imageDidDownload), object: self)
             NotificationCenter.default.post(notif)
         }
@@ -82,7 +73,6 @@ open class Book: _Book {
     
     var annotationsChanged: Bool? {
         willSet {
-            //print("Las anotaciones de \(self.title) cambiaron!!!")
             let notif = Notification(name: Notification.Name(rawValue: annotationsDidChange), object: self)
             NotificationCenter.default.post(notif)
         }
@@ -90,7 +80,7 @@ open class Book: _Book {
     
     var isFinished: Bool? {
         didSet {
-            // Crear tag "Finished" y lanzar la notificacion para que la tabla se recargue?, con el fetched se supone que deberia recargarse sola
+
             if isFinished! {
 
                 // Create and add "Finished tag"
@@ -105,15 +95,13 @@ open class Book: _Book {
                 NotificationCenter.default.post(notif)
                 
             } else {
-                //print("ya no estoy leido hasta el final")
-                //Quito el tag
+                // Remove tag
                 BookTag.removeTag("\(self.title) - Finished", fromBook: self, inContext: self.managedObjectContext!)
             }
     
         }
     }
     
-    // The implementation is easier because is a NSOrderedSet
     func authorsList() -> String {
         
         var text = ""
@@ -122,7 +110,9 @@ open class Book: _Book {
             text += "\((each as! Author).name), "
         }
         
-        //text += (self.authors.lastObject! as AnyObject).name
+        // Remove the last 2 character of the list (an extra ", ")
+        text.remove(at: text.index(before: text.endIndex))
+        text.remove(at: text.index(before: text.endIndex))
         
         return text
     }
@@ -132,8 +122,8 @@ open class Book: _Book {
         
         var arrayOfTags = [String]()
         if let array = self.bookTags.allObjects as? BookTagArray {
-            // go through the array except the tags __FAVORITO
-            for each in array where (!(each.tag.tag == "favorite") && !(each.tag.tag == "finished")) {
+            // go through the array except the pseudo "tags"
+            for each in array where (!(each.tag.tag == "favorite") && !(each.tag.tag == "finished")  && !(each.tag.tag == "recent")) {
                 arrayOfTags.append(each.tag.tag.capitalized)
             }
             arrayOfTags.sort()
@@ -148,17 +138,13 @@ open class Book: _Book {
     func containsTag(_ tag: String) -> Bool {
         
         if let array = self.bookTags.allObjects as? BookTagArray {
-            // go through the array except the tags __FAVORITO
             for each in array {
                 if each.tag.tag == tag {
                     return true
                 }
-                //arrayOfTags.append(each.tag.tag.capitalizedString)
             }
         }
-        
         return false
-        
     }
     
 }

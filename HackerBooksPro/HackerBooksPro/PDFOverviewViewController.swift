@@ -28,6 +28,8 @@ class PDFOverviewViewController: UICollectionViewController {
         return self.pdf?.document
     }
     
+    //MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,6 +47,7 @@ class PDFOverviewViewController: UICollectionViewController {
         }
     }
     
+    // MARK: - Utils
     func closeView() {
         self.dismiss(animated: true, completion: nil)
     }
@@ -154,6 +157,7 @@ class PDFOverviewViewController: UICollectionViewController {
     }
 }
 
+// MARK: - Extensions of Colors
 extension UIColor {
     static func selectedBlue() -> UIColor {
         return UIColor(red: (76.0/255.0), green: (161.0/255.0), blue: (255.0/255.0), alpha: 1.0)
