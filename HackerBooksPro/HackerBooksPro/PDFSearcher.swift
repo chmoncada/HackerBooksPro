@@ -44,10 +44,28 @@ class PDFSearcher {
         CGPDFOperatorTableSetCallback(operatorTable!, "TJ") { (scanner, info) in
             let pdfSearcher = unsafeBitCast(info, to: PDFSearcher.self)
             
-            var pdfArray: UnsafeMutablePointer<CGPDFArrayRef?>? = nil
-            CGPDFScannerPopArray(scanner, pdfArray)
-            var myArray = Unmanaged<CGPDFArrayRef>.fromOpaque(pdfArray!).takeUnretainedValue()
-            print("Show text")
+            //var pdfArray: UnsafeMutablePointer<CGPDFArrayRef?>? = nil
+            var pdfArray: CGPDFArrayRef?
+            CGPDFScannerPopArray(scanner, &pdfArray)
+            print("ENCONTRE \(CGPDFArrayGetCount(pdfArray!))")
+            for i in 0..<CGPDFArrayGetCount(pdfArray!) {
+                
+                var pdfObject: CGPDFObjectRef?
+                CGPDFArrayGetObject(pdfArray!, i, &pdfObject)
+                let valueType: CGPDFObjectType = CGPDFObjectGetType(pdfObject!)
+                
+                if (valueType == .string) {
+                    var stringFromObject: CGPDFStringRef?
+                    CGPDFObjectGetValue(pdfObject!, .string, &stringFromObject)
+                    let string = CGPDFStringCopyTextString(stringFromObject!)! as NSString
+                    print("\(string)")
+                }
+            
+            }
+            
+            
+            
+            
         }
         
         let numPages = pdfToParse.numberOfPages
