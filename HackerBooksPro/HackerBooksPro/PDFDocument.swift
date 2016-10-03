@@ -34,6 +34,16 @@ class PDFDocument {
         let doc = CGPDFDocument(provider!)
         
         self.document = doc
+        
+        
+    }
+    
+    var textOfPDF: String? {
+        // PRUEBA DE SCANNER
+        let prueba = PDFSearcher(pdf: self)
+        prueba.textOfPDF()
+        
+        return prueba.currentData
     }
     
     var numberOfPages: Int {

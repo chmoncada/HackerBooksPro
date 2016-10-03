@@ -10,6 +10,7 @@ public enum BookPDFAttributes: String {
     case lastTimeOpened = "lastTimeOpened"
     case pdfData = "pdfData"
     case pdfURL = "pdfURL"
+    case text = "text"
 }
 
 public enum BookPDFRelationships: String {
@@ -56,6 +57,9 @@ open class _BookPDF: NSManagedObject {
 
     @NSManaged open
     var pdfURL: String
+
+    @NSManaged open
+    var text: String?
 
     // MARK: - Relationships
 

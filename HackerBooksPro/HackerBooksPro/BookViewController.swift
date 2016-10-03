@@ -249,10 +249,14 @@ extension BookViewController: URLSessionDownloadDelegate {
         switch (c[0]) {
         case 0x25: //MIME type for PDF
             model!.pdf.pdfData = data
+            
+            // CREAMOS TEXTO DE PDF
+            let pdfDocument = PDFDocument(bookPdf: model!.pdf)
+            model!.pdf.text = pdfDocument.textOfPDF
+            
             DispatchQueue.main.async(execute: {
                 self.model!.isChanged = true
                 self.refreshUI()
-                //self.coreDataStack?.saveContext()
             })
         default: // all other cases
             DispatchQueue.main.async(execute: {
