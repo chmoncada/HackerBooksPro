@@ -37,7 +37,7 @@ class PDFSearcher {
             CGPDFScannerPopString(scanner, &pdfString)
             let stringOfPDF = CGPDFStringCopyTextString(pdfString!)! as NSString
             //print("\(stringOfPDF)")
-            pdfSearcher.currentData?.append(" ")
+            //pdfSearcher.currentData?.append(" ")
             pdfSearcher.currentData?.append(stringOfPDF as String)
         }
         
@@ -47,7 +47,7 @@ class PDFSearcher {
             //var pdfArray: UnsafeMutablePointer<CGPDFArrayRef?>? = nil
             var pdfArray: CGPDFArrayRef?
             CGPDFScannerPopArray(scanner, &pdfArray)
-            print("ENCONTRE \(CGPDFArrayGetCount(pdfArray!))")
+            //print("ENCONTRE \(CGPDFArrayGetCount(pdfArray!))")
             for i in 0..<CGPDFArrayGetCount(pdfArray!) {
                 
                 var pdfObject: CGPDFObjectRef?
@@ -59,6 +59,7 @@ class PDFSearcher {
                     CGPDFObjectGetValue(pdfObject!, .string, &stringFromObject)
                     let string = CGPDFStringCopyTextString(stringFromObject!)! as NSString
                     print("\(string)")
+                    pdfSearcher.currentData?.append(string as String)
                 }
             
             }

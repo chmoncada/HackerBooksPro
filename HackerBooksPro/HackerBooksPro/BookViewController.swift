@@ -251,8 +251,8 @@ extension BookViewController: URLSessionDownloadDelegate {
             model!.pdf.pdfData = data
             
             // CREAMOS TEXTO DE PDF
-            let pdfDocument = PDFDocument(bookPdf: model!.pdf)
-            model!.pdf.text = pdfDocument.textOfPDF
+            //let pdfDocument = PDFDocument(bookPdf: model!.pdf)
+            //model!.pdf.text = pdfDocument.textOfPDF
             
             DispatchQueue.main.async(execute: {
                 self.model!.isChanged = true

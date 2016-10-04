@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreData
+import CoreSpotlight
+import MobileCoreServices
 
 
 
@@ -62,6 +64,8 @@ class LibraryViewController: UIViewController {
         // Setup of initial tableType
         segmentedControl.selectedSegmentIndex = 0
         tableToShow = tableType.title
+        
+        setupSearchableContent()
         
         fetchedResultsController = getFetchedResultsController(tableToShow!)
         fetch()
@@ -323,3 +327,61 @@ extension LibraryViewController: UISearchBarDelegate {
     
 }
 
+// MARK: Core Spotlight
+
+extension LibraryViewController {
+    
+    func setupSearchableContent() {
+        var searchableItems = [CSSearchableItem]()
+        
+        let fetchRequestForSpotlight = NSFetchRequest<Book>(entityName: Book.entityName())
+        
+        do {
+            let results = try coreDataStack.context.fetch(fetchRequestForSpotlight)
+            
+            for each in results {
+                
+                var keywords = [String]()
+                let searchableItemAttributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
+                searchableItemAttributeSet.title = each.title
+                //keywords.append(each.title)
+                
+                searchableItemAttributeSet.thumbnailData = each.image.imageData
+                
+                var authorArray = [String]()
+                for author in each.authors {
+                    authorArray.append((author as! Author).name)
+                    //keywords.append((author as! Author).name)
+                }
+                searchableItemAttributeSet.authorNames = authorArray
+                
+                if let pdfText = each.pdf.text {
+                    print("encontre texto en \(each.title) \(pdfText)")
+                    searchableItemAttributeSet.contentDescription = pdfText
+                }
+                
+                searchableItemAttributeSet.keywords = keywords
+                
+                
+                
+                let searchableItem = CSSearchableItem(uniqueIdentifier: "com.charlesmoncada.HackerBooksPro.\(each.title)", domainIdentifier: "books", attributeSet: searchableItemAttributeSet)
+                
+                searchableItems.append(searchableItem)
+                
+            }
+            
+            CSSearchableIndex.default().indexSearchableItems(searchableItems) { (error) -> Void in
+                
+                if error != nil {
+                    print(error?.localizedDescription)
+                }
+            }
+            
+        } catch {
+            print("ERROR")
+        }
+    }
+    
+    
+    
+}

@@ -66,6 +66,7 @@ extension AppDelegate {
     */
     func populateRecentTag() {
         
+        
         // As first step, "reset" all the "recent" tags, erase them from the model
         let tagString = "recent"
         Tag.eraseTag(tagString, context: coreDataStack.context)
@@ -98,4 +99,6 @@ extension AppDelegate {
         }
     }
 
+    
+    
 }
